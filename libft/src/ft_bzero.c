@@ -1,4 +1,4 @@
-#include <string.h>
+#include "libft.h"
 
 void    ft_bzero(void *s, size_t n)
 {
@@ -6,5 +6,5 @@ void    ft_bzero(void *s, size_t n)
 
     tmp = s;
     while (n--)
-        *(tmp++) = '\0';
+        *tmp++ = '\0';
 }
