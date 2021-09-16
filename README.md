@@ -6,4 +6,4 @@ Githubeur, arrête de githuber!
 Githubeur, arrête de githuber!
 Githubeur, arrête de githuber...
 
-"Oh min..ais je m'en bats les cojones :)" dit-il.
+"Oh min..ais je m'en bats les cojones :)" dit-il en s'esclaffant avec un rire diaboliquement diabolique.
