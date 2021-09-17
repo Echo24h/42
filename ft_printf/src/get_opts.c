@@ -71,12 +71,12 @@ t_opts	get_opts(const char **format)
 	t_opts	opts;
 
 	opts = inst_opts();
-	printf("here baby : %c\n", **format);
-	print_opts(opts);
+	//printf("here baby : %c\n", **format);
+	//print_opts(opts);
 	get_flags(format, &opts);
 	get_width(format, &opts);
 	get_precision(format, &opts);
-	printf("\nAnd now here ;) : %c\n", **format);
-	print_opts(opts);
+	//printf("\nAnd now here ;) : %c\n", **format);
+	//print_opts(opts);
 	return (opts);
 }

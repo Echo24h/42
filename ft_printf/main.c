@@ -6,13 +6,17 @@ int	main()
 	int		x;
 	int		y;
 	int		z;
-	char	*s1;
-	char	*s2;
+	char	*s1 = "";
+	char	s2[] = "|%s|\n";
 
-	//x = printf("%d\n", 22);
-	//printf("printf:%d\n\n", x);
+	//printf("%s", ft_str);
+	printf("\n\n=== my test ===\n\n");
 
-	x = ft_printf("%#-0+   -- +56789034.512d\n", 55);
+	x = printf(s2, s1);
+	printf("printf:%d\n\n", x);
+
+	printf("\n\n");
+	x = ft_printf(s2, s1);
 	printf("ft_printf: %d\n", x);
 	return (0);
 }
