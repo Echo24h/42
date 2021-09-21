@@ -41,7 +41,8 @@ SRC			=	ft_memset.c		\
 				ft_putnbr_fd.c	\
 				ft_iswhitespace.c	\
 				ft_putchar.c	\
-				ft_putstr.c
+				ft_putstr.c	\
+				ft_striteri.c
 
 SRC_BONUS	=	ft_lstnew_bonus.c			\
 				ft_lstadd_front_bonus.c	\
