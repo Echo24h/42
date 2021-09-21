@@ -8,7 +8,14 @@ I_DIR		=	include
 SRC			=	dev.c	\
 				ft_printf.c \
 				is_flag.c	\
-				get_opts.c
+				get_opts.c	\
+				print_char.c	\
+				print_str.c	\
+				print_ptr.c	\
+				print_int.c	\
+				print_percentage.c	\
+				print_uint.c	\
+				print_hexa.c
 				
 
 SRC_BONUS	=	

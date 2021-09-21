@@ -1,4 +1,4 @@
-#include "ft_printf.h"
+#include "utils.h"
 #include "libft.h"
 
 void	get_width(const char **format, t_opts *opts)
@@ -76,7 +76,11 @@ t_opts	get_opts(const char **format)
 	get_flags(format, &opts);
 	get_width(format, &opts);
 	get_precision(format, &opts);
-	//printf("\nAnd now here ;) : %c\n", **format);
+	if (opts.precision != -1 || opts.flags.minus)
+		opts.flags.zero = 0;
+	if (opts.flags.plus)
+		opts.flags.blank = 0;
+	//printf("\nOPTS : \n");
 	//print_opts(opts);
 	return (opts);
 }

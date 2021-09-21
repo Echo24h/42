@@ -1,5 +1,3 @@
-#include "ft_printf.h"
-
 int	is_flag(char c)
 {
 	if (c == '+' || c == '-' || c == '0' ||

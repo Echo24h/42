@@ -1,68 +1,6 @@
 #include "ft_printf.h"
 #include "libft.h"
-
-int	print_char(int c, t_opts opts)
-{
-	int	count_char;
-
-	count_char = 0;
-	if (opts.flags.minus)
-		ft_putchar(c);
-	while (++count_char < opts.width)
-		ft_putchar(' ');	
-	if (!opts.flags.minus)
-		ft_putchar(c);
-	return (count_char);
-}
-
-int	print_str(char *str, t_opts opts)
-{
-	int		count_char;
-
-	str = str ? ft_strdup(str) : ft_strdup("(null)");
-	if (opts.precision != -1)
-		str = ft_substr(str, 0, opts.precision);
-	count_char = ft_strlen(str);
-	if (opts.flags.minus)
-		ft_putstr(str);
-	while (count_char < opts.width)
-	{
-		if (opts.flags.zero && !opts.flags.minus)
-			ft_putchar('0');
-		else
-			ft_putchar(' ');
-		count_char++;
-	}
-	if (!opts.flags.minus)
-		ft_putstr(str);
-	free(str);
-	return (count_char);
-}
-
-int	print_ptr(void *ptr, t_opts opts)
-{
-	return (0);
-}
-
-int	print_int(int x, t_opts opts)
-{
-	return (0);
-}
-
-int	print_uint(unsigned int x, t_opts opts)
-{
-	return (0);
-}
-
-int	print_hexa(unsigned int x, int maj, t_opts opts)
-{
-	return (0);
-}
-
-int	print_percentage(t_opts opts)
-{
-	return (0);
-}
+#include "utils.h"
 
 int	print_var(const char **format, va_list *ap)
 {
@@ -80,9 +18,9 @@ int	print_var(const char **format, va_list *ap)
 	else if (**format == 'u')
 		return (print_uint(va_arg(*ap, unsigned int), opts));
 	else if (**format == 'x')
-		return (print_hexa(va_arg(*ap, int), 0, opts));
+		return (print_hexa(va_arg(*ap, int), opts, 0));
 	else if (**format == 'X')
-		return (print_hexa(va_arg(*ap, int), 1, opts));
+		return (print_hexa(va_arg(*ap, int), opts, 1));
 	else if (**format == '%')
 		return (print_percentage(opts));
 	return (0);
