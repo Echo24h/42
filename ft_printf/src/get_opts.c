@@ -22,7 +22,7 @@ void	get_width(const char **format, t_opts *opts, va_list *ap)
 		opts->width = opts->width * 10 + (**format - 48);
 		(*format)++;
 	}
-	if (opts->width < 0) // avoiding error when width specified is larger than INT_MAX
+	if (opts->width < 0)
 		opts->width *= -1;
 }
 
@@ -47,7 +47,7 @@ void	get_precision(const char **format, t_opts *opts, va_list *ap)
 		opts->precision = opts->precision * 10 + (**format - 48);
 		(*format)++;
 	}
-	if (opts->precision < 0) // avoiding error when precision specified is larger than INT_MAX
+	if (opts->precision < 0)
 		opts->precision *= -1;
 }
 
