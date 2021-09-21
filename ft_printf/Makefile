@@ -5,8 +5,7 @@ SRC_DIR		=	src
 OBJ_DIR		=	src/obj
 I_DIR		=	include
 
-SRC			=	dev.c	\
-				ft_printf.c \
+SRC			=	ft_printf.c \
 				is_flag.c	\
 				get_opts.c	\
 				print_char.c	\

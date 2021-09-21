@@ -1,8 +1,19 @@
 #include "utils.h"
 #include "libft.h"
 
-void	get_width(const char **format, t_opts *opts)
+void	get_width(const char **format, t_opts *opts, va_list *ap)
 {
+	if (**format == '*')
+	{
+		opts->width = va_arg(*ap, int);
+		(*format)++;
+		if (opts->width < 0)
+		{
+			opts->width *= -1;
+			opts->flags.minus = 1;
+		}
+		return ;
+	}
 	if (!ft_isdigit(**format))
 		return ;
 	opts->width = 0;
@@ -15,18 +26,25 @@ void	get_width(const char **format, t_opts *opts)
 		opts->width *= -1;
 }
 
-void	get_precision(const char **format, t_opts *opts)
+void	get_precision(const char **format, t_opts *opts, va_list *ap)
 {
 	int	precision;
 
 	if (**format != '.')
 		return ;
 	(*format)++;
+	if (**format == '*')
+	{
+		opts->precision = va_arg(*ap, int);
+		if (opts->precision < 0)
+			opts->precision = -1;
+		(*format)++;
+		return ;
+	}
 	opts->precision = 0;
 	while (**format && ft_isdigit(**format))
 	{
 		opts->precision = opts->precision * 10 + (**format - 48);
-
 		(*format)++;
 	}
 	if (opts->precision < 0) // avoiding error when precision specified is larger than INT_MAX
@@ -66,21 +84,17 @@ t_opts	inst_opts()
 	return (opts);
 }
 
-t_opts	get_opts(const char **format)
+t_opts	get_opts(const char **format, va_list *ap)
 {
 	t_opts	opts;
 
 	opts = inst_opts();
-	//printf("here baby : %c\n", **format);
-	//print_opts(opts);
 	get_flags(format, &opts);
-	get_width(format, &opts);
-	get_precision(format, &opts);
+	get_width(format, &opts, ap);
+	get_precision(format, &opts, ap);
 	if (opts.precision != -1 || opts.flags.minus)
 		opts.flags.zero = 0;
 	if (opts.flags.plus)
 		opts.flags.blank = 0;
-	//printf("\nOPTS : \n");
-	//print_opts(opts);
 	return (opts);
 }

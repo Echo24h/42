@@ -1,6 +1,8 @@
 #ifndef UTILS_H
 # define UTILS_H
 
+#include <stdarg.h>
+
 typedef struct	s_flags
 {
 	int	minus;
@@ -17,7 +19,7 @@ typedef struct	s_opts
 	t_flags	flags;
 }				t_opts;
 
-t_opts	get_opts(const char **format);
+t_opts	get_opts(const char **format, va_list *ap);
 int		is_flag(char c);
 int		print_char(int c, t_opts opts);
 int		print_str(char *str, t_opts opts);
@@ -25,10 +27,6 @@ int		print_ptr(void *ptr, t_opts opts);
 int		print_int(int x, t_opts opts);
 int		print_percentage(t_opts opts);
 int		print_uint(unsigned int x, t_opts opts);
-int		print_hexa(int nbr, t_opts opts, int maj);
-
-// dev
-void	print_flags(t_flags flags);
-void	print_opts(t_opts opts);
+int		print_hexa(unsigned int nbr, t_opts opts, int maj);
 
 #endif

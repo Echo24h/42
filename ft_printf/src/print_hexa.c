@@ -41,7 +41,7 @@ void	ft_putuint_hexa(unsigned int nbr, t_opts opts, int first_entry, int maj)
 	}
 }
 
-int		print_hexa(int nbr, t_opts opts, int maj)
+int		print_hexa(unsigned int nbr, t_opts opts, int maj)
 {
 	int	count_char;
 	int	len_nbr;

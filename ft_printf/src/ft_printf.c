@@ -1,4 +1,3 @@
-#include "ft_printf.h"
 #include "libft.h"
 #include "utils.h"
 
@@ -6,7 +5,7 @@ int	print_var(const char **format, va_list *ap)
 {
 	t_opts	opts;
 	
-	opts = get_opts(format);
+	opts = get_opts(format, ap);
 	if (**format == 'c')
 		return (print_char(va_arg(*ap, int), opts));
 	else if (**format == 's')
@@ -18,9 +17,9 @@ int	print_var(const char **format, va_list *ap)
 	else if (**format == 'u')
 		return (print_uint(va_arg(*ap, unsigned int), opts));
 	else if (**format == 'x')
-		return (print_hexa(va_arg(*ap, int), opts, 0));
+		return (print_hexa(va_arg(*ap, unsigned int), opts, 0));
 	else if (**format == 'X')
-		return (print_hexa(va_arg(*ap, int), opts, 1));
+		return (print_hexa(va_arg(*ap, unsigned int), opts, 1));
 	else if (**format == '%')
 		return (print_percentage(opts));
 	return (0);
