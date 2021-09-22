@@ -1,5 +1,13 @@
 #include "libft.h"
 
+char	**free_on_error(char **res, int n)
+{
+	while (n--)
+		free(res[n]);
+	free(res);
+	return (NULL);
+}
+
 char	**malloc_res(char const *s, char c)
 {
 	int		nb_word;
@@ -46,7 +54,7 @@ char	**ft_split(char const *s, char c)
 		while (s[i + j] && s[i + j] != c)
 			j++;
 		if (j > 0 && !(res[k++] = ft_substr(s, i, j)))
-			return (NULL);
+			return (free_on_error(res, k - 1));
 		i = i + j;
 	}
 	return (res);
