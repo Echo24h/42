@@ -6,7 +6,7 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 	t_list	*freeMe;
 
 	tmp = *lst;
-	while (*tmp)
+	while (tmp)
 	{
 		(*del)(tmp->content);
 		freeMe = tmp;
