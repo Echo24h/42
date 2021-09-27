@@ -10,6 +10,20 @@ static int	ft_strlen(char *str)
 	return (i);
 }
 
+void 		*ft_calloc(size_t count, size_t size)
+{
+	char	*res;
+	size_t	i;
+
+	res = malloc(size * count);
+	if (!res)
+		return (NULL);
+	i = 0;
+	while (i < count * size)
+		res[i++] = '\0'; 
+	return ((void *)res);
+}
+
 static void	ft_strcpy(char *buff, char *src)
 {
 	if (*src == '\n')
@@ -42,9 +56,9 @@ char		*ft_strjoin(char **s1, char **s2)
 	return (res);
 }
 
-int			extract(char buff[BUFFER_SIZE + 1], char **extraction)
+int			extract(char *buff, char **extraction)
 {
-	int	i;
+	int	i; 
 	int	j;
 	int found_line;
 
@@ -52,14 +66,14 @@ int			extract(char buff[BUFFER_SIZE + 1], char **extraction)
 	while (buff[i] && buff[i] != '\n')
 		i++;
 	found_line = (buff[i] == '\n') ? 1 : 0;
+	i += found_line;
 	*extraction = malloc(i + 1);
 	if (!*extraction)
 		return (-1);
-	(*extraction)[i] = '\0';
 	j = -1;
 	while (++j < i)
 		(*extraction)[j] = buff[j];
-	(*extraction)[i] = '\0';
+	(*extraction)[j] = '\0';
 	ft_strcpy(buff, &buff[i]);
 	return (found_line);
 }

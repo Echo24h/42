@@ -5,8 +5,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int			get_next_line(int fd, char **line);
-int			extract(char buff[BUFFER_SIZE + 1], char **extraction);
-char		*ft_strjoin(char **s1, char **s2);
+char	*get_next_line(int fd);
+int		extract(char *buff, char **extraction);
+char	*ft_strjoin(char **s1, char **s2);
+void 	*ft_calloc(size_t count, size_t size);
 
 #endif

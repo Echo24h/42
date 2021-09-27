@@ -9,6 +9,7 @@
 
 int			extract(char buff[BUFFER_SIZE + 1], char **extraction);
 char		*ft_strjoin(char **s1, char **s2);
-int			get_next_line(int fd, char **line);
+char		*get_next_line(int fd);
+void 		*ft_calloc(size_t count, size_t size);
 
 #endif
