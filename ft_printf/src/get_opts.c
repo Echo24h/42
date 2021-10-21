@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_opts.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/18 17:35:47 by ydanset           #+#    #+#             */
+/*   Updated: 2021/10/18 17:55:22 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "utils.h"
 #include "libft.h"
 
@@ -51,7 +63,6 @@ void	get_precision(const char **format, t_opts *opts, va_list *ap)
 		opts->precision *= -1;
 }
 
-
 void	get_flags(const char **format, t_opts *opts)
 {
 	while (**format && is_flag(**format))
@@ -70,10 +81,10 @@ void	get_flags(const char **format, t_opts *opts)
 	}
 }
 
-t_opts	inst_opts()
+t_opts	inst_opts(void)
 {
 	t_opts	opts;
-	
+
 	opts.width = -1;
 	opts.precision = -1;
 	opts.flags.minus = 0;

@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_ptr.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/18 17:36:17 by ydanset           #+#    #+#             */
+/*   Updated: 2021/10/18 17:36:18 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "utils.h"
 
-int		get_len_addr(uintptr_t addr, int precision)
+int	get_len_addr(uintptr_t addr, int precision)
 {
 	int	len;
 
@@ -39,12 +51,16 @@ void	print_addr(uintptr_t addr, int precision, int len_addr, int x)
 
 int	print_ptr(void *ptr, t_opts opts)
 {
-	int	count_char;
-	int	len_addr;;
-	uintptr_t addr = (uintptr_t)ptr;
+	int			count_char;
+	int			len_addr;
+	uintptr_t	addr;
 
+	addr = (uintptr_t)ptr;
 	len_addr = get_len_addr(addr, opts.precision);
-	count_char = (opts.precision > len_addr) ? 2 + opts.precision : 2 + len_addr;
+	if (opts.precision > len_addr)
+		count_char = 2 + opts.precision;
+	else
+		count_char = 2 + len_addr;
 	if (opts.flags.minus || opts.flags.zero)
 		print_addr(addr, opts.precision, len_addr, 1);
 	while (count_char < opts.width)

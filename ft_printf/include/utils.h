@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/19 13:02:20 by ydanset           #+#    #+#             */
+/*   Updated: 2021/10/19 13:02:22 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef UTILS_H
 # define UTILS_H
 
-#include <stdarg.h>
+# include <stdarg.h>
 
-typedef struct	s_flags
+typedef struct s_flags
 {
 	int	minus;
 	int	plus;
@@ -12,7 +24,7 @@ typedef struct	s_flags
 	int	hashtag;
 }				t_flags;
 
-typedef struct	s_opts
+typedef struct s_opts
 {
 	int		width;
 	int		precision;

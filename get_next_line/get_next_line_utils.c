@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/18 17:05:10 by ydanset           #+#    #+#             */
+/*   Updated: 2021/10/18 17:32:53 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 
 static int	ft_strlen(char *str)
@@ -10,7 +22,7 @@ static int	ft_strlen(char *str)
 	return (i);
 }
 
-void 		*ft_calloc(size_t count, size_t size)
+void	*ft_calloc(size_t count, size_t size)
 {
 	char	*res;
 	size_t	i;
@@ -20,7 +32,7 @@ void 		*ft_calloc(size_t count, size_t size)
 		return (NULL);
 	i = 0;
 	while (i < count * size)
-		res[i++] = '\0'; 
+		res[i++] = '\0';
 	return ((void *)res);
 }
 
@@ -33,7 +45,7 @@ static void	ft_strcpy(char *buff, char *src)
 	*buff = '\0';
 }
 
-char		*ft_strjoin(char **s1, char **s2)
+char	*ft_strjoin(char **s1, char **s2)
 {
 	char	*res;
 	int		i;
@@ -56,16 +68,19 @@ char		*ft_strjoin(char **s1, char **s2)
 	return (res);
 }
 
-int			extract(char *buff, char **extraction)
+int	extract(char *buff, char **extraction)
 {
-	int	i; 
+	int	i;
 	int	j;
-	int found_line;
+	int	found_line;
 
 	i = 0;
 	while (buff[i] && buff[i] != '\n')
 		i++;
-	found_line = (buff[i] == '\n') ? 1 : 0;
+	if (buff[i] == '\n')
+		found_line = 1;
+	else
+		found_line = 0;
 	i += found_line;
 	*extraction = malloc(i + 1);
 	if (!*extraction)

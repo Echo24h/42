@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_int.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/18 17:53:00 by ydanset           #+#    #+#             */
+/*   Updated: 2021/10/18 17:53:03 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "utils.h"
 
-int		get_len_nbr(int nbr, int precision)
+int	get_len_nbr(int nbr, int precision)
 {
 	int	len;
 
@@ -52,13 +64,16 @@ void	ft_putnbr(int nbr, t_opts opts, int len_nbr, int first_entry)
 	}
 }
 
-int		print_int(int nbr, t_opts opts)
+int	print_int(int nbr, t_opts opts)
 {
 	int	len_nbr;
 	int	count_char;
 
 	len_nbr = get_len_nbr(nbr, opts.precision);
-	count_char = (opts.precision > len_nbr) ? opts.precision : len_nbr;
+	if (opts.precision > len_nbr)
+		count_char = opts.precision;
+	else
+		count_char = len_nbr;
 	if (nbr < 0 || opts.flags.plus || opts.flags.blank)
 		count_char++;
 	if (opts.flags.zero)
@@ -67,7 +82,10 @@ int		print_int(int nbr, t_opts opts)
 		ft_putnbr(nbr, opts, len_nbr, 1);
 	while (count_char < opts.width)
 	{
-		opts.flags.zero ? ft_putchar('0') : ft_putchar(' ');
+		if (opts.flags.zero)
+			ft_putchar('0');
+		else
+			ft_putchar(' ');
 		count_char++;
 	}
 	if (!opts.flags.minus)

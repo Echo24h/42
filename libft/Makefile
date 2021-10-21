@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ydanset <marvin@42.fr>                     +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/10/18 11:59:04 by ydanset           #+#    #+#              #
+#    Updated: 2021/10/18 11:59:06 by ydanset          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 CC			=	gcc
 CFLAGS		=	-Werror -Wall -Wextra
 NAME		=	libft.a
@@ -44,15 +56,15 @@ SRC			=	ft_memset.c		\
 				ft_putstr.c	\
 				ft_striteri.c
 
-SRC_BONUS	=	ft_lstnew_bonus.c			\
-				ft_lstadd_front_bonus.c	\
-				ft_lstsize_bonus.c		\
-				ft_lstlast_bonus.c		\
-				ft_lstadd_back_bonus.c	\
-				ft_lstclear_bonus.c		\
-				ft_lstdelone_bonus.c		\
-				ft_lstiter_bonus.c		\
-				ft_lstmap_bonus.c			\
+SRC_BONUS	=	ft_lstnew.c			\
+				ft_lstadd_front.c	\
+				ft_lstsize.c		\
+				ft_lstlast.c		\
+				ft_lstadd_back.c	\
+				ft_lstclear.c		\
+				ft_lstdelone.c		\
+				ft_lstiter.c		\
+				ft_lstmap.c			\
 				$(SRC)
 
 OBJ				=	$(SRC:%.c=%.o)
@@ -69,7 +81,7 @@ $(NAME): $(OBJ_PFX)
 bonus: $(OBJ_BONUS_PFX)
 	ar -rcs $(NAME) $(OBJ_BONUS_PFX)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c   
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(I_DIR)
 

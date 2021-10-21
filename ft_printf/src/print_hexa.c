@@ -1,7 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_hexa.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/18 17:58:06 by ydanset           #+#    #+#             */
+/*   Updated: 2021/10/18 18:03:48 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "utils.h"
 
-int		get_len_uint_hexa(unsigned int nbr, int precision)
+static void	i_wish_i_was_a_ternary(int maj, int nbr, int x)
+{
+	if (x)
+	{
+		if (maj)
+			ft_putchar("0123456789ABCDEF"[nbr]);
+		else
+			ft_putchar("0123456789abcdef"[nbr]);
+	}
+	else
+	{
+		if (maj)
+			ft_putstr("0X");
+		else
+			ft_putstr("0x");
+	}
+}
+
+int	get_len_uint_hexa(unsigned int nbr, int precision)
 {
 	int	len;
 
@@ -22,7 +52,10 @@ void	handle_width(unsigned int nbr, t_opts opts, int len_nbr)
 {
 	int	x;
 
-	x = (opts.flags.hashtag && nbr) ? 2 : 0;
+	if (opts.flags.hashtag && nbr)
+		x = 2;
+	else
+		x = 0;
 	while (opts.width-- > len_nbr + x)
 		ft_putchar('0');
 }
@@ -36,7 +69,7 @@ void	ft_putuint_hexa(unsigned int nbr, t_opts opts, int first_entry, int maj)
 		if (nbr == 0 && opts.precision == 0)
 			return ;
 		if (opts.flags.hashtag && nbr)
-			maj ? ft_putstr("0X") : ft_putstr("0x");
+			i_wish_i_was_a_ternary(maj, 0, 0);
 		len_nbr = get_len_uint_hexa(nbr, opts.precision);
 		while (opts.precision-- > len_nbr)
 			ft_putchar('0');
@@ -44,7 +77,7 @@ void	ft_putuint_hexa(unsigned int nbr, t_opts opts, int first_entry, int maj)
 			handle_width(nbr, opts, len_nbr);
 	}
 	if (nbr >= 0 && nbr <= 15)
-		maj ? ft_putchar("0123456789ABCDEF"[nbr]) : ft_putchar("0123456789abcdef"[nbr]);
+		i_wish_i_was_a_ternary(maj, nbr, 1);
 	else
 	{
 		ft_putuint_hexa(nbr / 16, opts, 0, maj);
@@ -52,13 +85,16 @@ void	ft_putuint_hexa(unsigned int nbr, t_opts opts, int first_entry, int maj)
 	}
 }
 
-int		print_hexa(unsigned int nbr, t_opts opts, int maj)
+int	print_hexa(unsigned int nbr, t_opts opts, int maj)
 {
 	int	count_char;
 	int	len_nbr;
 
 	len_nbr = get_len_uint_hexa(nbr, opts.precision);
-	count_char = (opts.precision > len_nbr) ? opts.precision : len_nbr;
+	if (opts.precision > len_nbr)
+		count_char = opts.precision;
+	else
+		count_char = len_nbr;
 	if (opts.flags.hashtag && nbr)
 		count_char += 2;
 	if (opts.flags.minus)

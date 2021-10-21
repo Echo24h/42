@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_uint.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/18 17:35:33 by ydanset           #+#    #+#             */
+/*   Updated: 2021/10/18 17:35:35 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "utils.h"
 
-int		get_len_uint(unsigned int nbr, int precision)
+int	get_len_uint(unsigned int nbr, int precision)
 {
 	int	len;
 
@@ -42,7 +54,10 @@ int	print_uint(unsigned int nbr, t_opts opts)
 	int	len_nbr;
 
 	len_nbr = get_len_uint(nbr, opts.precision);
-	count_char = (opts.precision > len_nbr) ? opts.precision : len_nbr;
+	if (opts.precision > len_nbr)
+		count_char = opts.precision;
+	else
+		count_char = len_nbr;
 	if (opts.flags.minus)
 		ft_putuint(nbr, opts, len_nbr, 1);
 	while (count_char < opts.width)

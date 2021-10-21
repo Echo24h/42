@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/18 17:34:36 by ydanset           #+#    #+#             */
+/*   Updated: 2021/10/18 17:53:58 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "utils.h"
 
 int	print_var(const char **format, va_list *ap)
 {
 	t_opts	opts;
-	
+
 	opts = get_opts(format, ap);
 	if (**format == 'c')
 		return (print_char(va_arg(*ap, int), opts));
@@ -44,7 +56,7 @@ int	ft_printf(const char *format, ...)
 			ft_putchar(*format);
 			count_char++;
 		}
-		if(*format)
+		if (*format)
 			format++;
 	}
 	va_end(ap);

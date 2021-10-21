@@ -1,6 +1,19 @@
-#include "libft.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/18 12:09:32 by ydanset           #+#    #+#             */
+/*   Updated: 2021/10/18 12:55:40 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-size_t	ft_strlcat(char * restrict dst, const char * restrict src, size_t dstsize)
+#include "libft.h"
+#include <string.h>
+
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
 	size_t	len_dst;
 	size_t	i;
@@ -9,7 +22,8 @@ size_t	ft_strlcat(char * restrict dst, const char * restrict src, size_t dstsize
 	if (len_dst > dstsize)
 		return (dstsize + ft_strlen(src));
 	i = 0;
-	while ((int)i < (int)dstsize - (int)len_dst - 1 && src[i] && len_dst + i < dstsize)
+	while ((int)i < (int)dstsize - (int)len_dst - 1
+		&& src[i] && len_dst + i < dstsize)
 	{
 		dst[len_dst + i] = src[i];
 		i++;

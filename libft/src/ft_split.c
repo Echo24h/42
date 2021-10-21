@@ -1,4 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/18 12:02:15 by ydanset           #+#    #+#             */
+/*   Updated: 2021/10/18 13:18:36 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
+
+static int	i_was_not_supposed_to_be_here(int *i, char const *s, char c)
+{
+	int	j;
+
+	while (s[*i] && s[*i] == c)
+		(*i)++;
+	j = 0;
+	while (s[*i + j] && s[*i + j] != c)
+		j++;
+	return (j);
+}
 
 char	**free_on_error(char **res, int n)
 {
@@ -48,13 +72,13 @@ char	**ft_split(char const *s, char c)
 	i = 0;
 	while (s[i])
 	{
-		while (s[i] && s[i] == c)
-			i++;
-		j = 0;
-		while (s[i + j] && s[i + j] != c)
-			j++;
-		if (j > 0 && !(res[k++] = ft_substr(s, i, j)))
-			return (free_on_error(res, k - 1));
+		j = i_was_not_supposed_to_be_here(&i, s, c);
+		if (j > 0)
+		{
+			res[k++] = ft_substr(s, i, j);
+			if (!res[k - 1])
+				return (free_on_error(res, k - 1));
+		}
 		i = i + j;
 	}
 	return (res);
