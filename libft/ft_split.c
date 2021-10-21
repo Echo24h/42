@@ -24,7 +24,7 @@ static int	i_was_not_supposed_to_be_here(int *i, char const *s, char c)
 	return (j);
 }
 
-char	**free_on_error(char **res, int n)
+static char	**free_on_error(char **res, int n)
 {
 	while (n--)
 		free(res[n]);
@@ -32,7 +32,7 @@ char	**free_on_error(char **res, int n)
 	return (NULL);
 }
 
-char	**malloc_res(char const *s, char c)
+static char	**malloc_res(char const *s, char c)
 {
 	int		nb_word;
 	int		i;

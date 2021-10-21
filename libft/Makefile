@@ -13,8 +13,7 @@
 CC			=	gcc
 CFLAGS		=	-Werror -Wall -Wextra
 NAME		=	libft.a
-SRC_DIR		=	src
-OBJ_DIR		=	src/obj
+OBJ_DIR		=	obj
 I_DIR		=	.
 
 SRC			=	ft_memset.c		\
@@ -81,7 +80,7 @@ $(NAME): $(OBJ_PFX)
 bonus: $(OBJ_BONUS_PFX)
 	ar -rcs $(NAME) $(OBJ_BONUS_PFX)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c   
+$(OBJ_DIR)/%.o: %.c   
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(I_DIR)
 
