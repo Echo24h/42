@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ydanset <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 11:59:04 by ydanset           #+#    #+#              #
-#    Updated: 2021/10/18 11:59:06 by ydanset          ###   ########.fr        #
+#    Updated: 2021/10/23 13:50:35 by ydanset          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,8 @@ SRC			=	ft_memset.c		\
 				ft_putstr.c	\
 				ft_striteri.c
 
-SRC_BONUS	=	ft_lstnew.c			\
+SRC_BONUS	=	$(SRC)	\
+				ft_lstnew.c			\
 				ft_lstadd_front.c	\
 				ft_lstsize.c		\
 				ft_lstlast.c		\
@@ -63,24 +64,26 @@ SRC_BONUS	=	ft_lstnew.c			\
 				ft_lstclear.c		\
 				ft_lstdelone.c		\
 				ft_lstiter.c		\
-				ft_lstmap.c			\
-				$(SRC)
+				ft_lstmap.c
+				
 
-OBJ				=	$(SRC:%.c=%.o)
-OBJ_PFX			=	$(addprefix $(OBJ_DIR)/, $(OBJ))
-
-OBJ_BONUS		=	$(SRC_BONUS:%.c=%.o)
-OBJ_BONUS_PFX	=	$(addprefix $(OBJ_DIR)/, $(OBJ_BONUS))
+ifdef WITH_BONUS
+	OBJ				=	$(SRC_BONUS:%.c=%.o)
+	OBJ_PFX			=	$(addprefix $(OBJ_DIR)/, $(OBJ))
+else
+	OBJ				=	$(SRC:%.c=%.o)
+	OBJ_PFX			=	$(addprefix $(OBJ_DIR)/, $(OBJ))
+endif
 
 all: $(NAME)
 
 $(NAME): $(OBJ_PFX)
 	ar -rcs $(NAME) $(OBJ_PFX)
 
-bonus: $(OBJ_BONUS_PFX)
-	ar -rcs $(NAME) $(OBJ_BONUS_PFX)
+bonus:
+	@make WITH_BONUS=1 all 
 
-$(OBJ_DIR)/%.o: %.c   
+$(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(I_DIR)
 
