@@ -6,7 +6,7 @@
 #    By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 11:59:04 by ydanset           #+#    #+#              #
-#    Updated: 2021/10/23 13:50:35 by ydanset          ###   ########.fr        #
+#    Updated: 2021/10/25 15:08:09 by ydanset          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,6 @@ I_DIR		=	.
 SRC			=	ft_memset.c		\
 				ft_bzero.c		\
 				ft_memcpy.c		\
-				ft_memccpy.c	\
 				ft_memmove.c 	\
 				ft_memchr.c		\
 				ft_memcmp.c		\
@@ -50,9 +49,6 @@ SRC			=	ft_memset.c		\
 				ft_putstr_fd.c	\
 				ft_putendl_fd.c	\
 				ft_putnbr_fd.c	\
-				ft_iswhitespace.c	\
-				ft_putchar.c	\
-				ft_putstr.c	\
 				ft_striteri.c
 
 SRC_BONUS	=	$(SRC)	\

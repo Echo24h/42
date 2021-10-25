@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 13:04:13 by ydanset           #+#    #+#             */
-/*   Updated: 2021/10/18 13:04:15 by ydanset          ###   ########.fr       */
+/*   Updated: 2021/10/25 15:21:03 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+static int	is_whitespace(int c)
+{
+	if (c == '\v' || c == '\n' || c == '\t'
+		|| c == '\r' || c == '\f' || c == ' ')
+		return (1);
+	return (0);
+}
 
 int	ft_atoi(const char *str)
 {
@@ -19,7 +27,7 @@ int	ft_atoi(const char *str)
 
 	res = 0;
 	neg = 0;
-	while (*str && ft_iswhitespace(*str))
+	while (*str && is_whitespace(*str))
 		str++;
 	if (*str == '-' || *str == '+')
 	{
