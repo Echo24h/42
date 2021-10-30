@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 17:05:10 by ydanset           #+#    #+#             */
-/*   Updated: 2021/10/18 17:32:53 by ydanset          ###   ########.fr       */
+/*   Updated: 2021/10/30 22:10:09 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ void	*ft_calloc(size_t count, size_t size)
 
 static void	ft_strcpy(char *buff, char *src)
 {
-	if (*src == '\n')
-		src++;
 	while (*src)
 		*buff++ = *src++;
 	*buff = '\0';
@@ -68,27 +66,31 @@ char	*ft_strjoin(char **s1, char **s2)
 	return (res);
 }
 
-int	extract(char *buff, char **extraction)
+int	extract_line(char *buff, char **line)
 {
 	int	i;
 	int	j;
 	int	found_line;
+	char	*line_extracted;
 
 	i = 0;
 	while (buff[i] && buff[i] != '\n')
 		i++;
+	found_line = 0;
 	if (buff[i] == '\n')
 		found_line = 1;
-	else
-		found_line = 0;
-	i += found_line;
-	*extraction = malloc(i + 1);
-	if (!*extraction)
+	line_extracted = ft_calloc(i + found_line + 1, 1);
+	if (!line_extracted)
 		return (-1);
-	j = -1;
-	while (++j < i)
-		(*extraction)[j] = buff[j];
-	(*extraction)[j] = '\0';
-	ft_strcpy(buff, &buff[i]);
+	j = 0;
+	while (j < i + found_line)
+	{
+		line_extracted[j] = buff[j];
+		j++;
+	}
+	*line = ft_strjoin(line, &line_extracted);
+	if (!line)
+		return (-1);
+	ft_strcpy(buff, &buff[i + found_line]);
 	return (found_line);
 }
