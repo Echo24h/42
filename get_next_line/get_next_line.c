@@ -6,12 +6,19 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 17:04:52 by ydanset           #+#    #+#             */
-/*   Updated: 2021/10/30 22:10:23 by ydanset          ###   ########.fr       */
+/*   Updated: 2021/11/02 16:29:32 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
+
+char	*error(char **line)
+{
+	if (*line)
+		free(*line);
+	return (NULL);
+}
 
 char	*get_next_line(int fd)
 {
@@ -22,18 +29,20 @@ char	*get_next_line(int fd)
 
 	line = ft_calloc(1, 1);
 	if (!line)
-		return (NULL);
+		return (error(&line));
 	found_line = 0;
 	while (!found_line)
 	{
 		found_line = extract_line(buff, &line);
 		if (found_line == -1)
-			return (NULL);
+			return (error(&line));
 		if (!found_line)
 		{
 			n = read(fd, buff, BUFFER_SIZE);
-			if (!n || n == -1)
-				return (NULL);
+			if (!n && *line)
+				found_line = 1;
+			else if (!n || n == -1)
+				return (error(&line));
 			buff[n] = '\0';
 		}
 	}

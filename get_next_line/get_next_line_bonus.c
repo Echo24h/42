@@ -3,39 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 17:28:40 by ydanset           #+#    #+#             */
-/*   Updated: 2021/10/18 17:28:42 by ydanset          ###   ########.fr       */
+/*   Updated: 2021/11/02 16:53:41 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
+char	*error(char **line)
+{
+	if (*line)
+		free(*line);
+	return (NULL);
+}
+
 char	*get_next_line(int fd)
 {
 	static char	buff[NB_FILES_MAX][BUFFER_SIZE + 1];
-	char		*extraction;
-	int			n;
 	char		*line;
+	int			n;
+	int			found_line;
 
-	if (fd >= NB_FILES_MAX)
+	if (fd >= NB_FILES_MAX || fd < 0)
 		return (NULL);
-	line = ft_calloc(1, 1);
-	if (!line)
-		return (NULL);
-	while (!extract(buff[fd], &extraction))
+	line = NULL;
+	found_line = 0;
+	while (!found_line)
 	{
-		line = ft_strjoin(&line, &extraction);
-		n = read(fd, buff[fd], BUFFER_SIZE);
-		if (!line || n == -1)
-			return (NULL);
-		buff[fd][n] = '\0';
-		if (!n && !buff[fd][0])
-			return (NULL);
+		found_line = extract_line(buff[fd], &line);
+		if (found_line == -1)
+			return (error(&line));
+		if (!found_line)
+		{
+			n = read(fd, buff[fd], BUFFER_SIZE);
+			if (!n && *line)
+				found_line = 1;
+			else if (!n || n == -1)
+				return (error(&line));
+			buff[fd][n] = '\0';
+		}
 	}
-	line = ft_strjoin(&line, &extraction);
-	if (!line)
-		return (NULL);
 	return (line);
 }
