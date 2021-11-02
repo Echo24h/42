@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 17:05:10 by ydanset           #+#    #+#             */
-/*   Updated: 2021/11/02 16:21:04 by ydanset          ###   ########.fr       */
+/*   Updated: 2021/11/02 17:01:36 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ char	*ft_strjoin(char **s1, char **s2)
 	int		i;
 	int		j;
 
-	if (!*s1 || !*s2)
-		return (NULL);
+	if (!*s1)
+		return (*s2);
 	res = malloc(ft_strlen(*s1) + ft_strlen(*s2) + 1);
 	if (!res)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 17:04:52 by ydanset           #+#    #+#             */
-/*   Updated: 2021/11/02 16:29:32 by ydanset          ###   ########.fr       */
+/*   Updated: 2021/11/02 17:01:27 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,7 @@ char	*get_next_line(int fd)
 	int			n;
 	int			found_line;
 
-	line = ft_calloc(1, 1);
-	if (!line)
-		return (error(&line));
+	line = NULL;
 	found_line = 0;
 	while (!found_line)
 	{
