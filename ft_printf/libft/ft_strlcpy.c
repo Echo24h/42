@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_char.c                                       :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/18 17:35:01 by ydanset           #+#    #+#             */
-/*   Updated: 2021/11/05 16:27:59 by ydanset          ###   ########.fr       */
+/*   Created: 2021/10/18 12:19:26 by ydanset           #+#    #+#             */
+/*   Updated: 2021/10/18 12:27:17 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "utils.h"
 
-int	print_char(int c, t_opts opts)
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	int	count_char;
+	size_t	i;
 
-	count_char = 0;
-	if (opts.flags.minus)
-		ft_putchar(c);
-	while (++count_char < opts.width)
-		ft_putchar(' ');
-	if (!opts.flags.minus)
-		ft_putchar(c);
-	return (count_char);
+	if (!dstsize)
+		return (ft_strlen(src));
+	i = 0;
+	while (i < dstsize - 1 && src[i])
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (ft_strlen(src));
 }

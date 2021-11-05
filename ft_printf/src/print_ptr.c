@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   print_ptr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 17:36:17 by ydanset           #+#    #+#             */
-/*   Updated: 2021/10/18 17:36:18 by ydanset          ###   ########.fr       */
+/*   Updated: 2021/11/05 18:03:02 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "utils.h"
 
-int	get_len_addr(uintptr_t addr, int precision)
+static int	get_len_addr(uintptr_t addr, int precision)
 {
 	int	len;
 
@@ -30,23 +30,17 @@ int	get_len_addr(uintptr_t addr, int precision)
 	return (len);
 }
 
-void	print_addr(uintptr_t addr, int precision, int len_addr, int x)
+static void	print_addr(uintptr_t addr, int len_addr, int x)
 {
 	if (x == 1)
 	{
 		ft_putstr("0x");
-		if (!len_addr && precision == 0)
+		if (!len_addr)
 			return ;
-		while (precision-- > len_addr)
-			ft_putchar('0');
 	}
-	if (addr >= 0 && addr <= 15)
-		ft_putchar("0123456789abcdef"[addr]);
-	else
-	{
-		print_addr(addr / 16, precision, len_addr, 0);
-		print_addr(addr % 16, precision, len_addr, 0);
-	}
+	if (addr > 15)
+		print_addr(addr / 16, len_addr, 0);
+	ft_putchar("0123456789abcdef"[addr % 16]);
 }
 
 int	print_ptr(void *ptr, t_opts opts)
@@ -57,21 +51,15 @@ int	print_ptr(void *ptr, t_opts opts)
 
 	addr = (uintptr_t)ptr;
 	len_addr = get_len_addr(addr, opts.precision);
-	if (opts.precision > len_addr)
-		count_char = 2 + opts.precision;
-	else
-		count_char = 2 + len_addr;
-	if (opts.flags.minus || opts.flags.zero)
-		print_addr(addr, opts.precision, len_addr, 1);
+	count_char = len_addr + 2;
+	if (opts.flags.minus)
+		print_addr(addr, len_addr, 1);
 	while (count_char < opts.width)
 	{
-		if (opts.flags.zero && !opts.flags.minus)
-			ft_putchar('0');
-		else
-			ft_putchar(' ');
+		ft_putchar(' ');
 		count_char++;
 	}
-	if (!opts.flags.minus && !opts.flags.zero)
-		print_addr(addr, opts.precision, len_addr, 1);
+	if (!opts.flags.minus)
+		print_addr(addr, len_addr, 1);
 	return (count_char);
 }

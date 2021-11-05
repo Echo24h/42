@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_char.c                                       :+:      :+:    :+:   */
+/*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/18 17:35:01 by ydanset           #+#    #+#             */
-/*   Updated: 2021/11/05 16:27:59 by ydanset          ###   ########.fr       */
+/*   Created: 2021/10/18 12:04:51 by ydanset           #+#    #+#             */
+/*   Updated: 2021/10/18 13:03:34 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "utils.h"
 
-int	print_char(int c, t_opts opts)
+int	ft_isalpha(int c)
 {
-	int	count_char;
-
-	count_char = 0;
-	if (opts.flags.minus)
-		ft_putchar(c);
-	while (++count_char < opts.width)
-		ft_putchar(' ');
-	if (!opts.flags.minus)
-		ft_putchar(c);
-	return (count_char);
+	if ((c >= 'a' && c <= 'z')
+		|| (c >= 'A' && c <= 'Z'))
+		return (1);
+	return (0);
 }

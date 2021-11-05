@@ -15,24 +15,20 @@ SRC			=	ft_printf.c \
 				print_percentage.c	\
 				print_uint.c	\
 				print_hexa.c
-				
-
-SRC_BONUS	=	
 
 OBJ				=	$(SRC:%.c=%.o)
 OBJ_PFX			=	$(addprefix $(OBJ_DIR)/, $(OBJ))
 
-OBJ_BONUS		=	$(SRC_BONUS:%.c=%.o)
-OBJ_BONUS_PFX	=	$(addprefix $(OBJ_DIR)/, $(OBJ_BONUS))
-
 all: $(NAME)
 
-$(NAME): $(OBJ_PFX)
-	cp lib/libft.a $(NAME)
+make_libft:
+	make -C libft bonus
+
+$(NAME): make_libft $(OBJ_PFX)
+	cp libft/libft.a $(NAME)
 	ar -rcs $(NAME) $(OBJ_PFX)
 
-bonus: $(OBJ_BONUS_PFX)
-	ar -rcs $(NAME) $(OBJ_BONUS_PFX)
+bonus: all
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
@@ -44,11 +40,13 @@ run: all
 	@rm -f run
 
 clean:
+	make -C libft clean
 	rm -rf $(OBJ_DIR)
 
 fclean: clean
-	rm -f $(NAME)
+	make -C libft fclean
+	rm -f $(NAME) && rm -f libft/libft.a
 
 re: fclean all
 
-.PHONY: all clean fclean re bonus run
+.PHONY: all clean fclean re bonus run make_libft

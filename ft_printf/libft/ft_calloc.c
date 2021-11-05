@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_char.c                                       :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/18 17:35:01 by ydanset           #+#    #+#             */
-/*   Updated: 2021/11/05 16:27:59 by ydanset          ###   ########.fr       */
+/*   Created: 2021/10/18 12:02:37 by ydanset           #+#    #+#             */
+/*   Updated: 2021/10/18 13:03:54 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "utils.h"
 
-int	print_char(int c, t_opts opts)
+void	*ft_calloc(size_t count, size_t size)
 {
-	int	count_char;
+	char	*res;
+	size_t	i;
 
-	count_char = 0;
-	if (opts.flags.minus)
-		ft_putchar(c);
-	while (++count_char < opts.width)
-		ft_putchar(' ');
-	if (!opts.flags.minus)
-		ft_putchar(c);
-	return (count_char);
+	res = malloc(size * count);
+	if (!res)
+		return (NULL);
+	i = 0;
+	while (i < count * size)
+		res[i++] = '\0';
+	return ((void *)res);
 }

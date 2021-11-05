@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 12:56:41 by ydanset           #+#    #+#             */
-/*   Updated: 2021/10/19 12:56:42 by ydanset          ###   ########.fr       */
+/*   Updated: 2021/11/05 20:29:02 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,24 @@
 int	print_str(char *str, t_opts opts)
 {
 	int		count_char;
+	char	*tmp;
 
-	if (str)
-		str = ft_strdup(str);
-	else
+	if (!str)
 		str = ft_strdup("(null)");
+	else
+		str = ft_strdup(str);
 	if (opts.precision != -1)
+	{
+		tmp = str;
 		str = ft_substr(str, 0, opts.precision);
+		free(tmp);
+	}
 	count_char = ft_strlen(str);
 	if (opts.flags.minus)
 		ft_putstr(str);
 	while (count_char < opts.width)
 	{
-		if (opts.flags.zero && !opts.flags.minus)
-			ft_putchar('0');
-		else
-			ft_putchar(' ');
+		ft_putchar(' ');
 		count_char++;
 	}
 	if (!opts.flags.minus)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_opts.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 17:35:47 by ydanset           #+#    #+#             */
-/*   Updated: 2021/10/18 17:55:22 by ydanset          ###   ########.fr       */
+/*   Updated: 2021/11/05 19:37:21 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@ void	get_width(const char **format, t_opts *opts, va_list *ap)
 		opts->width = va_arg(*ap, int);
 		(*format)++;
 		if (opts->width < 0)
-		{
 			opts->width *= -1;
-			opts->flags.minus = 1;
-		}
 		return ;
 	}
 	if (!ft_isdigit(**format))
@@ -34,8 +31,6 @@ void	get_width(const char **format, t_opts *opts, va_list *ap)
 		opts->width = opts->width * 10 + (**format - 48);
 		(*format)++;
 	}
-	if (opts->width < 0)
-		opts->width *= -1;
 }
 
 void	get_precision(const char **format, t_opts *opts, va_list *ap)
@@ -53,14 +48,14 @@ void	get_precision(const char **format, t_opts *opts, va_list *ap)
 		(*format)++;
 		return ;
 	}
+	if (**format == '-')
+		(*format)++;
 	opts->precision = 0;
 	while (**format && ft_isdigit(**format))
 	{
 		opts->precision = opts->precision * 10 + (**format - 48);
 		(*format)++;
 	}
-	if (opts->precision < 0)
-		opts->precision *= -1;
 }
 
 void	get_flags(const char **format, t_opts *opts)

@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_char.c                                       :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/18 17:35:01 by ydanset           #+#    #+#             */
-/*   Updated: 2021/11/05 16:27:59 by ydanset          ###   ########.fr       */
+/*   Created: 2021/10/18 12:20:20 by ydanset           #+#    #+#             */
+/*   Updated: 2021/11/05 15:13:23 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "utils.h"
 
-int	print_char(int c, t_opts opts)
+size_t	ft_strlen(const char *s)
 {
-	int	count_char;
+	size_t	res;
 
-	count_char = 0;
-	if (opts.flags.minus)
-		ft_putchar(c);
-	while (++count_char < opts.width)
-		ft_putchar(' ');
-	if (!opts.flags.minus)
-		ft_putchar(c);
-	return (count_char);
+	res = 0;
+	while (*(s++))
+		res++;
+	return (res);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_hexa.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 17:58:06 by ydanset           #+#    #+#             */
-/*   Updated: 2021/10/18 18:03:48 by ydanset          ###   ########.fr       */
+/*   Updated: 2021/11/05 20:04:01 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	i_wish_i_was_a_ternary(int maj, int nbr, int x)
 	}
 }
 
-int	get_len_uint_hexa(unsigned int nbr, int precision)
+static int	get_len_uint_hexa(unsigned int nbr, int precision)
 {
 	int	len;
 
