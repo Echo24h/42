@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 13:02:20 by ydanset           #+#    #+#             */
-/*   Updated: 2021/11/05 16:23:38 by ydanset          ###   ########.fr       */
+/*   Updated: 2021/11/05 20:39:00 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define UTILS_H
 
 # include <stdarg.h>
-#include <string.h>
+# include <string.h>
 
 typedef struct s_flags
 {

@@ -21,10 +21,10 @@ OBJ_PFX			=	$(addprefix $(OBJ_DIR)/, $(OBJ))
 
 all: $(NAME)
 
-make_libft:
+libft/libft.a:
 	make -C libft bonus
 
-$(NAME): make_libft $(OBJ_PFX)
+$(NAME): libft/libft.a $(OBJ_PFX)
 	cp libft/libft.a $(NAME)
 	ar -rcs $(NAME) $(OBJ_PFX)
 
