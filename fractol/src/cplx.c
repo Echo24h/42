@@ -2,7 +2,7 @@
 
 void	print_cplx(t_cplx z)
 {
-	printf("z = %f + i%f", z.re, z.im);
+	printf("z = %f + %fi", z.re, z.im);
 }
 
 t_cplx	get_cplx(double re, double im)

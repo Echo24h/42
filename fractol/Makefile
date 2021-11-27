@@ -6,7 +6,8 @@ L_DIR	=	lib
 LIB		=	-lmlx
 
 SRC		=	src/main.c	\
-			src/cplx.c
+			src/cplx.c	\
+			src/hooks.c	\
 
 OBJ		=	$(SRC:%.c=%.o)
 
@@ -18,7 +19,7 @@ $(NAME): $(OBJ)
 %.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(I_DIR)
 
-run: re
+run: re clean
 	./$(NAME)
 
 clean:
