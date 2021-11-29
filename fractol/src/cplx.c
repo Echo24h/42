@@ -1,11 +1,6 @@
 #include "cplx.h"
 
-void	print_cplx(t_cplx z)
-{
-	printf("z = %f + %fi", z.re, z.im);
-}
-
-t_cplx	get_cplx(double re, double im)
+t_cplx	get_cplx(long double re, long double im)
 {
 	t_cplx	z;
 
@@ -14,15 +9,11 @@ t_cplx	get_cplx(double re, double im)
 	return (z);
 }
 
-t_cplx	pow2_cplx(t_cplx z)
+t_cplx	get_next_cplx(t_cplx z, t_cplx c)
 {
-	return (get_cplx(pow(z.re, 2) - pow(z.im, 2), 2 * z.re * z.im));
-}
+	t_cplx	next_z;
 
-t_cplx	add_cplx(t_cplx z1, t_cplx z2)
-{
-	t_cplx	z;
-
-	z = get_cplx(z1.re + z2.re, z1.im +z2.im);
-	return (z);
+	next_z.re = z.re * z.re - z.im * z.im + c.re;
+	next_z.im = 2 * z.im * z.re + c.im;
+	return (next_z);
 }

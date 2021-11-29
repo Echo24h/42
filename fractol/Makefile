@@ -8,6 +8,8 @@ LIB		=	-lmlx
 SRC		=	src/main.c	\
 			src/cplx.c	\
 			src/hooks.c	\
+			src/events.c	\
+			src/rgb.c	\
 
 OBJ		=	$(SRC:%.c=%.o)
 
@@ -19,8 +21,8 @@ $(NAME): $(OBJ)
 %.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(I_DIR)
 
-run: re clean
-	./$(NAME)
+run: re
+	make clean && ./$(NAME)
 
 clean:
 	rm -f $(OBJ)
