@@ -7,8 +7,8 @@ void	handle_zoom(t_var *var)
 	long double	db;
 	long double	dl;
 
-	//printf("zoom: %d\n", var->iteration_max);
 	mlx_mouse_get_pos(WIN, &(var->mouse_x), &(var->mouse_y));
+	printf("zoom: (%d, %d)\n", var->mouse_x, var->mouse_y);
 	dt = var->mouse_y * var->step_y;
 	dr = (W - var->mouse_x) * var->step_x;
 	db = (H - var->mouse_y) * var->step_y;
@@ -17,6 +17,7 @@ void	handle_zoom(t_var *var)
 		var->limits.curr_min_re + (dl / var->zoom_speed),
 		var->limits.curr_max_im - (dt / var->zoom_speed),
 		var->limits.curr_min_im + (db / var->zoom_speed));
+	var->iteration_max += 3;
 	draw_fractal(var);
 }
 
@@ -25,13 +26,16 @@ void	handle_unzoom(t_var *var)
 	long double	dh;
 	long double	dv;
 
-	//printf("unzoom: %d\n", var->iteration_max);
 	dh = (W / 2) * var->step_x;
 	dv = (H / 2) * var->step_y;
 	var->limits = get_limits(var->limits.curr_max_re + (dh / var->zoom_speed),
 		var->limits.curr_min_re - (dh / var->zoom_speed),
 		var->limits.curr_max_im + (dv / var->zoom_speed),
 		var->limits.curr_min_im - (dv / var->zoom_speed));
+	if (var->iteration_max > 51)
+		var->iteration_max -= 2;
+	else if (var->iteration_max == 51)
+		var->iteration_max = 50;
 	draw_fractal(var);
 }
 

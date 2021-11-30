@@ -52,22 +52,29 @@ void	put_pixel(t_var *var, int x, int y, int color)
 	}
 }
 
-int	get_pixel_color(t_var *var, t_cplx c)
+unsigned int	get_color(t_var *var, int nb_iteration)
+{
+	if (var->palette == 0)
+		return (palette_0(var, nb_iteration));
+	else if (var->palette == 1)
+		return (palette_1(var, nb_iteration));
+	return (0);
+}
+
+int	get_nb_iteration(t_var *var, t_cplx c)
 {
 	t_cplx	z;
 	int	i;
-	t_rgb	rgb;
-
+	
 	i = 0;
-	z = get_cplx(0, 0);
+	
+	if (var->fractal == MANDELBROT)
+		z = get_cplx(0, 0);
+	else if (var->fractal == JULIA)
+		z = get_cplx(var->mouse_x, var->mouse_y);
 	while (z.re * z.re + z.im * z.im < 4 && ++i < var->iteration_max)
 		z = get_next_cplx(z, c);
-	if (i == var->iteration_max)
-		return (0x0);
-	rgb.r = sin(0.2 * i + 3) * 127 + 128;
-	rgb.g = sin(0.2 * i + 2) * 127 + 128;
-	rgb.b = sin(0.2 * i + 1) * 127 + 128;
-	return (rgb_to_int(rgb));
+	return (i);
 }
 
 void	draw_fractal(t_var *var)
@@ -86,7 +93,7 @@ void	draw_fractal(t_var *var)
 		while (x < W)
 		{
 			c = get_cplx(x * var->step_x + var->limits.curr_min_re, var->limits.curr_max_im - y * var->step_y);
-			color = get_pixel_color(var, c);
+			color = get_color(var, get_nb_iteration(var, c));
 			put_pixel(var, x, y, color);
 			x++;
 		}
@@ -95,7 +102,12 @@ void	draw_fractal(t_var *var)
 	mlx_put_image_to_window(MLX, WIN, IMG, 0, 0);
 }
 
-int	main()
+int	mouse_motion()
+{
+	return (1);
+}
+
+int	main(int ac, char **av)
 {
 	t_var	*var;
 
@@ -111,13 +123,20 @@ int	main()
 	var->limits = get_limits(MAX_RE, MIN_RE, MAX_IM, MIN_IM);
 	var->iteration_max = 50;
 	var->zoom_speed = 2;
-	
+	var->palette = 0;
+	var->max_step_x = (fabs(MAX_RE) + fabs(MIN_RE)) / W;
+	var->max_step_x = (fabs(MAX_IM) + fabs(MIN_IM)) / H;
+	var->fractal = MANDELBROT;
+	var->allow_julia_variation = 0;
+
 	draw_fractal(var);
 
 	mlx_key_hook(WIN, key_hook, var);
 	mlx_mouse_hook(WIN, mouse_hook, var);
+	mlx_hook(WIN, DestroyNotify, StructureNotifyMask, exit_prog, var);
+	// mlx_hook(WIN, MotionNotify, PointerMotionMask, mouse_motion, var);
 	mlx_loop(MLX);
-	
+
 	printf("EH ouais bitch\n");
 	return (0);
 }

@@ -10,6 +10,7 @@ SRC		=	src/main.c	\
 			src/hooks.c	\
 			src/events.c	\
 			src/rgb.c	\
+			src/palettes.c	\
 
 OBJ		=	$(SRC:%.c=%.o)
 
