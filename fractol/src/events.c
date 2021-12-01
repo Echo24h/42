@@ -7,8 +7,11 @@ void	handle_zoom(t_var *var)
 	long double	db;
 	long double	dl;
 
+	var->count_scroll++;
+	if (var->count_scroll == 1)
+		return ;
+	var->count_scroll = 0;
 	mlx_mouse_get_pos(WIN, &(var->mouse_x), &(var->mouse_y));
-	printf("zoom: (%d, %d)\n", var->mouse_x, var->mouse_y);
 	dt = var->mouse_y * var->step_y;
 	dr = (W - var->mouse_x) * var->step_x;
 	db = (H - var->mouse_y) * var->step_y;
@@ -26,6 +29,10 @@ void	handle_unzoom(t_var *var)
 	long double	dh;
 	long double	dv;
 
+	var->count_scroll++;
+	if (var->count_scroll == 1)
+		return ;
+	var->count_scroll = 0;
 	dh = (W / 2) * var->step_x;
 	dv = (H / 2) * var->step_y;
 	var->limits = get_limits(var->limits.curr_max_re + (dh / var->zoom_speed),

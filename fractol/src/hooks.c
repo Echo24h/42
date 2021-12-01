@@ -1,4 +1,5 @@
 #include "fractol.h"
+#include <unistd.h>
 
 int	exit_prog(t_var *var)
 {
@@ -19,7 +20,10 @@ void	switch_palette(t_var *var)
 void	reset_fractal(t_var *var)
 {
 	var->iteration_max = 50;
-	var->limits = get_limits(MAX_RE, MIN_RE, MAX_IM, MIN_IM);
+	if (var->fractal == MANDELBROT)
+		var->limits = get_limits(MAX_RE, MIN_RE, MAX_IM, MIN_IM);
+	else if (var->fractal == JULIA)
+		var->limits = get_limits(JULIA_MAX_RE, JULIA_MIN_RE, JULIA_MAX_IM, JULIA_MIN_IM);
 	draw_fractal(var);
 }
 
@@ -61,5 +65,15 @@ int	mouse_hook(int button, int x,int y, void *param)
 		add_to_iteration_max(var, 1);
 	else if (button == 2)
 		add_to_iteration_max(var, -1);
+	return (1);
+}
+
+int	mouse_motion_hook(int x, int y, t_var *var)
+{
+	if (var->allow_julia_variation)
+	{
+		var->julia_point = get_cplx(x * var->julia_step_x + MIN_RE, MAX_IM - y * var->julia_step_y);
+		draw_fractal(var);
+	}
 	return (1);
 }

@@ -58,6 +58,8 @@ unsigned int	get_color(t_var *var, int nb_iteration)
 		return (palette_0(var, nb_iteration));
 	else if (var->palette == 1)
 		return (palette_1(var, nb_iteration));
+	else if (var->palette == 2)
+		return (palette_2(var, nb_iteration));
 	return (0);
 }
 
@@ -67,14 +69,31 @@ int	get_nb_iteration(t_var *var, t_cplx c)
 	int	i;
 	
 	i = 0;
-	
-	if (var->fractal == MANDELBROT)
+	if (var->fractal == MANDELBROT || var->fractal == BURNING_SHIP)
 		z = get_cplx(0, 0);
 	else if (var->fractal == JULIA)
-		z = get_cplx(var->mouse_x, var->mouse_y);
+		z = c;
 	while (z.re * z.re + z.im * z.im < 4 && ++i < var->iteration_max)
-		z = get_next_cplx(z, c);
+	{
+		if (var->fractal == MANDELBROT || var->fractal == BURNING_SHIP)
+			z = get_next_cplx(var, z, c);
+		else if (var->fractal == JULIA)
+			z = get_next_cplx(var, z, var->julia_point);
+	}
+		
 	return (i);
+}
+
+void	draw_iteration(t_var *var)
+{
+		char	*s;
+		char	*n;
+
+		n = ft_itoa(var->iteration_max);
+		s = ft_strjoin("Iterations : ", n);
+		free(n);
+		mlx_string_put(MLX, WIN, 10, 20, 0x0, s);
+		free(s);
 }
 
 void	draw_fractal(t_var *var)
@@ -100,10 +119,21 @@ void	draw_fractal(t_var *var)
 		y++;
 	}
 	mlx_put_image_to_window(MLX, WIN, IMG, 0, 0);
+	draw_iteration(var);
 }
 
-int	mouse_motion()
+int	parse_params(t_var *var, int ac, char **av)
 {
+	if (ac != 2)
+		return (0); // error
+	if (!ft_strcmp(av[1], "mandelbrot"))
+		var->fractal = MANDELBROT;
+	else if (!ft_strcmp(av[1], "julia"))
+		var->fractal = JULIA;
+	else if (!ft_strcmp(av[1], "burning_ship"))
+		var->fractal = BURNING_SHIP;
+	else
+		return (0); // error
 	return (1);
 }
 
@@ -113,6 +143,8 @@ int	main(int ac, char **av)
 
 	var = malloc(sizeof(t_var) * 1);
 	if (!var)
+		return (1);
+	if (!parse_params(var, ac, av))
 		return (1);
 	MLX = mlx_init();
 	WIN = mlx_new_window(MLX, W, H, "fractol");
@@ -124,17 +156,23 @@ int	main(int ac, char **av)
 	var->iteration_max = 50;
 	var->zoom_speed = 2;
 	var->palette = 0;
-	var->max_step_x = (fabs(MAX_RE) + fabs(MIN_RE)) / W;
-	var->max_step_x = (fabs(MAX_IM) + fabs(MIN_IM)) / H;
-	var->fractal = MANDELBROT;
-	var->allow_julia_variation = 0;
+	var->count_scroll = 0;
+	if (var->fractal == JULIA)
+	{
+		var->allow_julia_variation = 0;
+		var->limits = get_limits(JULIA_MAX_RE, JULIA_MIN_RE, JULIA_MAX_IM, JULIA_MIN_IM);
+		var->julia_step_x = (fabs(MAX_RE) + fabs(MIN_RE)) / W;
+		var->julia_step_y = (fabs(MAX_IM) + fabs(MIN_IM)) / H;
+		var->julia_point = get_cplx(0.3, 0.5);
+	}
 
 	draw_fractal(var);
 
 	mlx_key_hook(WIN, key_hook, var);
 	mlx_mouse_hook(WIN, mouse_hook, var);
-	mlx_hook(WIN, DestroyNotify, StructureNotifyMask, exit_prog, var);
-	// mlx_hook(WIN, MotionNotify, PointerMotionMask, mouse_motion, var);
+	mlx_hook(WIN, DestroyNotify, 0, exit_prog, var);
+	if (var->fractal == JULIA)
+		mlx_hook(WIN, MotionNotify, 0, mouse_motion_hook, var);
 	mlx_loop(MLX);
 
 	printf("EH ouais bitch\n");

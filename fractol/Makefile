@@ -3,7 +3,7 @@ CFLAGS	=	#-Wall -Wextra -Werror
 NAME	=	fractol
 I_DIR	=	include
 L_DIR	=	lib
-LIB		=	-lmlx
+LIB		=	-lmlx -lft
 
 SRC		=	src/main.c	\
 			src/cplx.c	\
@@ -11,6 +11,7 @@ SRC		=	src/main.c	\
 			src/events.c	\
 			src/rgb.c	\
 			src/palettes.c	\
+			src/utils.c	\
 
 OBJ		=	$(SRC:%.c=%.o)
 
@@ -23,7 +24,7 @@ $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(I_DIR)
 
 run: re
-	make clean && ./$(NAME)
+	make clean && ./$(NAME) mandelbrot
 
 clean:
 	rm -f $(OBJ)

@@ -17,7 +17,7 @@ unsigned int	palette_1(t_var *var, int nb_iteration)
 	t_rgb	rgb;
 	
 	if (nb_iteration == var->iteration_max)
-		return (0xff);
+		return (0x0);
 	if (var->iteration_max > 255)
 		rgb.r = 255;
 	else
