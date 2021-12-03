@@ -6,7 +6,7 @@
 #    By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 11:59:04 by ydanset           #+#    #+#              #
-#    Updated: 2021/10/25 15:08:09 by ydanset          ###   ########.fr        #
+#    Updated: 2021/12/03 23:06:29 by ydanset          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,8 +49,10 @@ SRC			=	ft_memset.c		\
 				ft_putstr_fd.c	\
 				ft_putendl_fd.c	\
 				ft_putnbr_fd.c	\
-				ft_striteri.c
-
+				ft_striteri.c	\
+				ft_putstr.c		\
+				ft_putchar.c	\
+				
 SRC_BONUS	=	$(SRC)	\
 				ft_lstnew.c			\
 				ft_lstadd_front.c	\
@@ -60,7 +62,7 @@ SRC_BONUS	=	$(SRC)	\
 				ft_lstclear.c		\
 				ft_lstdelone.c		\
 				ft_lstiter.c		\
-				ft_lstmap.c
+				ft_lstmap.c			\
 				
 
 ifdef WITH_BONUS
