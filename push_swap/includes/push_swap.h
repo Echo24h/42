@@ -8,7 +8,21 @@
 
 int	parse(int ac, char **av, t_list **a);
 
+// operations
+void	swap_a(t_list **a);
+void	swap_b(t_list **b);
+void	swap_ab(t_list **a, t_list **b);
+void	push_a(t_list **a, t_list **b);
+void	push_b(t_list **a, t_list **b);
+void	rotate_a(t_list **a);
+void	rotate_b(t_list **b);
+void	rotate_ab(t_list **a, t_list **b);
+void	reverse_rotate_a(t_list **a);
+void	reverse_rotate_b(t_list **b);
+void	reverse_rotate_ab(t_list **a, t_list **b);
+
 // dev
 void	print_stack(t_list *stack);
+void	print_stacks(t_list *a, t_list *b);
 
 #endif

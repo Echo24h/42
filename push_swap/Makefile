@@ -6,6 +6,11 @@ L_DIR		=	libs
 LIBS		=	-lft
 
 SRCS		=	srcs/main.c	\
+				srcs/parsing.c	\
+				srcs/swap.c	\
+				srcs/push.c	\
+				srcs/rotate.c	\
+				srcs/reverse_rotate.c	\
 				srcs/dev.c	\
 
 OBJS		=	$(SRCS:%.c=%.o)

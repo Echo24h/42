@@ -85,8 +85,6 @@ static int	parse_multiple_params(int ac, char **av, t_list **a)
 
 int	parse(int ac, char **av, t_list **a)
 {
-	if (ac < 2)
-		return (0);
 	if (ac == 2 && !parse_one_param(av[1], a))
 		return (0);
 	else if (ac > 2 && !parse_multiple_params(ac, av, a))
