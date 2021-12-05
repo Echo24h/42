@@ -1,38 +1,35 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/08 10:58:42 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/19 16:49:01 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_memmove.c                                     .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/04 14:15:13 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/05 19:19:11 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "libft.h"
 
-void	*ft_memmove(void *dst, const void *src, size_t len)
+void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	char		*dest;
-	const char	*source;
+	unsigned char *buffer_dest;
+	unsigned char *buffer_src;
 
-	dest = (char *)dst;
-	source = (const char *)src;
-	if (dest || source || len)
+	buffer_dest = dest;
+	buffer_src = (void *)src;
+	if (buffer_dest == buffer_src)
+		return (NULL);
+	else if (buffer_dest < buffer_src)
+		ft_memcpy(buffer_dest, buffer_src, n);
+	else
 	{
-		if (dest <= source)
-			ft_memcpy(dest, source, len);
-		else
-		{
-			if (len == 0)
-				return (dest);
-			while (len > 0)
-			{
-				dest[len - 1] = source[len - 1];
-				len--;
-			}
-		}
+		buffer_dest += n - 1;
+		buffer_src += n - 1;
+		while (n--)
+			*buffer_dest-- = *buffer_src--;
 	}
-	return (dst);
+	return (dest);
 }

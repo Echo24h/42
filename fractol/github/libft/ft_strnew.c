@@ -1,25 +1,27 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strnew.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/07 16:38:55 by mdubus            #+#    #+#             */
-/*   Updated: 2016/12/03 18:33:39 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_strnew.c                                      .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/04 16:31:56 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/08 18:01:52 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
-#include <stdlib.h>
+#include "libft.h"
 
 char	*ft_strnew(size_t size)
 {
 	char	*str;
+	size_t	i;
 
-	str = (char *)malloc(sizeof(char) * (size + 1));
-	if (str == NULL)
+	if (!(str = (char *)malloc(sizeof(*str) * (size + 1))))
 		return (NULL);
-	ft_bzero(str, size + 1);
+	i = -1;
+	while (++i <= size)
+		str[i] = '\0';
 	return (str);
 }

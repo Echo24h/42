@@ -20,7 +20,7 @@ void	handle_zoom(t_var *var)
 		var->limits.curr_min_re + (dl / var->zoom_speed),
 		var->limits.curr_max_im - (dt / var->zoom_speed),
 		var->limits.curr_min_im + (db / var->zoom_speed));
-	var->iteration_max += 3;
+	var->iteration_max += 2;
 	draw_fractal(var);
 }
 
@@ -30,6 +30,7 @@ void	handle_unzoom(t_var *var)
 	long double	dv;
 
 	var->count_scroll++;
+	var->count_unzoom++;
 	if (var->count_scroll == 1)
 		return ;
 	var->count_scroll = 0;
@@ -39,10 +40,8 @@ void	handle_unzoom(t_var *var)
 		var->limits.curr_min_re - (dh / var->zoom_speed),
 		var->limits.curr_max_im + (dv / var->zoom_speed),
 		var->limits.curr_min_im - (dv / var->zoom_speed));
-	if (var->iteration_max > 51)
+	if (var->iteration_max > 40 && var->count_unzoom % 3)
 		var->iteration_max -= 2;
-	else if (var->iteration_max == 51)
-		var->iteration_max = 50;
 	draw_fractal(var);
 }
 

@@ -1,70 +1,42 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strtrim.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/14 09:38:05 by mdubus            #+#    #+#             */
-/*   Updated: 2016/12/03 11:47:40 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_strtrim.c                                     .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/05 15:14:34 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/10 17:26:10 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
-#include <stdlib.h>
+#include "libft.h"
 
-static int	count_length(int len, int i, char const *s)
-{
-	while ((ft_isblank(s[len - 1]) == 1) || s[len - 1] == 10)
-		len--;
-	if (len <= 0)
-		return (0);
-	while (ft_isblank(s[i]) == 1 || s[i] == 10)
-	{
-		i++;
-		len--;
-	}
-	return (len);
-}
-
-static char	*do_strtrim(char *str, int i, int len, const char *s)
-{
-	int	j;
-
-	j = 0;
-	while (s[i] == ' ' || s[i] == '\t' || s[i] == '\n')
-		i++;
-	while (len)
-	{
-		str[j] = s[i];
-		j++;
-		i++;
-		len--;
-	}
-	str[j] = '\0';
-	return (str);
-}
-
-char		*ft_strtrim(char const *s)
+char	*ft_strtrim(char const *s)
 {
 	char	*str;
+	int		length;
 	int		i;
-	int		len;
+	int		j;
+	int		k;
 
+	if (!s)
+		return (NULL);
 	i = 0;
-	if (s == 0)
-		return (0);
-	len = ft_strlen_secure(s);
-	len = count_length(len, i, s);
-	str = (char *)malloc((len + 1) * sizeof(char));
-	if (len == 0)
-	{
-		str[i] = '\0';
-		return (str);
-	}
-	if (str == 0)
-		return (0);
-	if (len != 0)
-		str = do_strtrim(str, i, len, s);
+	j = ft_strlen(s);
+	k = 0;
+	while (s[i] == ' ' || s[i] == '\n' || s[i] == '\t')
+		i++;
+	while (s[j - 1] == ' ' || s[j - 1] == '\n' || s[j - 1] == '\t')
+		j--;
+	length = j - i;
+	if (length <= 0)
+		length = 0;
+	if (!(str = (char *)malloc(sizeof(*str) * (length + 1))))
+		return (NULL);
+	while (i < j)
+		str[k++] = s[i++];
+	str[k] = '\0';
 	return (str);
 }

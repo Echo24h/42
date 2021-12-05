@@ -1,32 +1,28 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_memchr.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/08 11:15:28 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/11 17:53:57 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_memchr.c                                      .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/04 14:32:39 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/04 15:35:48 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "libft.h"
 
 void	*ft_memchr(const void *s, int c, size_t n)
 {
-	size_t	i;
-	char	*str;
+	size_t i;
 
 	i = 0;
-	str = (char *)s;
-	if (n != 0)
+	while (i < n)
 	{
-		while (i < n)
-		{
-			if (str[i] == (char)c)
-				return ((void*)&str[i]);
-			i++;
-		}
+		if (*(unsigned char*)(s + i) == (unsigned char)c)
+			return (&*(void*)s + i);
+		i++;
 	}
-	return (0);
+	return (NULL);
 }

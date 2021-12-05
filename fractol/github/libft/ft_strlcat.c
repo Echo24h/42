@@ -1,36 +1,35 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strlcat.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/07 11:05:00 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/11 11:29:01 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_strlcat.c                                     .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/07/10 19:21:23 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/10 17:21:21 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
-#include <string.h>
+#include "libft.h"
 
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
+unsigned int	ft_strlcat(char *dest, const char *src, size_t size)
 {
-	size_t	len_dest;
-	size_t	len_src;
-	size_t	i;
-	size_t	j;
+	unsigned int	i;
+	unsigned int	j;
+	int				length;
 
+	if (size == 0)
+		return (ft_strlen(src));
+	i = ft_strlen(dest);
+	j = ft_strlen(src);
+	length = size < i ? j + size : i + j;
 	j = 0;
-	i = ft_strlen(dst);
-	len_dest = i;
-	if (len_dest > size)
-		len_dest = size;
-	while (src[j] != '\0' && (int)(size-- - len_dest - 1) > 0)
+	while (src[j] && j + i < size - 1)
 	{
-		dst[i + j] = src[j];
+		dest[i + j] = src[j];
 		j++;
 	}
-	len_src = ft_strlen(src);
-	dst[i + j] = '\0';
-	return (len_dest + len_src);
+	dest[i + j] = '\0';
+	return (length);
 }

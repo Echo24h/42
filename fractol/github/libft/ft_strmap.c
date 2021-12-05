@@ -1,39 +1,40 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strmap.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/11 17:54:06 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/16 09:57:25 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_strmap.c                                      .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/05 13:28:17 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/10 17:21:51 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
-#include <stdlib.h>
+#include "libft.h"
 
 char	*ft_strmap(char const *s, char (*f)(char))
 {
-	char	*new_str;
+	char	*str;
 	int		i;
-	int		j;
+	int		length;
 
 	i = 0;
-	j = 0;
-	if (s != 0 && f != 0)
+	length = 0;
+	if (s && f)
 	{
-		new_str = (char *)malloc((ft_strlen(s) + 1) * sizeof(char));
-		if (new_str == 0)
-			return (0);
-		while (s[i] != '\0')
+		while (s[i++])
+			length++;
+		if (!(str = (char *)malloc(sizeof(*str) * length + 1)))
+			return (NULL);
+		i = 0;
+		while (i < length)
 		{
-			new_str[j] = f(s[i]);
+			str[i] = f(s[i]);
 			i++;
-			j++;
 		}
-		new_str[j] = '\0';
-		return (new_str);
+		str[i] = '\0';
+		return (str);
 	}
-	return (0);
+	return (NULL);
 }

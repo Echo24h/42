@@ -1,29 +1,26 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/06 10:30:40 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/17 13:40:55 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_strncmp.c                                     .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/07/09 11:46:11 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/05 17:43:54 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "libft.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+int		ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	unsigned int	i;
+	unsigned int i;
 
 	i = 0;
 	if (n == 0)
 		return (0);
-	while (i < (unsigned int)n && s1[i] != '\0' && (s1[i] == s2[i]))
-	{
+	while (s1[i] == s2[i] && s1[i] && s2[i] && i < n - 1)
 		i++;
-	}
-	if (i == n)
-		return ((unsigned char)(s1[i - 1]) - (unsigned char)(s2[i - 1]));
-	return ((unsigned char)(s1[i]) - (unsigned char)(s2[i]));
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }

@@ -1,41 +1,32 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/07 14:39:21 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/07 15:04:32 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_strnstr.c                                     .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/03 16:07:55 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/09 13:05:13 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "libft.h"
 
-char	*ft_strnstr(const char *big, const char *little, size_t len)
+char	*ft_strnstr(const char *big, const char *lit, size_t len)
 {
-	int		i;
-	int		j;
-	size_t	size_little;
+	size_t i;
+	size_t j;
 
-	i = 0;
 	j = 0;
-	size_little = (size_t)ft_strlen(little);
-	if (little[i] == '\0')
+	while (big[j])
 	{
-		return ((char *)big);
-	}
-	while (big[i] != '\0' && len >= size_little)
-	{
-		j = 0;
-		while (big[i + j] == little[j])
-		{
-			j++;
-			if (little[j] == '\0')
-				return ((char*)&big[i]);
-		}
-		i++;
-		len--;
+		i = 0;
+		while (big[i + j] == lit[i] && lit[i] && j + i < len)
+			i++;
+		if (!lit[i])
+			return ((char *)big + j);
+		j++;
 	}
 	return (0);
 }

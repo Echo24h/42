@@ -1,34 +1,32 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strcat.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/06 16:35:25 by mdubus            #+#    #+#             */
-/*   Updated: 2017/01/14 11:42:03 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_strcat.c                                      .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/07/09 18:54:58 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/05 17:22:47 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "libft.h"
 
-char	*ft_strcat(char *s1, const char *s2)
+char	*ft_strcat(char *dest, const char *src)
 {
-	int	i;
+	int i;
 	int j;
 
 	i = 0;
 	j = 0;
-	while (s1[i] != '\0')
-	{
+	while (dest[i])
 		i++;
-	}
-	while (s2[j] != '\0')
+	while (src[j])
 	{
-		s1[i] = s2[j];
-		i++;
+		dest[i + j] = src[j];
 		j++;
 	}
-	s1[i] = '\0';
-	return (s1);
+	dest[i + j] = '\0';
+	return (dest);
 }

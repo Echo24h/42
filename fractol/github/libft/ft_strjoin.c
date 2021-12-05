@@ -1,31 +1,31 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/09 17:32:59 by mdubus            #+#    #+#             */
-/*   Updated: 2017/01/14 11:41:33 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_strjoin.c                                     .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/05 15:00:05 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/17 17:16:08 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
-#include <stdlib.h>
+#include "libft.h"
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*new_str;
+	char	*s3;
+	size_t	len;
 
-	if (s2 == 0 || s1 == 0)
-		return (0);
-	new_str = ft_strnew(ft_strlen_secure(s1) + ft_strlen_secure(s2));
-	if (new_str == 0)
-		return (0);
-	else
+	if (s1 && s2)
 	{
-		ft_strcpy(new_str, s1);
-		ft_strcat(new_str, s2);
-		return (new_str);
+		len = ft_strlen(s1) + ft_strlen(s2);
+		if (!(s3 = (char*)malloc(sizeof(char) * len + 1)))
+			return (NULL);
+		ft_strcpy(s3, s1);
+		ft_strcat(s3, s2);
+		return (s3);
 	}
+	return (NULL);
 }

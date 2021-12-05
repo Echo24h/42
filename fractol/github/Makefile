@@ -1,84 +1,72 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2016/11/22 14:11:57 by gpouyat           #+#    #+#              #
-#*   Updated: 2016/12/01 11:50:27 by gpouyat          ###   ########.fr       *#
-#                                                                              #
-# **************************************************************************** #
+NAME = fractol
 
-GPU			=
-OS			=
-CC			=	clang
-NAME		=	fractol
-FLAGS		=	-Wall -Wextra -Werror
-LIBDIR		=	libft
-LIBLINK		=	-L $(LIBDIR) -lft
-LIB 		=	$(LIBDIR)/libft.a
+LIB_FOLDER = libft
+LIB = $(LIB_FOLDER)/libft.a
 
-INCLUDES	= 	-I ./includes
-INCLUDE		=	./includes
+LIBX_FOLDER = minilibx_macos
+LIBX = $(LIBX_FOLDER)/libmlx.a
 
-OBJDIR		=	objs
-SRCDIR		=	srcs
-SRC			=	main.c\
-				useful.c\
-				init_opencl.c\
-				key_press.c\
-				mouse_events.c\
-				int_rgb_converter.c\
-				palette1.c\
-				load_opencl.c\
-				fractales.c\
-				choose_cpu_or_gpu.c\
-				init_structs.c\
-				do_fractol.c\
-				put_image_mlx.c\
-				move_julia.c\
-				init_limits_fractales.c\
-				free.c\
-				key_loop.c\
-				palette3.c\
-				palette2.c\
-				calc_fractales.c
+FLAGS = -Wall -Wextra -Werror
+XFLAGS = -framework OpenGL -framework AppKit -lpthread
+OFLAG = -O3
+CC = gcc
 
-OBJ			= $(SRC:.c=.o)
-SRCS		=	$(addprefix $(SRCDIR)/, $(SRC))
-OBJS		=	$(addprefix $(OBJDIR)/, $(SRC:.c=.o))
+SRCS_FOLDER = srcs
+SRCS = $(SRCS_FOLDER)/main.c						\
+		$(SRCS_FOLDER)/error.c						\
+		$(SRCS_FOLDER)/struct.c						\
+		$(SRCS_FOLDER)/graphic.c					\
+		$(SRCS_FOLDER)/string.c						\
+		$(SRCS_FOLDER)/interface.c					\
+		$(SRCS_FOLDER)/key.c						\
+		$(SRCS_FOLDER)/mouse.c						\
+		$(SRCS_FOLDER)/color.c						\
+		$(SRCS_FOLDER)/mandelbrot.c					\
+		$(SRCS_FOLDER)/julia.c						\
+		$(SRCS_FOLDER)/bship.c						\
+		$(SRCS_FOLDER)/multibrot.c					\
+		$(SRCS_FOLDER)/thread.c
 
+OBJS_FOLDER = objs
+OBJS = $(SRCS:$(SRCS_FOLDER)/%.c=$(OBJS_FOLDER)/%.o)
 
-all: directory $(NAME)
+INC_FOLDER = includes
+INCLUDES = $(INC_FOLDER)/fractol.h
 
-$(NAME): $(OBJDIR) $(LIB) $(OBJS) $(INCLUDE)
-	@$(CC) $(FLAGS) -o $(NAME) $(OBJS) -L minilibx/el_capitan/ -lmlx -framework OpenGL -framework AppKit -framework OpenCL $(LIBLINK)
+all: $(NAME)
+
+$(NAME): $(LIBX) $(LIB) $(OBJS)
+	@ $(CC) $(FLAGS) -I $(INCLUDES) $(OFLAG) -o $@ $^ $(LIB) $(LIBX) $(XFLAGS)
+	@ echo "Compilation $(NAME) ...."\
+	".................................................. \033[32m[OK]\033[0m"
+	@ echo "Compilation $(LIBX_FOLDER) ...."\
+	"........................................... \033[32m[OK]\033[0m"
 
 $(LIB):
-	@make -C $(LIBDIR)
+	@ make -C $(LIB_FOLDER)
 
-ifeq ($(GPU), yes)
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@$(CC) -D DO_GPU $(FLAGS) -c $^ -o $@ $(INCLUDES)
-else
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@$(CC) $(FLAGS) -c $^ -o $@ $(INCLUDES)
-endif
+$(LIBX):
+	@ make -C $(LIBX_FOLDER)
 
-directory: $(OBJDIR)
+$(OBJS_FOLDER):
+	@ mkdir $(OBJS_FOLDER)
 
-$(OBJDIR):
-	@mkdir -p $(OBJDIR)
+$(OBJS_FOLDER)/%.o: $(SRCS_FOLDER)/%.c $(INCLUDES) | $(OBJS_FOLDER) $(INCLUDES)
+	@ $(CC) $(FLAGS) -I $(INCLUDES) $(OFLAG) -o $@ -c $<
 
 clean:
-	@rm -rf $(OBJS)
-	@make -C $(LIBDIR) clean
-	@rm -rf $(OBJDIR)
+	@ rm -f $(OBJS)
+	@ rm -rf $(OBJS_FOLDER)
+	@ make -C $(LIB_FOLDER) clean
+	@ make -C $(LIBX_FOLDER) clean
+	@ echo "Delete *.o ($(NAME)) ...."\
+	"................................................. \033[32m[OK]\033[0m"
+
 fclean: clean
-	@rm -f $(NAME)
-	@make -C $(LIBDIR) fclean
+	@ rm -f $(NAME) $(LIB) $(LIBX)
+	@ echo "Delete $(LIB) ....."\
+	"................................................ \033[32m[OK]\033[0m"
+	@ echo "Delete $(NAME) ........"\
+	"................................................... \033[32m[OK]\033[0m"
 
 re: fclean all
-
-.PHONY: clean all re fclean directory

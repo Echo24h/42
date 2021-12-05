@@ -1,35 +1,28 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strrchr.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/07 12:01:49 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/11 14:41:30 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_strrchr.c                                     .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/03 15:53:08 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/05 17:33:38 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "libft.h"
 
-char	*ft_strrchr(const char *s, int c)
+char	*ft_strrchr(const char *str, int c)
 {
-	char	search_char;
-	int		i;
-	char	*adresse;
+	int i;
 
-	i = 0;
-	search_char = (char)c;
-	adresse = 0;
-	if (s[i] == '\0')
-		adresse = 0;
-	while (s[i] != '\0')
+	i = ft_strlen(str);
+	while (i >= 0)
 	{
-		if (s[i] == search_char)
-			adresse = (char *)&s[i];
-		i++;
+		if (str[i] == c)
+			return ((char *)&str[i]);
+		i--;
 	}
-	if (search_char == '\0')
-		adresse = (char *)&s[i];
-	return (adresse);
+	return (NULL);
 }

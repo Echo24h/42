@@ -1,78 +1,51 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/21 11:13:53 by mdubus            #+#    #+#             */
-/*   Updated: 2017/08/05 15:59:00 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   main.c                                           .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/01/08 17:17:22 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2019/03/28 18:48:57 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
 #include "../includes/fractol.h"
 
-static int	print_usage(void)
+int		main(int argc, char **argv)
 {
-	ft_putstr("Usage : ./fractol [mandelbrot / duobrot / triobrot");
-	ft_putendl(" / mandelbar / julia / buffalo / ship / bird]");
-	exit(1);
-}
+	char	*usage;
 
-static void	do_parsing_fractol(t_p *p, char *argv)
-{
-	if (ft_strcmp("mandelbrot", argv) == 0)
-		p->fractale = MANDELBROT;
-	else if (ft_strcmp("julia", argv) == 0)
-		p->fractale = JULIA;
-	else if (ft_strcmp("duobrot", argv) == 0)
-		p->fractale = DUOBROT;
-	else if (ft_strcmp("triobrot", argv) == 0)
-		p->fractale = TRIOBROT;
-	else if (ft_strcmp("ship", argv) == 0)
-		p->fractale = SHIP;
-	else if (ft_strcmp("bird", argv) == 0)
-		p->fractale = BIRD;
-	else if (ft_strcmp("buffalo", argv) == 0)
-		p->fractale = BUFFALO;
-	else if (ft_strcmp("mandelbar", argv) == 0)
-		p->fractale = MANDELBAR;
-	else
-		print_usage();
-	get_name_fractal(p);
-}
-
-void		get_name_fractal(t_p *p)
-{
-	if (p->fractale == MANDELBROT)
-		p->nfractale = "Mandelbrot";
-	if (p->fractale == JULIA)
-		p->nfractale = "Julia";
-	if (p->fractale == DUOBROT)
-		p->nfractale = "Duobrot";
-	if (p->fractale == TRIOBROT)
-		p->nfractale = "Triobrot";
-	if (p->fractale == SHIP)
-		p->nfractale = "Burning Ship";
-	if (p->fractale == BIRD)
-		p->nfractale = "Bird of Prey";
-	if (p->fractale == BUFFALO)
-		p->nfractale = "Buffalo";
-	if (p->fractale == MANDELBAR)
-		p->nfractale = "Mandelbar";
-}
-
-int			main(int argc, char **argv)
-{
-	t_p		p;
-
-	if (argc != 2)
-		print_usage();
-	else
+	usage = "usage: ./fractol [fractal]\n\nfractals:\n-> Mandelbrot     (1)\
+	\n-> Julia          (2) \n-> Burning_Ship   (3) \n-> Multibrot      (4)";
+	if (argc == 2)
 	{
-		do_parsing_fractol(&p, argv[1]);
-		init(&p);
-		do_fractol(&p);
+		if (ft_strcmp("Mandelbrot", argv[1]) == 0
+				|| ft_strcmp("1", argv[1]) == 0)
+			main_next("Mandelbrot");
+		else if (ft_strcmp("Julia", argv[1]) == 0
+				|| ft_strcmp("2", argv[1]) == 0)
+			main_next("Julia");
+		else if (ft_strcmp("Burning_Ship", argv[1]) == 0
+				|| ft_strcmp("3", argv[1]) == 0)
+			main_next("Burning_Ship");
+		else if (ft_strcmp("Multibrot", argv[1]) == 0
+				|| ft_strcmp("4", argv[1]) == 0)
+			main_next("Multibrot");
+		else
+			ft_putendl(usage);
 	}
-	return (0);
+	else
+		ft_putendl(usage);
+	return (EXIT_SUCCESS);
+}
+
+void	main_next(char *fr_name)
+{
+	t_mlx *ptr;
+
+	ptr = struct_init(fr_name);
+	ptr = graphic_init(ptr);
+	struct_free(ptr);
 }

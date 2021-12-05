@@ -12,18 +12,20 @@ int	exit_prog(t_var *var)
 void	switch_palette(t_var *var)
 {
 	var->palette += 1;
-	if (var->palette > 1)
+	if (var->palette > 2)
 		var->palette = 0;
 	draw_fractal(var);
 }
 
 void	reset_fractal(t_var *var)
 {
-	var->iteration_max = 50;
+	var->iteration_max = 40;
 	if (var->fractal == MANDELBROT)
 		var->limits = get_limits(MAX_RE, MIN_RE, MAX_IM, MIN_IM);
 	else if (var->fractal == JULIA)
 		var->limits = get_limits(JULIA_MAX_RE, JULIA_MIN_RE, JULIA_MAX_IM, JULIA_MIN_IM);
+	else if (var->fractal == BURNING_SHIP)
+		var->limits = get_limits(BURNING_SHIP_MAX_RE, BURNING_SHIP_MIN_RE, BURNING_SHIP_MAX_IM, BURNING_SHIP_MIN_IM);
 	draw_fractal(var);
 }
 
@@ -62,9 +64,9 @@ int	mouse_hook(int button, int x,int y, void *param)
 	else if (button == 5)
 		handle_unzoom(var);
 	else if (button == 1)
-		add_to_iteration_max(var, 1);
+		add_to_iteration_max(var, 10);
 	else if (button == 2)
-		add_to_iteration_max(var, -1);
+		add_to_iteration_max(var, -10);
 	return (1);
 }
 
@@ -72,7 +74,8 @@ int	mouse_motion_hook(int x, int y, t_var *var)
 {
 	if (var->allow_julia_variation)
 	{
-		var->julia_point = get_cplx(x * var->julia_step_x + MIN_RE, MAX_IM - y * var->julia_step_y);
+		var->julia_point_r = x * var->julia_step_x + MIN_RE;
+		var->julia_point_i = MAX_IM - y * var->julia_step_y;
 		draw_fractal(var);
 	}
 	return (1);

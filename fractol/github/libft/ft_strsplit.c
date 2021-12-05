@@ -1,78 +1,42 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strsplit.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/14 13:30:44 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/19 09:52:04 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_strsplit.c                                    .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/08 11:07:22 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/08 16:52:55 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
-#include <stdlib.h>
+#include "libft.h"
 
-static int		count_length(int i, char const *s, char c)
+char	**ft_strsplit(char const *s, char c)
 {
-	int		lengthword;
-
-	lengthword = i;
-	while (s[lengthword] != c && s[lengthword] != '\0')
-		lengthword++;
-	lengthword = lengthword - i;
-	return (lengthword);
-}
-
-static char		**do_split(int i, char const *s, char c, char **str)
-{
-	int		lengthword;
+	char	**str;
+	int		length;
+	int		i;
 	int		j;
-	int		k;
 
+	if (!s || !c)
+		return (NULL);
+	if (!(str = ft_memalloc(ft_strlen(s) + 1)))
+		return (NULL);
+	i = 0;
 	j = 0;
-	k = 0;
-	while (s[i] != '\0')
-	{
+	while (s[i])
 		if (s[i] == c)
 			i++;
 		else
 		{
-			lengthword = count_length(i, s, c);
-			str[j] = (char *)malloc((lengthword + 1) * sizeof(char));
-			while (lengthword-- > 0)
-			{
-				str[j][k++] = s[i++];
-			}
-			str[j++][k] = '\0';
-			k = 0;
-			lengthword = 0;
+			length = 0;
+			while (s[i + length] && (s[i + length] != c))
+				length++;
+			str[j++] = ft_strsub(s, i, length);
+			i += length;
 		}
-	}
 	str[j] = NULL;
 	return (str);
-}
-
-char			**ft_strsplit(char const *s, char c)
-{
-	int		i;
-	char	**str;
-	int		nbwords;
-	char	*str2;
-
-	i = 0;
-	if (c && s)
-	{
-		nbwords = ft_countwords(s, c);
-		str = (char **)malloc((nbwords + 1) * sizeof(char *));
-		if (str == 0)
-			return (0);
-		str = do_split(i, s, c, str);
-		return (str);
-	}
-	else
-	{
-		str2 = ft_strnew(1);
-		return ((char **)str2);
-	}
 }

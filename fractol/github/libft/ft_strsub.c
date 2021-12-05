@@ -1,40 +1,31 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strsub.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/11 18:42:07 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/14 13:37:17 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_strsub.c                                      .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/05 14:50:40 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/17 03:30:36 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
-#include <stdlib.h>
+#include "libft.h"
 
 char	*ft_strsub(char const *s, unsigned int start, size_t len)
 {
-	char			*str_new;
-	unsigned int	i;
-	unsigned int	j;
+	char	*str;
+	size_t	i;
 
-	i = start;
-	j = 0;
-	if (s)
-	{
-		str_new = (char *)malloc((len + 1) * sizeof(char));
-		if (str_new == 0)
-			return (0);
-		while (len > 0)
-		{
-			str_new[j] = s[i];
-			j++;
-			i++;
-			len--;
-		}
-		str_new[j] = '\0';
-		return (str_new);
-	}
-	return (0);
+	i = -1;
+	if (!s)
+		return (NULL);
+	str = NULL;
+	if (!(str = (char *)malloc(sizeof(*str) * len + 1)))
+		return (NULL);
+	while (++i < len)
+		str[i] = s[i + start];
+	str[i] = '\0';
+	return (str);
 }

@@ -6,12 +6,12 @@ L_DIR	=	lib
 LIB		=	-lmlx -lft
 
 SRC		=	src/main.c	\
-			src/cplx.c	\
 			src/hooks.c	\
 			src/events.c	\
 			src/rgb.c	\
 			src/palettes.c	\
 			src/utils.c	\
+			src/fractals.c	\
 
 OBJ		=	$(SRC:%.c=%.o)
 

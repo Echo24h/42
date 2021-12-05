@@ -1,28 +1,27 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_lstdel.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/15 17:42:44 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/16 11:30:43 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_lstdel.c                                      .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/09 17:37:58 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/09 18:57:25 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
-#include <stdlib.h>
+#include "libft.h"
 
 void	ft_lstdel(t_list **alst, void (*del)(void *, size_t))
 {
-	t_list	**temp;
+	t_list *temp;
 
-	temp = alst;
-	while ((*alst))
+	while (*alst)
 	{
 		del((*alst)->content, (*alst)->content_size);
+		temp = (*alst)->next;
 		free(*alst);
-		*alst = (*alst)->next;
+		*alst = temp;
 	}
-	*temp = NULL;
 }

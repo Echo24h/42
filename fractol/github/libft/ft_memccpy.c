@@ -1,32 +1,29 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_memccpy.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/07 15:10:42 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/11 18:35:32 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_memccpy.c                                     .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/04 12:19:09 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/05 16:21:58 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "libft.h"
 
-void	*ft_memccpy(void *dst, const void *src, int c, size_t n)
+void	*ft_memccpy(void *dest, const void *src, int c, size_t n)
 {
-	unsigned char	*dest;
-	unsigned char	*source;
-	size_t			i;
+	size_t i;
 
-	dest = (unsigned char *)dst;
-	source = (unsigned char *)src;
 	i = 0;
 	while (i < n)
 	{
-		dest[i] = source[i];
-		if ((unsigned char)(source[i]) == (unsigned char)c)
-			return (dest + i + 1);
+		((unsigned char *)dest)[i] = ((unsigned char *)src)[i];
+		if (((unsigned char *)src)[i] == (unsigned char)c)
+			return (&dest[i + 1]);
 		i++;
 	}
-	return (0);
+	return (NULL);
 }

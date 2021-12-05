@@ -1,41 +1,91 @@
-# fractol
+# Fract'ol
 
-A beautiful fractal renderer coded with C, the minilibx (included), and Opencl. 
+Réalisation de fractales (Mandelbrot, Julia, BurningShip, Multibrot) avec la librairie graphique minilibX.
 
-It is the second infographie project of the school 42.
+## Sujet
 
-Multiple bonus : 
-* Choose between GPU or CPU
-* Large color palette
-* Many fractals available
-* Smooth coloring
+[PDF fract'ol](https://github.com/Rorothejedi/101_fractol/blob/master/fract_ol.fr.pdf)
 
-## Installation
+## Fonctionnalités
 
-Compile with CPU : 
+- Utilisation du multithreading (8 threads).
+- Utilisation des images de la minilibX.
+- Zoom et dezoom qui pointe sur la position actuelle de la souris.
+- Déplacement avec les flèches du clavier.
+- Possibilité de faire varier avec la souris (sans clic) le paramètre de l’ensemble de Julia.
+- Possibilité de faire varier la puissance du Multibrot.
+- Possibilité de changer la fractale affichée a la volée.
 
-`$ make`
+* Interface dynamique affichant en temps reel :
+	* la fractale actuelle
+	* le temps de rendu (en secondes)
+	* le nombre d'iterations
+	* la puissance du zoom
+	* la couleur (parmi les 7 disponibles)
+	* la sensibilite (des mouvements, des itérations et de la puissance du multibrot)
+	* (puissance de Multibrot)
+	* (verrouillage de Julia)
 
-Compile with GPU : 
+* Interface statique séparant les commandes disponibles en deux sections :
+	* les commandes etant affectées par la sensibilité
+	* les commandes qui ne sont pas affectées par la sensibilité
 
-`$ make GPU=yes`
+## Utilisation
 
-## Usage
-`$ ./fractol [mandelbrot / duobrot / triobrot / mandelbar / julia / buffalo / ship / bird]`
+### Compilation du programme :
 
-## Overview
+```
+$> make
+```
 
-![alt text](https://github.com/mdubus/fractol/blob/master/img/mandelbrot%20smooth%20blue.png)
+### Lancement de la fenetre graphique :
 
-![alt text](https://github.com/mdubus/fractol/blob/master/img/mandelbrot%20hedgehog.png)
+```
+$> ./fractol Mandelbrot
+$> ./fractol Julia
+$> ./fractol Burning_Ship
+$> ./fractol Multibrot
+```
 
-![alt text](https://github.com/mdubus/fractol/blob/master/img/mandelbrot%20vasarely.png)
+Ou
 
-![alt text](https://github.com/mdubus/fractol/blob/master/img/duobrot%20grey.png)
+```
+$> ./fractol 1
+$> ./fractol 2
+$> ./fractol 3
+$> ./fractol 4
+```
 
-![alt text](https://github.com/mdubus/fractol/blob/master/img/julia%20psychedelic.png)
+> Realisé et testé sur MacOs Sierra V.10.12.6
 
-![alt text](https://github.com/mdubus/fractol/blob/master/img/burning%20ship%20ghost.png)
+-----------------------------------
 
-## Final mark
-`125/100 (full bonus)`
+## Images du projet
+
+### Mandelbrot
+
+![Image Mandelbrot 1](https://github.com/Rorothejedi/fractol/blob/master/img_project/img_mandel.png)
+
+![Image Mandelbrot 2](https://github.com/Rorothejedi/fractol/blob/master/img_project/img_mandel_2.png)
+
+![Image Mandelbrot 3](https://github.com/Rorothejedi/fractol/blob/master/img_project/img_mandel_3.png)
+
+-----------------------------------
+
+### Julia
+
+![Image Julia 1](https://github.com/Rorothejedi/fractol/blob/master/img_project/img_julia.png)
+
+![Image Julia 2](https://github.com/Rorothejedi/fractol/blob/master/img_project/img_julia_2.png)
+
+-----------------------------------
+
+### Burning Ship
+
+![Image Burning Ship](https://github.com/Rorothejedi/fractol/blob/master/img_project/img_bship.png)
+
+-----------------------------------
+
+### Multibrot
+
+![Image Multibrot](https://github.com/Rorothejedi/fractol/blob/master/img_project/img_multi.png)

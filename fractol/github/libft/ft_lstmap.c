@@ -1,41 +1,40 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_lstmap.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/15 18:10:16 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/16 12:16:35 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_lstmap.c                                      .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/09 19:57:44 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/10 18:02:11 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
-#include <stdlib.h>
+#include "libft.h"
 
-t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
+t_list		*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {
-	t_list	*begin_list;
-	t_list	*temp;
-	t_list	*temp2;
+	t_list *new;
+	t_list *begin;
 
-	temp = f(lst);
-	begin_list = ft_lstnew(temp->content, temp->content_size);
-	if (begin_list == 0)
-		return (0);
-	temp2 = begin_list;
-	if (lst)
+	new = NULL;
+	begin = NULL;
+	if (!lst || !f)
+		return (NULL);
+	while (lst)
 	{
-		lst = lst->next;
-		while (lst)
+		if (!begin)
 		{
-			temp = f(lst);
-			temp2->next = ft_lstnew(temp->content, temp->content_size);
-			if (temp2->next == 0)
-				return (0);
-			temp2 = temp2->next;
-			lst = lst->next;
+			new = f(lst);
+			begin = new;
 		}
+		else
+		{
+			new->next = f(lst);
+			new = new->next;
+		}
+		lst = lst->next;
 	}
-	return (begin_list);
+	return (begin);
 }

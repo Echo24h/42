@@ -9,20 +9,21 @@
 #include "X.h"
 #include "libft.h"
 
+// W / 1.125 = H
 # define W 810
 # define H 720
 # define MAX_RE 0.6
 # define MIN_RE -2.1
 # define MAX_IM 1.2
 # define MIN_IM -1.2
-# define JULIA_MAX_RE 2.0
-# define JULIA_MIN_RE -2.0
-# define JULIA_MAX_IM 2.0
-# define JULIA_MIN_IM -2.0
+# define JULIA_MAX_RE 1.5
+# define JULIA_MIN_RE -1.5
+# define JULIA_MAX_IM 1.33
+# define JULIA_MIN_IM -1.33
 # define BURNING_SHIP_MAX_RE 2.0
 # define BURNING_SHIP_MIN_RE -2.0
-# define BURNING_SHIP_MAX_IM 2.0
-# define BURNING_SHIP_MIN_IM -2.0
+# define BURNING_SHIP_MAX_IM 1.753
+# define BURNING_SHIP_MIN_IM -1.752
 # define TOP 1
 # define RIGHT 2
 # define BOTTOM 3
@@ -35,12 +36,6 @@
 # define WIN 		var->win
 # define IMG 		var->img
 # define IMG_DATA 	var->img_data
-
-typedef struct s_cplx
-{
-	long double re;
-	long double im;
-}	t_cplx;
 
 typedef struct	s_limits
 {
@@ -68,8 +63,11 @@ typedef struct	s_var
 	int				mouse_x;
 	int				mouse_y;
 	int				count_scroll;
-	t_cplx			julia_point;
+	int				count_unzoom;
+	long double		julia_point_r;
+	long double		julia_point_i;
 	int				iteration_max;
+	long double		module;
 	int				fractal;
 	int				allow_julia_variation;
 	int				endian;
@@ -83,6 +81,11 @@ void		print_limits(t_var *var);
 void		set_dists(t_var *var);
 int			exit_prog(t_var *var);
 
+// fractales
+int	mandelbrot(t_var *var, long double c_r, long double c_i);
+int	julia(t_var *var, long double c_r, long double c_i);
+int	burning_ship(t_var *var, long double c_r, long double c_i);
+
 // hooks
 int 		key_hook(int keycode, void *param);
 int			mouse_hook(int button, int x,int y, void *param);
@@ -95,16 +98,14 @@ void		handle_move(t_var *var, int direction);
 void		add_to_iteration_max(t_var *var, int n);
 
 // palettes
-unsigned int	palette_0(t_var *var, int nb_iteration);
-unsigned int	palette_1(t_var *var, int nb_iteration);
-unsigned int	palette_2(t_var *var, int nb_iteration);
+unsigned int	palette(t_var *var, int nb_iteration);
+unsigned int	brain_fuck(t_var *var, int nb_iteration);
+unsigned int	grey(t_var *var, int nb_iteration);
+unsigned int	smooth_red(t_var *var, int nb_iteration);
+unsigned int	rainbow(t_var *var, int nb_iteration);
+unsigned int	zebra(t_var *var, int nb_iteration);
 
 // utils
 int	ft_strcmp(char *s1, char *s2);
-
-// cplx
-t_cplx	get_cplx(long double re, long double im);
-t_cplx	get_next_cplx(t_var *var, t_cplx z, t_cplx c);
-
 
 #endif

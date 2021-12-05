@@ -52,39 +52,20 @@ void	put_pixel(t_var *var, int x, int y, int color)
 	}
 }
 
-unsigned int	get_color(t_var *var, int nb_iteration)
+unsigned int	get_color(t_var *var, long double c_r, long double c_i)
 {
-	if (var->palette == 0)
-		return (palette_0(var, nb_iteration));
-	else if (var->palette == 1)
-		return (palette_1(var, nb_iteration));
-	else if (var->palette == 2)
-		return (palette_2(var, nb_iteration));
-	return (0);
-}
+	int	iteration;
 
-int	get_nb_iteration(t_var *var, t_cplx c)
-{
-	t_cplx	z;
-	int	i;
-	
-	i = 0;
-	if (var->fractal == MANDELBROT || var->fractal == BURNING_SHIP)
-		z = get_cplx(0, 0);
+	if (var->fractal == MANDELBROT)
+		iteration = mandelbrot(var, c_r, c_i);
 	else if (var->fractal == JULIA)
-		z = c;
-	while (z.re * z.re + z.im * z.im < 4 && ++i < var->iteration_max)
-	{
-		if (var->fractal == MANDELBROT || var->fractal == BURNING_SHIP)
-			z = get_next_cplx(var, z, c);
-		else if (var->fractal == JULIA)
-			z = get_next_cplx(var, z, var->julia_point);
-	}
-		
-	return (i);
+		iteration = julia(var, c_r, c_i);
+	else if (var->fractal == BURNING_SHIP)
+		iteration = burning_ship(var, c_r, c_i);
+	return (palette(var, iteration));
 }
 
-void	draw_iteration(t_var *var)
+void	draw_iteration_max(t_var *var)
 {
 		char	*s;
 		char	*n;
@@ -92,16 +73,16 @@ void	draw_iteration(t_var *var)
 		n = ft_itoa(var->iteration_max);
 		s = ft_strjoin("Iterations : ", n);
 		free(n);
-		mlx_string_put(MLX, WIN, 10, 20, 0x0, s);
+		mlx_string_put(MLX, WIN, 10, 20, 0xffffff, s);
 		free(s);
 }
 
 void	draw_fractal(t_var *var)
 {
-	int		color;
-	int		x;
-	int		y;
-	t_cplx	c;
+	int	x;
+	int	y;
+	long double	c_r;
+	long double	c_i;
 	
 	set_dists(var);
 	set_steps(var);
@@ -111,15 +92,17 @@ void	draw_fractal(t_var *var)
 		x = 0;
 		while (x < W)
 		{
-			c = get_cplx(x * var->step_x + var->limits.curr_min_re, var->limits.curr_max_im - y * var->step_y);
-			color = get_color(var, get_nb_iteration(var, c));
-			put_pixel(var, x, y, color);
+			c_r = x * var->step_x + var->limits.curr_min_re;
+			c_i = var->limits.curr_max_im - y * var->step_y;
+			//printf("%Lf + %Lfi | (%d, %d)\n", c_r, c_i, x, y);
+			//sleep(10);
+			put_pixel(var, x, y, get_color(var, c_r, c_i));
 			x++;
 		}
 		y++;
 	}
 	mlx_put_image_to_window(MLX, WIN, IMG, 0, 0);
-	draw_iteration(var);
+	draw_iteration_max(var);
 }
 
 int	parse_params(t_var *var, int ac, char **av)
@@ -140,6 +123,7 @@ int	parse_params(t_var *var, int ac, char **av)
 int	main(int ac, char **av)
 {
 	t_var	*var;
+	int i;
 
 	var = malloc(sizeof(t_var) * 1);
 	if (!var)
@@ -153,8 +137,8 @@ int	main(int ac, char **av)
 	IMG_DATA = mlx_get_data_addr(IMG, &(var->bpp), &(var->size_line), &(var->endian));
 
 	var->limits = get_limits(MAX_RE, MIN_RE, MAX_IM, MIN_IM);
-	var->iteration_max = 50;
-	var->zoom_speed = 2;
+	var->iteration_max = 40;
+	var->zoom_speed = 3;
 	var->palette = 0;
 	var->count_scroll = 0;
 	if (var->fractal == JULIA)
@@ -163,10 +147,24 @@ int	main(int ac, char **av)
 		var->limits = get_limits(JULIA_MAX_RE, JULIA_MIN_RE, JULIA_MAX_IM, JULIA_MIN_IM);
 		var->julia_step_x = (fabs(MAX_RE) + fabs(MIN_RE)) / W;
 		var->julia_step_y = (fabs(MAX_IM) + fabs(MIN_IM)) / H;
-		var->julia_point = get_cplx(0.3, 0.5);
+		var->julia_point_r = 0.3;
+		var->julia_point_i = 0.5;
+		var->count_unzoom = 0;
 	}
+	if (var->fractal == BURNING_SHIP)
+		var->limits = get_limits(BURNING_SHIP_MAX_RE, BURNING_SHIP_MIN_RE, BURNING_SHIP_MAX_IM, BURNING_SHIP_MIN_IM);
 
 	draw_fractal(var);
+	/*
+	i = 0;
+	mlx_mouse_move(WIN, W / 2, H / 2);
+	while (++i < 50)
+		handle_zoom(var);
+	i = 0;
+	while (var->iteration_max > 50)
+		handle_unzoom(var);
+	draw_fractal(var);
+	*/
 
 	mlx_key_hook(WIN, key_hook, var);
 	mlx_mouse_hook(WIN, mouse_hook, var);

@@ -1,259 +1,224 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   fractol.h                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/08/01 17:36:53 by mdubus            #+#    #+#             */
-/*   Updated: 2017/08/05 15:58:47 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   fractol.h                                        .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/01/08 17:14:40 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2019/03/28 18:32:48 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
 /*
-** Necessaire pour plusieurs fonctions (mlx_init, mlx_new_window, ...)
+** -------------------------------------------
+** DEFINES PROGRAM SETTINGS
+** -------------------------------------------
 */
-# include "mlx.h"
+
+# define NAME			"Fract'ol 101"
+# define THREADS		8
+# define W_WIDTH		900
+# define W_HEIGHT		900
+# define FULL_WIDTH		(W_WIDTH + 350)
 
 /*
-** Necessaire pour les masques de mlx_hook
+** -------------------------------------------
+** INCLUDES
+** -------------------------------------------
 */
+
+# include "../libft/libft.h"
+# include "../minilibx_macos/mlx.h"
+# include "./keys.h"
 # include "X.h"
-
-# include <math.h>
-# include <OpenCL/opencl.h>
-# include "../libft/includes/libft.h"
-# include "color.h"
-
-/*
-** open
-*/
 # include <fcntl.h>
-
-/*
-** perror
-*/
+# include <math.h>
+# include <time.h>
+# include <pthread.h>
 # include <stdio.h>
 
-# define WIDTH_W 800
-# define HEIGHT_W 800
-# define PLUS 69
-# define MINUS 78
-# define TOP 126
-# define BOTTOM 125
-# define LEFT 123
-# define RIGHT 124
-# define ESC 53
-# define P 35
-# define RST 15
-# define R 0
-# define I 1
-# define ACCG 33
-# define ACCD 30
-# define FRACT 3
-# define ZOOM 5.0
-# define SPACE 49
+/*
+** -------------------------------------------
+** STRUCTURES
+** -------------------------------------------
+*/
 
-# define UI unsigned int
-# define ZR p->z[R]
-# define ZI p->z[I]
-# define CI p->c[I]
-# define CR p->c[R]
+/*
+** Secondary structs
+*/
 
-# define SHIP_OR_BIRD (p->fractale == SHIP || p->fractale == BIRD)
-# define MANDEL_OR_JULIA (p->fractale == MANDELBROT || p->fractale == JULIA)
-
-# define BLUE blue(i, p->iter_max, mult)
-# define AQUA_BLUE aqua_blue(p->iter_max, i, mult)
-# define GREY grey(i, p->iter_max, mult)
-# define SMOOTH_AQUA_BLUE smooth_aqua_blue(p->iter_max, i, mult)
-# define FIRE fire(i, p->iter_max, mult)
-# define SHADE_OF_GREY shade_of_grey(i, p->iter_max, mult)
-# define SMOOTH_SHADE_OF_GREY smooth_shade_of_grey(i, p->iter_max, mult)
-# define RAINBOW rainbow2(p->iter_max, i, mult)
-# define PICOTS picots(p->iter_max, i, p->squares, mult)
-# define VASARELY vasarely(p->z_im)
-# define ZEBRA zebra(i, p->iter_max, mult)
-
-typedef struct			s_p
+typedef struct			s_img
 {
-	void				*mlx_ptr;
-	void				*win;
-	void				*img_ptr;
-	char				*img;
-	char				*nfractale;
-	char				*fcolor;
-	char				*fkernel;
-	char				*fpalette1;
-	char				*fpalette2;
-	char				*fpalette3;
-	char				*fbegin;
-	const char			*opencl;
-	unsigned int		blue;
-	unsigned int		green;
-	unsigned int		red;
-	unsigned int		color;
-	unsigned int		nb_pixels;
-	unsigned int		padding;
+	void				*i;
+	unsigned int		*data;
 	int					bpp;
-	int					s_l;
+	int					size_l;
 	int					endian;
-	int					keyflag[256];
-	int					width;
-	int					height;
-	int					palette;
-	int					iter_max;
-	int					round;
-	int					midx;
-	int					midy;
-	int					coorx;
-	int					coory;
-	int					mx;
-	int					my;
-	int					fractale;
-	int					space;
-	double				x1;
-	double				x2;
-	double				y1;
-	double				y2;
-	double				z_im;
-	double				squares;
-	double				c[2];
-	double				z[2];
-	double				offx;
-	double				offy;
-	double				zoom;
-	size_t				global;
-	size_t				local;
-	cl_device_id		device_id;
-	cl_context			context;
-	cl_command_queue	commands;
-	cl_mem				buffer;
-	cl_program			program;
-	cl_kernel			kernel;
-}						t_p;
+}						t_img;
 
-typedef struct			s_fgnl
+typedef struct			s_fractal
 {
-	int					fd;
-	int					gnl_ret;
-	char				*line;
-	char				*mew;
-	char				*temp;
-}						t_fgnl;
+	char				*name;
+	int					lock;
+	float				n;
+	long double			x1;
+	long double			x2;
+	long double			y1;
+	long double			y2;
+	long double			z_r;
+	long double			z_i;
+	long double			tmp;
+	long double			zoom;
+	int					max;
+}						t_fractal;
+
+typedef struct			s_param
+{
+	int					sens;
+	char				*color;
+	int					white;
+	int					green;
+}						t_param;
+
+typedef struct			s_thread
+{
+	int					id_thread;
+	long double			c_r;
+	long double			c_i;
+	void				*ptr_add;
+}						t_thr;
 
 /*
-** calc_fractales
+** Main struct
 */
 
-void					get_fractale(t_p *p, int *i);
+typedef struct			s_mlx
+{
+	void				*mlx;
+	void				*win;
+	clock_t				time;
+	int					first;
+	t_img				img;
+	struct s_fractal	*fr;
+	struct s_param		*set;
+	struct s_thread		**thr;
+}						t_mlx;
 
 /*
-** choose_cpu_or_gpu
+** -------------------------------------------
+** PROTOTYPES
+** -------------------------------------------
+**
+** main.c
 */
 
-void					init(t_p *p);
-void					put_fractale(t_p *p);
+void					main_next(char *fr_name);
 
 /*
-** do_fractol
+** error.c
 */
 
-void					do_fractol(t_p *p);
+void					error(char *str);
+void					error_free(t_mlx *ptr, char *str);
 
 /*
-** fractales
+** struct.c
 */
 
-void					get_fractal_differences(t_p *p);
-void					load_fractale(t_p *p);
+t_mlx					*struct_init(char *fr_name);
+t_fractal				*struct_fractal(char *fr_name);
+t_param					*struct_param(void);
+t_thr					**struct_thread(t_mlx *ptr);
+void					struct_free(t_mlx *ptr);
 
 /*
-** free
+** graphic.c
 */
 
-int						destroy_struct(t_p *p);
+t_mlx					*graphic_init(t_mlx *ptr);
+int						graphic_trace(t_mlx *ptr);
+void					graphic_pixel(t_mlx *ptr, int x, int y,
+		unsigned int color);
+float					graphic_time(t_mlx *ptr);
 
 /*
-** init_limits_fractales
+** string.c
 */
 
-void					init_limits_fractale(t_p *p);
+void					string_init(t_mlx *ptr);
+void					string_gen(t_mlx *ptr, double w, double h, char *str);
+void					string_active_gen(t_mlx *ptr, double w, double h,
+		char *str);
+char					*string_count_zoom(long double zoom);
 
 /*
-** init_opencl
+** interface.c
 */
-
-void					init_opencl(t_p *p);
+void					interface_real_time(t_mlx *ptr);
+void					interface_commands(t_mlx *ptr);
+void					interface_active(t_mlx *ptr);
 
 /*
-** init_structs
+** key.c
 */
-
-void					init_struct_p(t_p *p);
-void					init_mlx(t_p *p);
+int						key_events(int keycode, t_mlx *ptr);
+t_mlx					*key_events_other(int keycode, t_mlx *ptr);
 
 /*
-** int_rgb_converter
+** mouse.c
 */
-
-void					int_to_rgb(t_p *p);
-void					rgb_to_int(t_p *p, int red, int green, int blue);
+int						mouse_events(int button, int x, int y, t_mlx *ptr);
+t_mlx					*mouse_zoom (t_mlx *ptr, long double mx, long double my,
+		char *eff);
 
 /*
-** key_loop
+** color.c
 */
-
-int						loop_key(t_p *p);
+unsigned int			color_rgbtoi(unsigned int r, unsigned int g,
+		unsigned int b);
+unsigned int			color_performer(char *str, unsigned int color);
+t_mlx					*color_change(t_mlx *ptr, char *dir);
+t_mlx					*color_change_next(t_mlx *ptr);
+t_mlx					*color_change_prev(t_mlx *ptr);
 
 /*
-** key_press
+** mandelbrot.c
 */
-
-int						key_press(int keycode, t_p *p);
-int						key_release(int keycode, t_p *p);
+t_mlx					*mandel_init(t_mlx *ptr);
+void					mandel_create(t_mlx *ptr, t_thr *thr, int x, int y);
+t_mlx					*mandel_events_key(int keycode, t_mlx *ptr);
 
 /*
-** load_opencl
+** julia.c
 */
-
-void					load_arguments_opencl(t_p *p);
-void					load_opencl(t_p *p);
+t_mlx					*julia_init(t_mlx *ptr);
+void					julia_create(t_mlx *ptr, t_thr *thr, int x, int y);
+t_mlx					*julia_events_key(int keycode, t_mlx *ptr);
+int						julia_events_mouse(int x, int y, t_mlx *ptr);
 
 /*
-** main
+** bship.c
 */
-
-void					get_name_fractal(t_p *p);
-int						main(int argc, char **argv);
+t_mlx					*bship_init(t_mlx *ptr);
+void					bship_create(t_mlx *ptr, t_thr *thr, int x, int y);
+t_mlx					*bship_events_key(int keycode, t_mlx *ptr);
 
 /*
-** mouse_events
+** multibrot.c
 */
-
-int						expose(t_p *p);
-int						mouse_events(int button, int x, int y, t_p *p);
-int						red_cross(t_p *p);
+t_mlx					*multi_init(t_mlx *ptr);
+void					multi_create(t_mlx *ptr, t_thr *thr, int x, int y);
+t_mlx					*multi_events_key(int keycode, t_mlx *ptr);
 
 /*
-** move_julia
+** thread.c
 */
-
-int						move_julia(int x, int y, t_p *p);
-
-/*
-** put_image_mlx
-*/
-
-void					put_image_mlx(t_p *p);
-
-/*
-** usefull
-*/
-
-void					put_pixel(t_p *p, int x, int y);
+int						thread_init(t_mlx *ptr);
+void					*thread_compute(void *param);
 
 #endif

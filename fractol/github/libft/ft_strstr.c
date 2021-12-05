@@ -1,40 +1,34 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strstr.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/07 13:04:00 by mdubus            #+#    #+#             */
-/*   Updated: 2017/01/04 16:36:53 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_strstr.c                                      .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/07/09 10:15:33 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/05 19:00:31 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "libft.h"
 
 char	*ft_strstr(const char *big, const char *little)
 {
 	int i;
-	int	j;
+	int j;
 
-	i = 0;
 	j = 0;
-	if (little[i] == '\0')
-	{
+	if (little[0] == '\0')
 		return ((char *)big);
-	}
-	while (big[i] != '\0')
+	while (big[j])
 	{
-		j = 0;
-		while (big[i + j] == little[j])
-		{
-			j++;
-			if (little[j] == '\0')
-			{
-				return ((char*)&big[i]);
-			}
-		}
-		i++;
+		i = 0;
+		while (big[i + j] == little[i] && little[i])
+			i++;
+		if (!little[i])
+			return ((char *)big + j);
+		j++;
 	}
 	return (0);
 }

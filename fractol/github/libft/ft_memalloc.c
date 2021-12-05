@@ -1,25 +1,24 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_memalloc.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/07 16:27:50 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/11 18:13:35 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_memalloc.c                                    .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/04 15:51:24 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/10 17:13:01 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
-#include <stdlib.h>
+#include "libft.h"
 
 void	*ft_memalloc(size_t size)
 {
-	void	*memory;
+	void *mem;
 
-	memory = malloc(size * sizeof(void *));
-	if (memory == 0)
-		return (0);
-	ft_bzero(memory, size);
-	return (memory);
+	if (!(mem = (void *)malloc(sizeof(void*) * size)))
+		return (NULL);
+	ft_bzero(mem, size);
+	return (mem);
 }

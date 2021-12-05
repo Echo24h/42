@@ -1,26 +1,31 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strequ.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/09 17:16:44 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/09 17:32:52 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_strequ.c                                      .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/05 14:20:04 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/05 19:32:56 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "libft.h"
 
-int	ft_strequ(char const *s1, char const *s2)
+int		ft_strequ(char const *s1, char const *s2)
 {
-	int result;
+	int i;
 
-	if (!s1 || !s2)
-		return (0);
-	result = ft_strcmp(s1, s2);
-	if (result == 0)
-		return (1);
-	else
-		return (0);
+	i = 0;
+	if (s1 && s2)
+	{
+		while (s1[i] || s2[i])
+		{
+			if (s1[i] - s2[i] != 0)
+				return (0);
+			i++;
+		}
+	}
+	return (1);
 }

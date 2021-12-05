@@ -1,38 +1,37 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdubus <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/15 14:40:15 by mdubus            #+#    #+#             */
-/*   Updated: 2016/11/16 10:19:06 by mdubus           ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_lstnew.c                                      .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: rcabotia <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/10/09 13:09:51 by rcabotia     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/09 16:51:57 by rcabotia    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
-#include <stdlib.h>
+#include "libft.h"
 
-t_list		*ft_lstnew(void const *content, size_t content_size)
+t_list	*ft_lstnew(void const *content, size_t content_size)
 {
-	t_list		*new;
+	t_list *temp;
 
-	new = (t_list *)malloc(sizeof(t_list));
-	if (new == NULL)
+	temp = NULL;
+	if (!(temp = malloc(sizeof(t_list))))
 		return (NULL);
-	if (content == NULL)
+	if (content)
 	{
-		new->content = NULL;
-		new->content_size = 0;
+		if (!(temp->content = malloc(content_size)))
+			return (NULL);
+		temp->content_size = content_size;
+		ft_memcpy(temp->content, content, content_size);
 	}
 	else
 	{
-		new->content = malloc(sizeof(content));
-		if (new->content == NULL)
-			return (NULL);
-		ft_memcpy(new->content, content, content_size);
-		new->content_size = content_size;
+		temp->content = (char *)NULL;
+		temp->content_size = 0;
 	}
-	new->next = NULL;
-	return (new);
+	temp->next = NULL;
+	return (temp);
 }
