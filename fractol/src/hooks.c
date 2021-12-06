@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hooks.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/06 08:42:14 by ydanset           #+#    #+#             */
+/*   Updated: 2021/12/06 08:42:43 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 
 int	key_hook(int keycode, void *param)
@@ -24,7 +36,7 @@ int	key_hook(int keycode, void *param)
 	return (1);
 }
 
-int	mouse_hook(int button, int x,int y, void *param)
+int	mouse_hook(int button, int x, int y, void *param)
 {
 	t_var	*var;
 

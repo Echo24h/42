@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/06 08:47:21 by ydanset           #+#    #+#             */
+/*   Updated: 2021/12/06 08:50:02 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 
 int	ft_strcmp(char *s1, char *s2)
@@ -24,7 +36,7 @@ float	ft_atof(char *s)
 		s++;
 	}
 	while (*s && ft_isdigit(*s))
-		res = res * 10 + *s++ - 48; 
+		res = res * 10 + *s++ - 48;
 	if (*s == '.' || *s == ',')
 		s++;
 	x = 0.1;
@@ -38,12 +50,12 @@ float	ft_atof(char *s)
 	return (res);
 }
 
-void	mmmmOkYouGuysAreFreeToGo(t_var *var)
+void	mmmm_ok_you_guys_are_free_to_go(t_var *var)
 {
-	if (IMG)
-		mlx_destroy_image(MLX, IMG);
-	if (WIN)
-		mlx_destroy_window(MLX, WIN);
+	if (var->img)
+		mlx_destroy_image(var->mlx, var->img);
+	if (var->win)
+		mlx_destroy_window(var->mlx, var->win);
 	free(var);
 }
 

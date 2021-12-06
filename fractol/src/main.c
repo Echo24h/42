@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/06 08:43:28 by ydanset           #+#    #+#             */
+/*   Updated: 2021/12/06 08:51:42 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 
 static int	print_options(void)
@@ -6,8 +18,10 @@ static int	print_options(void)
 	printf(" - mandelbrot\n");
 	printf(" - julia\n");
 	printf(" - burning_ship\n\n");
-	printf("For julia you can also precise the starting point => ./fractol julia z.r z.i\n");
-	printf("Note that you have to wrap the param in "" if it is a negative value");
+	printf("For julia you can also precise the starting point");
+	printf(" => ./fractol julia z.r z.i\n");
+	printf("Note that you have to wrap the param in \"\" ");
+	printf("if it is a negative value\n");
 	return (0);
 }
 
@@ -27,11 +41,11 @@ int	main(int ac, char **av)
 	if (!init_mlx(var))
 		return (1);
 	draw_fractal(var);
-	mlx_key_hook(WIN, key_hook, var);
-	mlx_mouse_hook(WIN, mouse_hook, var);
-	mlx_hook(WIN, DestroyNotify, 0, exit_prog, var);
+	mlx_key_hook(var->win, key_hook, var);
+	mlx_mouse_hook(var->win, mouse_hook, var);
+	mlx_hook(var->win, DestroyNotify, 0, exit_prog, var);
 	if (var->fractal == JULIA)
-		mlx_hook(WIN, MotionNotify, 0, mouse_motion_hook, var);
-	mlx_loop(MLX);
+		mlx_hook(var->win, MotionNotify, 0, mouse_motion_hook, var);
+	mlx_loop(var->mlx);
 	return (0);
 }

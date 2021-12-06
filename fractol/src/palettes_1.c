@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   palettes_1.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/06 08:46:04 by ydanset           #+#    #+#             */
+/*   Updated: 2021/12/06 08:46:07 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 
 unsigned int	grey(t_var *var, int nb_iteration)
 {
 	t_rgb	rgb;
-	
+
 	if (nb_iteration == var->iteration_max)
 		return (0x0);
 	rgb.r = sin(0.3 * nb_iteration) * 127 + 128;
@@ -15,7 +27,7 @@ unsigned int	grey(t_var *var, int nb_iteration)
 unsigned int	smooth_red(t_var *var, int nb_iteration)
 {
 	t_rgb	rgb;
-	
+
 	if (nb_iteration == var->iteration_max)
 		return (0x0);
 	rgb.r = nb_iteration * 255 / var->iteration_max;
@@ -27,7 +39,7 @@ unsigned int	smooth_red(t_var *var, int nb_iteration)
 unsigned int	rainbow_0(t_var *var, int nb_iteration)
 {
 	t_rgb	rgb;
-	
+
 	if (nb_iteration == var->iteration_max)
 		return (0x0);
 	rgb.r = sin(0.3 * nb_iteration + 3) * 127 + 128;
@@ -40,7 +52,7 @@ unsigned int	rainbow_0(t_var *var, int nb_iteration)
 unsigned int	rainbow_1(t_var *var, int nb_iteration)
 {
 	t_rgb	rgb;
-	
+
 	if (nb_iteration == var->iteration_max)
 		return (0x0);
 	rgb.r = sin(0.4 * nb_iteration) * 127 + 128;
