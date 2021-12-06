@@ -1,39 +1,9 @@
 #include "fractol.h"
-#include <unistd.h>
-
-int	exit_prog(t_var *var)
-{
-	mlx_destroy_image(MLX, IMG);
-	mlx_destroy_window(MLX, WIN);
-	exit(0);
-	return (1);
-}
-
-void	switch_palette(t_var *var)
-{
-	var->palette += 1;
-	if (var->palette > 2)
-		var->palette = 0;
-	draw_fractal(var);
-}
-
-void	reset_fractal(t_var *var)
-{
-	var->iteration_max = 40;
-	if (var->fractal == MANDELBROT)
-		var->limits = get_limits(MAX_RE, MIN_RE, MAX_IM, MIN_IM);
-	else if (var->fractal == JULIA)
-		var->limits = get_limits(JULIA_MAX_RE, JULIA_MIN_RE, JULIA_MAX_IM, JULIA_MIN_IM);
-	else if (var->fractal == BURNING_SHIP)
-		var->limits = get_limits(BURNING_SHIP_MAX_RE, BURNING_SHIP_MIN_RE, BURNING_SHIP_MAX_IM, BURNING_SHIP_MIN_IM);
-	draw_fractal(var);
-}
 
 int	key_hook(int keycode, void *param)
 {
 	t_var	*var;
 
-	//printf("%d\n", keycode);
 	var = (t_var *)param;
 	if (keycode == 126)
 		handle_move(var, TOP);
@@ -58,6 +28,8 @@ int	mouse_hook(int button, int x,int y, void *param)
 {
 	t_var	*var;
 
+	if (!(x >= 0 && x < W && y >= 0 && y < H))
+		return (1);
 	var = (t_var *)param;
 	if (button == 4)
 		handle_zoom(var);

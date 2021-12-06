@@ -20,8 +20,8 @@
 # define JULIA_MIN_RE -1.5
 # define JULIA_MAX_IM 1.33
 # define JULIA_MIN_IM -1.33
-# define BURNING_SHIP_MAX_RE 2.0
-# define BURNING_SHIP_MIN_RE -2.0
+# define BURNING_SHIP_MAX_RE 1.5
+# define BURNING_SHIP_MIN_RE -2.5
 # define BURNING_SHIP_MAX_IM 1.753
 # define BURNING_SHIP_MIN_IM -1.752
 # define TOP 1
@@ -67,7 +67,6 @@ typedef struct	s_var
 	long double		julia_point_r;
 	long double		julia_point_i;
 	int				iteration_max;
-	long double		module;
 	int				fractal;
 	int				allow_julia_variation;
 	int				endian;
@@ -75,11 +74,9 @@ typedef struct	s_var
 	int 			size_line;
 }	t_var;
 
+void	put_pixel(t_var *var, int x, int y, int color);
 void		draw_fractal(t_var *var);
 t_limits	get_limits(long double max_re, long double min_re, long double max_im, long double min_im);
-void		print_limits(t_var *var);
-void		set_dists(t_var *var);
-int			exit_prog(t_var *var);
 
 // fractales
 int	mandelbrot(t_var *var, long double c_r, long double c_i);
@@ -92,20 +89,39 @@ int			mouse_hook(int button, int x,int y, void *param);
 int			mouse_motion_hook(int x, int y, t_var *var);
 
 // events
-void		handle_zoom(t_var *var);
-void		handle_unzoom(t_var *var);
-void		handle_move(t_var *var, int direction);
-void		add_to_iteration_max(t_var *var, int n);
+void	handle_zoom(t_var *var);
+void	handle_unzoom(t_var *var);
+void	handle_move(t_var *var, int direction);
+void	add_to_iteration_max(t_var *var, int n);
+void	switch_palette(t_var *var);
+void	reset_fractal(t_var *var);
+int		exit_prog(t_var *var);
 
 // palettes
 unsigned int	palette(t_var *var, int nb_iteration);
+unsigned int	palette_0(t_var *var, int nb_iteration);
+unsigned int	palette_1(t_var *var, int nb_iteration);
+unsigned int	palette_2(t_var *var, int nb_iteration);
+unsigned int	palette_3(t_var *var, int nb_iteration);
 unsigned int	brain_fuck(t_var *var, int nb_iteration);
 unsigned int	grey(t_var *var, int nb_iteration);
 unsigned int	smooth_red(t_var *var, int nb_iteration);
-unsigned int	rainbow(t_var *var, int nb_iteration);
+unsigned int	rainbow_0(t_var *var, int nb_iteration);
+unsigned int	rainbow_1(t_var *var, int nb_iteration);
 unsigned int	zebra(t_var *var, int nb_iteration);
 
+// parsing
+void	parse_julia_starting_point(t_var *var, int ac, char **av);
+int	parse_params(t_var *var, int ac, char **av);
+
+// initialisation
+int	init_mlx(t_var *var);
+int	init_var(t_var *var);
+
 // utils
-int	ft_strcmp(char *s1, char *s2);
+int		ft_strcmp(char *s1, char *s2);
+float	ft_atof(char *s);
+void	mmmmOkYouGuysAreFreeToGo(t_var *var);
+unsigned int	rgb_to_int(t_rgb rgb);
 
 #endif
