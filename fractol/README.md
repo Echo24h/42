@@ -10,4 +10,4 @@ Commands :<br/>
 	- Scroll 		=> Zoom<br/>
 	- V 			=> Turn on/off Julia point selection<br/>
 	- R 			=> Reset fractal<br/>
-	- ESC 			=> Exit<br/>
+	- ESC              => Exit<br/>
