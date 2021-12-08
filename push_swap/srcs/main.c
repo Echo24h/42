@@ -91,14 +91,45 @@ void	sorting(t_list **a, t_list **b)
 
 	while (*a)
 	{
-		;
+		move_to_top_a(a, get_min(*a));
+		push_b(a, b);
 	}
+	while (*b)
+		push_a(a, b);
 }
+
+/*
+t_list	*init_chunks(int n, t_list *lst)
+{
+	int		size;
+	int		i;
+	int		j;
+	t_list	*chunks;
+
+	size = ft_lstsize(lst);
+	chunks = malloc(sizeof(t_list) * n);
+	if (!chunks)
+		return (NULL);
+	i = 0;
+	while (i < n)
+	{
+		j = 0;
+		while (j++ < size / n)
+			ft_lstadd_front(&chunks[i], get_min(lst));
+		i++;
+	}
+	while (j++ < size)
+		ft_lstadd_front(&chunks[i], get_min(lst));
+	return (chunks);
+}
+*/
 
 int	main(int ac, char **av)
 {
+	int		size;
 	t_list	*a;
 	t_list	*b;
+	int		**chunks;
 
 	if (ac < 2)
 		return (0);
@@ -106,8 +137,7 @@ int	main(int ac, char **av)
 	b = NULL;
 	if (!parse(ac, av, &a))
 		return (on_error());
-	printf("%d\n", get_index(a, get_max(a)));
-	move_to_top_a(&a, get_max(a));
+	b = copy_lst(a);
 	print_stacks(a, b);
 	return (0);
 }

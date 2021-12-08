@@ -25,4 +25,7 @@ void	reverse_rotate_ab(t_list **a, t_list **b);
 void	print_stack(t_list *stack);
 void	print_stacks(t_list *a, t_list *b);
 
+// utils
+t_list	*copy_lst(t_list *lst);
+
 #endif

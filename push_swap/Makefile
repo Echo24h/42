@@ -1,3 +1,6 @@
+#ARG=`ruby -e 'min=1; max=10; A = Array(min..max); A.shuffle.each{ |n| print "#{n} "}'`; ./push_swap $ARG | ./checker_Mac $ARG
+#`ruby -e 'min=1; max=10; A = Array(min..max); A.shuffle.each{ |n| print "#{n} "}'`
+
 CC			=	gcc
 CFLAGS		=	#-Wall -Wextra -Werror
 NAME		=	push_swap
@@ -11,6 +14,7 @@ SRCS		=	srcs/main.c	\
 				srcs/push.c	\
 				srcs/rotate.c	\
 				srcs/reverse_rotate.c	\
+				srcs/utils.c	\
 				srcs/dev.c	\
 
 OBJS		=	$(SRCS:%.c=%.o)
@@ -27,9 +31,6 @@ $(NAME): $(OBJS) $(L_DIR)/libft.a
 %.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(I_DIR)
 
-run: all
-	./$(NAME) "1 5 8 9 2 4"
-
 clean:
 	make clean -C $(L_DIR)/libft
 	rm -f $(OBJS)
@@ -41,4 +42,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all run clean fclean re
+.PHONY: all clean fclean re
