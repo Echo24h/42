@@ -18,3 +18,14 @@ void	print_stacks(t_list *a, t_list *b)
 	printf("b : ");
 	print_stack(b);
 }
+
+void	print_chunks_limits(int *chunks_limits, int n)
+{
+	int	i;
+
+	i = 0;
+	printf("chunks_limits: ");
+	while (i < n)
+		printf("%d ", chunks_limits[i++]);
+	printf("\n");
+}

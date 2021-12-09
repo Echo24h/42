@@ -6,7 +6,7 @@
 #    By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 11:59:04 by ydanset           #+#    #+#              #
-#    Updated: 2021/12/04 04:18:54 by ydanset          ###   ########.fr        #
+#    Updated: 2021/12/09 14:01:54 by ydanset          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,6 +54,7 @@ SRC			=	ft_memset.c		\
 				ft_putchar.c	\
 				ft_atoi_long_long.c	\
 				is_number.c		\
+				get_next_line.c	\
 				
 SRC_BONUS	=	$(SRC)	\
 				ft_lstnew.c			\

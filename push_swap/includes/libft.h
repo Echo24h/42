@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 11:52:56 by ydanset           #+#    #+#             */
-/*   Updated: 2021/12/04 04:22:45 by ydanset          ###   ########.fr       */
+/*   Updated: 2021/12/09 14:01:32 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,6 @@ void	ft_putstr(char *str);
 void	ft_putchar(char c);
 long long int	ft_atoi_long_long(const char *str);
 int		is_number(char *s);
+char	*get_next_line(int fd);
 
 #endif
