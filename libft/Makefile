@@ -1,20 +1,9 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/10/18 11:59:04 by ydanset           #+#    #+#              #
-#    Updated: 2021/12/03 23:06:29 by ydanset          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 CC			=	gcc
-CFLAGS		=	-Werror -Wall -Wextra
+CFLAGS		=	-Wall -Wextra -Werror
 NAME		=	libft.a
-OBJ_DIR		=	obj
-I_DIR		=	.
+SRC_DIR		=	srcs
+OBJ_DIR		=	srcs/objs
+I_DIR		=	includes
 
 SRC			=	ft_memset.c		\
 				ft_bzero.c		\
@@ -52,8 +41,19 @@ SRC			=	ft_memset.c		\
 				ft_striteri.c	\
 				ft_putstr.c		\
 				ft_putchar.c	\
-				
-SRC_BONUS	=	$(SRC)	\
+				ft_atoi_long_long.c	\
+				is_number.c		\
+				get_next_line.c	\
+				ft_printf.c \
+				is_flag.c	\
+				get_opts.c	\
+				print_char.c	\
+				print_str.c	\
+				print_ptr.c	\
+				print_int.c	\
+				print_percentage.c	\
+				print_uint.c	\
+				print_hexa.c	\
 				ft_lstnew.c			\
 				ft_lstadd_front.c	\
 				ft_lstsize.c		\
@@ -63,25 +63,18 @@ SRC_BONUS	=	$(SRC)	\
 				ft_lstdelone.c		\
 				ft_lstiter.c		\
 				ft_lstmap.c			\
-				
 
-ifdef WITH_BONUS
-	OBJ				=	$(SRC_BONUS:%.c=%.o)
-	OBJ_PFX			=	$(addprefix $(OBJ_DIR)/, $(OBJ))
-else
-	OBJ				=	$(SRC:%.c=%.o)
-	OBJ_PFX			=	$(addprefix $(OBJ_DIR)/, $(OBJ))
-endif
+SRC_PFX			=	$(addprefix $(SRC_DIR)/, $(SRC))
+
+OBJ				=	$(SRC:%.c=%.o)
+OBJ_PFX			=	$(addprefix $(OBJ_DIR)/, $(OBJ))
 
 all: $(NAME)
 
 $(NAME): $(OBJ_PFX)
 	ar -rcs $(NAME) $(OBJ_PFX)
 
-bonus:
-	@make WITH_BONUS=1 all 
-
-$(OBJ_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(I_DIR)
 
@@ -93,4 +86,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re bonus run
