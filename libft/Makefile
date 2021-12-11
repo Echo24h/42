@@ -64,8 +64,6 @@ SRC			=	ft_memset.c		\
 				ft_lstiter.c		\
 				ft_lstmap.c			\
 
-SRC_PFX			=	$(addprefix $(SRC_DIR)/, $(SRC))
-
 OBJ				=	$(SRC:%.c=%.o)
 OBJ_PFX			=	$(addprefix $(OBJ_DIR)/, $(OBJ))
 
@@ -86,4 +84,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re bonus run
+.PHONY: all clean fclean re
