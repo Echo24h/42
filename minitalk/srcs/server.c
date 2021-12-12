@@ -26,34 +26,42 @@ void	reset_buffer(char *buff)
 	}
 }
 
-void	addto_buffer(char *buff, char c)
+void	addto_buffer(char *buff, char bit)
 {
-	int	i;
+	int		i;
+	char	c;
 
 	i = 0;
 	while (i < 8 && buff[i])
 		i++;
 	if (i == 8)
 	{
-		ft_printf("%c", read_buffer(buff));
+		c = read_buffer(buff);
+		write(1, &c, 1);
 		reset_buffer(buff);
 	}
 	else
-		buff[i] = c;
+		buff[i] = bit;
 }
 
 void	sigusr1_handler(int signum)
 {
-	ft_printf("In sigusr1 handler\n");
+	write(1, "In sigusr1 handler\n", ft_strlen("In sigusr1 handler\n"));
 	addto_buffer(buff, '0');
-	//signal(SIGUSR1, sigusr1_handler);
+	signal(SIGUSR1, sigusr1_handler);
 }
 
 void	sigusr2_handler(int signum)
 {
-	ft_printf("In sigusr2 handler\n");
+	write(1, "In sigusr2 handler\n", ft_strlen("In sigusr2 handler\n"));
 	addto_buffer(buff, '1');
-	//signal(SIGUSR2, sigusr2_handler);
+	signal(SIGUSR2, sigusr2_handler);
+}
+
+void	sigint_handler(int signum)
+{
+	display_buff(buff);
+	signal(SIGINT, sigint_handler);
 }
 
 int	main(int ac, char **av)
@@ -61,6 +69,7 @@ int	main(int ac, char **av)
 	char	buff[8];
 
 	ft_printf("%d\n", (int)getpid());
+	signal(SIGINT, sigint_handler);
 	signal(SIGUSR1, sigusr1_handler);
 	signal(SIGUSR2, sigusr2_handler);
 	while (1)
