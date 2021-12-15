@@ -39,6 +39,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(I_DIR)
 
+run: all
+	./server
+
 clean:
 	make clean -C $(L_DIR)/libft
 	rm -rf $(OBJ_DIR)

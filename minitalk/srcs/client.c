@@ -12,7 +12,7 @@ void	set_buff(char *buff, unsigned int c)
 	}
 }
 
-int	parse(int ac, char **av, pid_t *server_pid)
+int		parse(int ac, char **av, pid_t *server_pid)
 {
 	if (ac != 3)
 		return (0);
@@ -20,46 +20,60 @@ int	parse(int ac, char **av, pid_t *server_pid)
 	return (1);
 }
 
-// SIGUSR1 => 0
-// SIGUSR2 => 1
+void	sigusr1_handler(int signum)
+{
+	ft_printf("The data has been received successfully!\n");
+}
+
 int	main(int ac, char **av)
 {
-	int		i;
-	int		j;
-	char	buff[8];
-	pid_t	server_pid;
+	int					i;
+	int					j;
+	char				buff[8];
+	pid_t				server_pid;
+	struct sigaction	setup_sigusr1;
 
-	ft_printf("I'm the client boy!\n");
 	if (!parse(ac, av, &server_pid))
 		return (1); // error
-	printf("Server PID : %d\n", (int)server_pid);
+
+	setup_sigusr1.sa_handler = &sigusr1_handler;
+	sigemptyset(&setup_sigusr1.sa_mask);
+	sigaddset(&setup_sigusr1.sa_mask, SIGUSR1);
+	setup_sigusr1.sa_flags = 0;
+	sigaction(SIGUSR1, &setup_sigusr1, NULL);
+
 	i = 0;
 	while (av[2][i])
 	{
 		set_buff(buff, av[2][i]);
-		display_buff(buff);
+		//display_buff(buff);
 		j = 0;
 		while (j < 8)
 		{
+			//ft_printf("sending signal\n");
 			if (buff[j] == '0')
 			{
-				printf("sending sigusr1 | ");
+				//ft_printf("sending sigusr1\n");
 				kill(server_pid, SIGUSR1);
 			}
 			else
 			{
-				printf("sending sigusr2 | ");
+				//ft_printf("sending sigusr2\n");
 				kill(server_pid, SIGUSR2);
 			}
-			printf("there, %c\n", buff[j]);
+			//ft_printf("after pause\n");
+			usleep(100);
+			//printf("\n");
 			j++;
 		}
 		i++;
 	}
-	/*
 	i = 0;
 	while (i++ < 8)
+	{
+		//ft_printf("sending sigusr1\n");
 		kill(server_pid, SIGUSR1);
-	*/
+		usleep(100);
+	}
 	return (0);
 }

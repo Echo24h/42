@@ -1,8 +1,8 @@
 #include "minitalk.h"
 
-char	buff[8];
+# define BUFFER_SIZE 1024
 
-char	read_buffer(char *buff)
+char	read_byte(char *byte)
 {
 	unsigned int	c;
 	int				n;
@@ -10,69 +10,80 @@ char	read_buffer(char *buff)
 	c = 0;
 	n = 8;
 	while (n--)
-		c += (buff[n] - '0') * (1 << (7 - n));
+		c += (byte[n] - '0') * (1 << (7 - n));
 	return (c);
 }
 
-void	reset_buffer(char *buff)
+void	addto_buffer(unsigned char c, siginfo_t *info)
 {
-	int	i;
+	static int	i = 0;
+	static char	buff[BUFFER_SIZE];
 
-	i = 0;
-	while (i < 8)
+	buff[i++] = c;
+	if (i == BUFFER_SIZE - 1 || c == '\0')
 	{
 		buff[i] = '\0';
-		i++;
+		write(1, buff, ft_strlen(buff));
+		if (buff[i - 1] == '\\' && buff[i - 2] != '\\')
+		{
+			buff[0] = '\\';
+			i = 1;
+		}
+		else
+			i = 0;
+		write(1, "\n", 1);
 	}
+	if (c == '\0' && info->si_pid)
+		kill(info->si_pid, SIGUSR1);
 }
 
-void	addto_buffer(char *buff, char bit)
+void	addto_byte(char bit, siginfo_t *info)
 {
-	int		i;
-	char	c;
+	static int	i = 0;
+	static char	byte[8];
 
-	i = 0;
-	while (i < 8 && buff[i])
-		i++;
-	if (i == 8)
+	byte[i++] = bit;
+	if (i > 7)
 	{
-		c = read_buffer(buff);
-		write(1, &c, 1);
-		reset_buffer(buff);
+		addto_buffer(read_byte(byte), info);
+		i = 0;
 	}
-	else
-		buff[i] = bit;
 }
 
-void	sigusr1_handler(int signum)
+void	sigusr1_handler(int signum, siginfo_t *info, void *context)
 {
-	write(1, "In sigusr1 handler\n", ft_strlen("In sigusr1 handler\n"));
-	addto_buffer(buff, '0');
-	signal(SIGUSR1, sigusr1_handler);
+	addto_byte('0', info);
 }
 
-void	sigusr2_handler(int signum)
+void	sigusr2_handler(int signum, siginfo_t *info, void *context)
 {
-	write(1, "In sigusr2 handler\n", ft_strlen("In sigusr2 handler\n"));
-	addto_buffer(buff, '1');
-	signal(SIGUSR2, sigusr2_handler);
-}
-
-void	sigint_handler(int signum)
-{
-	display_buff(buff);
-	signal(SIGINT, sigint_handler);
+	addto_byte('1', info);
 }
 
 int	main(int ac, char **av)
 {
-	char	buff[8];
+	struct sigaction	setup_sigusr1;
+	struct sigaction	setup_sigusr2;
+	sigset_t			block_mask;
 
 	ft_printf("%d\n", (int)getpid());
-	signal(SIGINT, sigint_handler);
-	signal(SIGUSR1, sigusr1_handler);
-	signal(SIGUSR2, sigusr2_handler);
+
+	sigemptyset(&block_mask);
+	sigaddset(&block_mask, SIGUSR1);
+	sigaddset(&block_mask, SIGUSR2);
+
+	setup_sigusr1.sa_sigaction = &sigusr1_handler;
+	setup_sigusr1.sa_mask = block_mask;
+	setup_sigusr1.sa_flags = SA_SIGINFO;
+	
+	setup_sigusr2.sa_sigaction = &sigusr2_handler;
+	setup_sigusr2.sa_mask = block_mask;
+	setup_sigusr2.sa_flags = SA_SIGINFO;
+
+	sigaction(SIGUSR1, &setup_sigusr1, NULL);
+	sigaction(SIGUSR2, &setup_sigusr2, NULL);
+
 	while (1)
-		;
+		pause();
 	return (0);
 }
