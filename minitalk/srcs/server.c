@@ -2,6 +2,18 @@
 
 # define BUFFER_SIZE 1024
 
+void	display_byte(char *byte)
+{
+	int	i;
+
+	if (!byte)
+		return ;
+	i = 0;
+	while (i < 8)
+		write(1, &byte[i++], 1);
+	write(1, "\n", 1);
+}
+
 char	read_byte(char *byte)
 {
 	unsigned int	c;
@@ -14,50 +26,92 @@ char	read_byte(char *byte)
 	return (c);
 }
 
-void	addto_buffer(unsigned char c, siginfo_t *info)
+char	*ft_append_char_to_str(char *str, char c)
 {
-	static int	i = 0;
-	static char	buff[BUFFER_SIZE];
+	int		i;
+	char	*res;
 
-	buff[i++] = c;
-	if (i == BUFFER_SIZE - 1 || c == '\0')
+	if (!str)
 	{
-		buff[i] = '\0';
-		write(1, buff, ft_strlen(buff));
-		if (buff[i - 1] == '\\' && buff[i - 2] != '\\')
-		{
-			buff[0] = '\\';
-			i = 1;
-		}
-		else
-			i = 0;
-		write(1, "\n", 1);
+		res = malloc(sizeof(char) * 2);
+		if (!res)
+			return (NULL);
+		res[0] = c;
+		res[1] = '\0';
+		//ft_printf("in res: %s\n", res);
+		return (res);
 	}
-	if (c == '\0' && info->si_pid)
-		kill(info->si_pid, SIGUSR1);
+	res = malloc(sizeof(char) * (ft_strlen(str) + 2));
+	if (!res)
+		return (NULL);
+	i = 0;
+	while (str[i])
+	{
+		res[i] = str[i];
+		i++;
+	}
+	res[i++] = c;
+	res[i] = '\0';
+	free(str);
+	//ft_printf("in res: %s\n", res);
+	return (res);
 }
 
-void	addto_byte(char bit, siginfo_t *info)
+int		addto_byte(char bit, pid_t client_pid)
 {
-	static int	i = 0;
-	static char	byte[8];
+	static int		i = 0;
+	static char		byte[8];
+	static char		*msg = NULL;
+	unsigned char	c;
 
 	byte[i++] = bit;
 	if (i > 7)
 	{
-		addto_buffer(read_byte(byte), info);
+		//display_byte(byte);
+		c = read_byte(byte);
+		msg = ft_append_char_to_str(msg, c);
+		if (c == '\0')
+		{
+			ft_printf(msg);
+			//free(msg);
+			//msg = NULL;
+			//ft_printf("sending sigusr1\n");
+			kill(client_pid, SIGUSR1);
+			return (0);
+		}
 		i = 0;
 	}
+	return (1);
 }
 
-void	sigusr1_handler(int signum, siginfo_t *info, void *context)
+void	sigusr_handler(int signum, siginfo_t *info, void *context)
 {
-	addto_byte('0', info);
-}
+	static pid_t	client_pid = 0;
 
-void	sigusr2_handler(int signum, siginfo_t *info, void *context)
-{
-	addto_byte('1', info);
+	if (!client_pid)
+	{
+		if (!info->si_pid)
+		{
+			ft_printf("error : si_pid = 0\n"); // error
+		}
+		else
+			client_pid = info->si_pid;
+	}
+	if (signum == SIGUSR1)
+	{
+		//ft_printf("add byte 0\n");
+		if (!addto_byte('0', client_pid))
+			client_pid = 0;
+	}
+	else
+	{
+		//ft_printf("add byte 1\n");
+		if (!addto_byte('1', client_pid))
+			client_pid = 0;
+	}
+	//ft_printf("sending sigusr2\n");
+	if (client_pid)
+		kill(client_pid, SIGUSR2);
 }
 
 int	main(int ac, char **av)
@@ -72,11 +126,11 @@ int	main(int ac, char **av)
 	sigaddset(&block_mask, SIGUSR1);
 	sigaddset(&block_mask, SIGUSR2);
 
-	setup_sigusr1.sa_sigaction = &sigusr1_handler;
+	setup_sigusr1.sa_sigaction = &sigusr_handler;
 	setup_sigusr1.sa_mask = block_mask;
 	setup_sigusr1.sa_flags = SA_SIGINFO;
 	
-	setup_sigusr2.sa_sigaction = &sigusr2_handler;
+	setup_sigusr2.sa_sigaction = &sigusr_handler;
 	setup_sigusr2.sa_mask = block_mask;
 	setup_sigusr2.sa_flags = SA_SIGINFO;
 
