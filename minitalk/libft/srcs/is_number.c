@@ -1,21 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   is_number.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/17 17:53:39 by ydanset           #+#    #+#             */
-/*   Updated: 2021/12/17 17:55:34 by ydanset          ###   ########.fr       */
+/*   Created: 2021/12/17 18:02:26 by ydanset           #+#    #+#             */
+/*   Updated: 2021/12/17 18:06:58 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "libft.h"
 
-# include "libft.h"
-# include <signal.h>
-
-int	exit_and_free(int res, char *to_free);
-
-#endif
+int	is_number(char *s)
+{
+	if (!s || !*s)
+		return (0);
+	if (*s == '-')
+		s++;
+	while (*s)
+	{
+		if (!ft_isdigit(*s))
+			return (0);
+		s++;
+	}
+	return (1);
+}

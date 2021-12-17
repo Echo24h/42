@@ -1,8 +1,9 @@
 #!/bin/bash
 
 i=0
-while [ $i -ne 10 ]
+while [ $i -ne 100 ]
 do
-	./client 29775 m
+	echo $i
+	./client 69872 mdr
 	i=$(($i+1))
 done
