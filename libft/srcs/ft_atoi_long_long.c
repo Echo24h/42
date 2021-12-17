@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atoi_long_long.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/17 17:57:21 by ydanset           #+#    #+#             */
+/*   Updated: 2021/12/17 17:57:57 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 static int	is_whitespace(int c)
@@ -11,7 +23,7 @@ static int	is_whitespace(int c)
 long long int	ft_atoi_long_long(const char *str)
 {
 	long long int	res;
-	int	neg;
+	int				neg;
 
 	res = 0;
 	neg = 0;

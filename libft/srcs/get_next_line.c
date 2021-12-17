@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/17 17:58:44 by ydanset           #+#    #+#             */
+/*   Updated: 2021/12/17 18:02:22 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 static char	*ft_append_char(char *str, char c)
@@ -30,12 +42,21 @@ char	*get_next_line(int fd)
 	int		n;
 
 	line = NULL;
-	while ((n = read(fd, &c, 1)) > 0 && c != '\n')
-		if (!(line = ft_append_char(line, c)))
+	c = '\0';
+	n = 1;
+	while (n > 0 && c != '\n')
+	{
+		n = read(fd, &c, 1);
+		line = ft_append_char(line, c);
+		if (!line)
 			return (NULL);
+	}
 	if (n > 0)
-		if (!(line = ft_append_char(line, c)))
+	{
+		line = ft_append_char(line, c);
+		if (!line)
 			return (NULL);
+	}
 	if (n == -1)
 		return (NULL);
 	return (line);
