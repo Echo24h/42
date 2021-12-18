@@ -12,14 +12,14 @@
 
 #include "minitalk.h"
 
-static void	set_buff(char *buff, unsigned int c)
+static void	set_byte(char *byte, unsigned int c)
 {
 	int	n;
 
 	n = 8;
 	while (n--)
 	{
-		buff[n] = c % 2 + 48;
+		byte[n] = c % 2 + 48;
 		c /= 2;
 	}
 }
@@ -41,7 +41,7 @@ static void	send_bit(pid_t server_pid, char *client_message)
 	static char		*msg = NULL;
 	static pid_t	pid = 0;
 	static int		i = 0;
-	static char		buff[8];
+	static char		byte[8];
 
 	if (!msg)
 		msg = ft_strdup(client_message);
@@ -50,9 +50,9 @@ static void	send_bit(pid_t server_pid, char *client_message)
 	if (!pid)
 		pid = server_pid;
 	if (i % 8 == 0)
-		set_buff(buff, msg[i / 8]);
+		set_byte(byte, msg[i / 8]);
 	i++;
-	if (buff[(i - 1) % 8] == '0')
+	if (byte[(i - 1) % 8] == '0')
 	{
 		if (kill(pid, SIGUSR1) == -1)
 			exit_and_free(EXIT_FAILURE, msg);
