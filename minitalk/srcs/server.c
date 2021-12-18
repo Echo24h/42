@@ -86,7 +86,7 @@ static void	sigusr_handler(int signum, siginfo_t *info, void *context)
 			client_pid = 0;
 	}
 	else if (!addto_byte('1', client_pid))
-			client_pid = 0;
+		client_pid = 0;
 	if (client_pid)
 		kill(client_pid, SIGUSR2);
 }
