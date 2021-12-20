@@ -6,8 +6,6 @@ CC			=	gcc
 CFLAGS		=	#-Wall -Wextra -Werror
 NAME		=	push_swap
 I_DIR		=	includes
-L_DIR		=	libs
-LIBS		=	-lft
 
 SRCS		=	srcs/main.c	\
 				srcs/parsing.c	\
@@ -24,28 +22,27 @@ OBJS		=	$(SRCS:%.c=%.o)
 
 all: $(NAME)
 
-$(L_DIR)/libft.a:
-	make bonus -C $(L_DIR)/libft
-	cp -f $(L_DIR)/libft/libft.a $(L_DIR)
+libft/libft.a:
+	make -C libft
 
-$(NAME): $(OBJS) $(L_DIR)/libft.a
-	$(CC) -o $(NAME) $(OBJS) -I$(I_DIR) -L$(L_DIR) $(LIBS)
+$(NAME): libft/libft.a $(OBJS)
+	$(CC) -o $(NAME) $(OBJS) -I$(I_DIR) -Llibft -lft
 
 average: all
 	./get_average.sh
 	$(CC) -o print_average srcs/print_average.c -L$(L_DIR) $(LIBS) -I$(I_DIR)
 	./print_average
+	@rm -f print_average
 
 %.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(I_DIR)
 
 clean:
-	make clean -C $(L_DIR)/libft
+	make clean -C libft
 	rm -f $(OBJS)
 
 fclean: clean
-	make fclean -C $(L_DIR)/libft
-	rm -f $(L_DIR)/libft.a 
+	make fclean -C libft
 	rm -f $(NAME)
 
 re: fclean all
