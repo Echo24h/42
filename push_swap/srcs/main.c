@@ -39,6 +39,9 @@ int	main(int ac, char **av)
 	if (!var->a->next)
 		return (EXIT_SUCCESS); // need to free
 	var->a_chunk_size = ft_lstsize(var->a);
-	chunk_sort(var);
+	if (var->a_chunk_size == 3)
+		sort_3(var);
+	else
+		chunk_sort(var);
 	return (0);
 }

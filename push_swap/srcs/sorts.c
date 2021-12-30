@@ -136,7 +136,8 @@ void	push_from_b_to_a(t_var *var, int n)
 		}
 	}
 	while (count_rb--)
-		reverse_rotate_b(var);
+		if (var->b_chunks_sizes->next)
+			reverse_rotate_b(var);
 }
 
 int	handle_first_b_chunk(t_var *var)
@@ -188,6 +189,15 @@ int	chunk_sort(t_var *var)
 	return (1);
 }
 
+void	sort_3(t_var *var)
+{
+	if (is_max(var->a, var->a))
+		rotate_a(var);
+	else if (is_max(var->a, var->a->next))
+		reverse_rotate_a(var);
+	if (*(int *)var->a->content > *(int *)var->a->next->content)
+		swap_a(var);
+}
 
 
 

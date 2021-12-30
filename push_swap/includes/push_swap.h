@@ -59,10 +59,12 @@ int		chunk_is_in_descending_order(t_list *lst, int chunk_size);
 void	swap_int(int *x, int *y);
 void	ft_lstdel_first(t_list **lst);
 t_list	*ft_lstcreate(int x);
+int		is_max(t_list *lst, t_list *el);
 
-// chunk_sort
+// sorts
 int	mid_point_a_to_b(t_var *var);
 int	handle_first_b_chunk(t_var *var);
 int	chunk_sort(t_var *var);
+void	sort_3(t_var *var);
 
 #endif

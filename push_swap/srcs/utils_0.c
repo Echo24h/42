@@ -116,4 +116,13 @@ int	is_equal(t_list *el1, t_list *el2)
 	return (1);
 }
 
-
+int	is_max(t_list *lst, t_list *el)
+{
+	while (lst)
+	{
+		if (*(int *)lst->content > *(int *)el->content)
+			return (0);
+		lst = lst->next;
+	}
+	return (1);
+}
