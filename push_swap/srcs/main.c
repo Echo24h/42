@@ -1,16 +1,5 @@
 #include "push_swap.h"
 
-t_list	*new_chunk_size(int size)
-{
-	int	*ptr;
-
-	ptr = malloc(sizeof(int) * 1);
-	if (!ptr)
-		return (NULL);
-	*ptr = size;
-	return (ft_lstnew(ptr));
-}
-
 int	init_var(t_var **var)
 {
 	*var = malloc(sizeof(t_var) * 1);

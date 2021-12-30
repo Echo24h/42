@@ -91,8 +91,5 @@ int	parse(int ac, char **av, t_var *var)
 		return (0);
 	if (!check_duplicate(var->a))
 		return (0);
-	//var->a_chunks_sizes = new_chunk_size(ft_lstsize(var->a));
-	//if (!var->a_chunks_sizes)
-	//	return (0);
 	return (1);
 }

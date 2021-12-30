@@ -31,8 +31,6 @@ int	get_median(t_list *lst, int chunk_size, int *median, int direction)
 		*median = array[(chunk_size / 2) - 1];
 	else
 		*median = array[chunk_size / 2];
-	//print_array(array, chunk_size);
-	//printf("median: %d\n", *median);
 	free(array);
 	return (1);
 }

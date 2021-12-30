@@ -19,17 +19,6 @@ void	print_stacks(t_list *a, t_list *b)
 	print_stack(b);
 }
 
-void	print_chunks_limits(int *chunks_limits, int n)
-{
-	int	i;
-
-	i = 0;
-	printf("chunks_limits: ");
-	while (i < n)
-		printf("%d ", chunks_limits[i++]);
-	printf("\n");
-}
-
 void	print_var(t_var *var)
 {
 	if (!var)
