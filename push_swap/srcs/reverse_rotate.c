@@ -1,52 +1,52 @@
 #include "push_swap.h"
 
-void	reverse_rotate_a(t_list **a)
+void	reverse_rotate_a(t_var *var)
 {
 	t_list	*tmp;
 
 	ft_putstr("rra\n");
-	if (!*a || !(*a)->next)
+	if (!var->a || !var->a->next)
 		return ;
-	tmp = *a;
+	tmp = var->a;
 	while (tmp->next->next)
 		tmp = tmp->next;
-	ft_lstadd_front(a, tmp->next);
+	ft_lstadd_front(&var->a, tmp->next);
 	tmp->next = NULL;
 }
 
-void	reverse_rotate_b(t_list **b)
+void	reverse_rotate_b(t_var *var)
 {
 	t_list	*tmp;
 
 	ft_putstr("rrb\n");
-	if (!*b || !(*b)->next)
+	if (!var->b || !var->b->next)
 		return ;
-	tmp = *b;
+	tmp = var->b;
 	while (tmp->next->next)
 		tmp = tmp->next;
-	ft_lstadd_front(b, tmp->next);
+	ft_lstadd_front(&var->b, tmp->next);
 	tmp->next = NULL;
 }
 
-void	reverse_rotate_ab(t_list **a, t_list **b)
+void	reverse_rotate_ab(t_var *var)
 {
 	t_list	*tmp;
 
 	ft_putstr("rrr\n");
-	if (*a && (*a)->next)
+	if (var->a && var->a->next)
 	{
-		tmp = *a;
+		tmp = var->a;
 		while (tmp->next->next)
 			tmp = tmp->next;
-		ft_lstadd_front(a, tmp->next);
+		ft_lstadd_front(&var->a, tmp->next);
 		tmp->next = NULL;
 	}
-	if (*b || (*b)->next)
+	if (var->b && var->b->next)
 	{
-		tmp = *b;
+		tmp = var->b;
 		while (tmp->next->next)
 			tmp = tmp->next;
-		ft_lstadd_front(b, tmp->next);
+		ft_lstadd_front(&var->b, tmp->next);
 		tmp->next = NULL;
 	}
 }

@@ -42,11 +42,8 @@ char	*get_next_line(int fd)
 	int		n;
 
 	line = NULL;
-	c = '\0';
-	n = 1;
-	while (n > 0 && c != '\n')
+	while ((n = read(fd, &c, 1)) > 0 && c != '\n')
 	{
-		n = read(fd, &c, 1);
 		line = ft_append_char(line, c);
 		if (!line)
 			return (NULL);

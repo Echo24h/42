@@ -51,12 +51,12 @@ static int	parse_one_param(char *param, t_list **a)
 	while (entries[i])
 	{
 		val = get_int(entries[i]);
-		if (!val)
+		el = ft_lstnew(val);
+		if (!val || !el)
 		{
 			free(entries);
 			return (0);
 		}
-		el = ft_lstnew(val);
 		ft_lstadd_back(a, el);
 		i++;
 	}
@@ -74,22 +74,25 @@ static int	parse_multiple_params(int ac, char **av, t_list **a)
 	while (i < ac)
 	{
 		val = get_int(av[i]);
-		if (!val)
-			return (0);
 		el = ft_lstnew(val);
+		if (!val || !el)
+			return (0);
 		ft_lstadd_back(a, el);
 		i++;
 	}
 	return (1);
 }
 
-int	parse(int ac, char **av, t_list **a)
+int	parse(int ac, char **av, t_var *var)
 {
-	if (ac == 2 && !parse_one_param(av[1], a))
+	if (ac == 2 && !parse_one_param(av[1], &var->a))
 		return (0);
-	else if (ac > 2 && !parse_multiple_params(ac, av, a))
+	else if (ac > 2 && !parse_multiple_params(ac, av, &var->a))
 		return (0);
-	if (!check_duplicate(*a))
+	if (!check_duplicate(var->a))
 		return (0);
+	//var->a_chunks_sizes = new_chunk_size(ft_lstsize(var->a));
+	//if (!var->a_chunks_sizes)
+	//	return (0);
 	return (1);
 }

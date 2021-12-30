@@ -1,34 +1,44 @@
 #include "push_swap.h"
 
-int	on_error() // need to track malloc boy
+t_list	*new_chunk_size(int size)
 {
-	ft_putstr("Error\n");
-	return (0);
+	int	*ptr;
+
+	ptr = malloc(sizeof(int) * 1);
+	if (!ptr)
+		return (NULL);
+	*ptr = size;
+	return (ft_lstnew(ptr));
+}
+
+int	init_var(t_var **var)
+{
+	*var = malloc(sizeof(t_var) * 1);
+	if (!*var)
+		return (0);
+	(*var)->a = NULL;
+	(*var)->b = NULL;
+	(*var)->a_chunk_size = 0;
+	(*var)->b_chunks_sizes = NULL;
+	return (1);
 }
 
 int	main(int ac, char **av)
 {
-	t_list	*t1;
-	t_list	*t2;
-	int		size;
-	t_list	*a;
-	t_list	*b;
-	int		**chunks;
-	int		*x;
+	t_var	*var;
+	int		i;
+	int		n;
 
-	if (ac < 2)
-		return (0);
-	a = NULL;
-	b = NULL;
-	if (!parse(ac, av, &a))
-		return (on_error());
-	if (!a || ft_lstsize(a) == 1)
-		return (0); // nothing to be done, check subject
-	//print_stacks(a, b);
-	//t1 = ft_lstnew()
-	//fusion_sort(&a, &b);
-	//print_stacks(a, b);
-	//system("leaks push_swap");
-	chunk_sort(&a, &b);
+	if (ac < 2 || !init_var(&var))
+		return (EXIT_FAILURE);
+	if (!parse(ac, av, var))
+	{
+		ft_putstr("Error\n");
+		return (EXIT_FAILURE); // need to free
+	}
+	if (!var->a->next)
+		return (EXIT_SUCCESS); // need to free
+	var->a_chunk_size = ft_lstsize(var->a);
+	chunk_sort(var);
 	return (0);
 }

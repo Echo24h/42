@@ -1,48 +1,48 @@
 #include "push_swap.h"
 
-void	rotate_a(t_list **a)
+void	rotate_a(t_var *var)
 {
 	t_list	*tmp;
 
 	ft_putstr("ra\n");
-	if (!*a || !(*a)->next)
+	if (!var->a || !var->a->next)
 		return ;
-	tmp = *a;
-	*a = (*a)->next;
+	tmp = var->a;
+	var->a = var->a->next;
 	tmp->next = NULL;
-	ft_lstadd_back(a, tmp);
+	ft_lstadd_back(&var->a, tmp);
 }
 
-void	rotate_b(t_list **b)
+void	rotate_b(t_var *var)
 {
 	t_list	*tmp;
 
 	ft_putstr("rb\n");
-	if (!*b || !(*b)->next)
+	if (!var->b || !var->b->next)
 		return ;
-	tmp = *b;
-	*b = (*b)->next;
+	tmp = var->b;
+	var->b = var->b->next;
 	tmp->next = NULL;
-	ft_lstadd_back(b, tmp);
+	ft_lstadd_back(&var->b, tmp);
 }
 
-void	rotate_ab(t_list **a, t_list **b)
+void	rotate_ab(t_var *var)
 {
 	t_list	*tmp;
 
 	ft_putstr("rr\n");
-	if (*a && (*a)->next)
+	if (var->a && var->a->next)
 	{
-		tmp = *a;
-		*a = (*a)->next;
+		tmp = var->a;
+		var->a = var->a->next;
 		tmp->next = NULL;
-		ft_lstadd_back(a, tmp);
+		ft_lstadd_back(&var->a, tmp);
 	}
-	if (*b || (*b)->next)
+	if (var->b && var->b->next)
 	{
-		tmp = *b;
-		*b = (*b)->next;
+		tmp = var->b;
+		var->b = var->b->next;
 		tmp->next = NULL;
-		ft_lstadd_back(b, tmp);
+		ft_lstadd_back(&var->b, tmp);
 	}
 }

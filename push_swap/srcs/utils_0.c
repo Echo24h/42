@@ -89,7 +89,7 @@ int	is_smaller(t_list *el1, t_list *el2)
 		return (0);
 	if (!el2)
 		return (1);
-	if (*(int *)el1->content < *(int *)el2->content)
+	if (el1->content < el2->content)
 		return (1);
 	return (0);
 }
@@ -100,7 +100,7 @@ int	is_bigger(t_list *el1, t_list *el2)
 		return (0);
 	if (!el2)
 		return (1);
-	if (*(int *)el1->content > *(int *)el2->content)
+	if (el1->content > el2->content)
 		return (1);
 	return (0);
 }
@@ -115,3 +115,5 @@ int	is_equal(t_list *el1, t_list *el2)
 		return (0);
 	return (1);
 }
+
+

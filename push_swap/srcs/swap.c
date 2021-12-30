@@ -1,48 +1,48 @@
 #include "push_swap.h"
 
-void	swap_a(t_list **a)
+void	swap_a(t_var *var)
 {
-	t_list	*tmp;
+	t_list *tmp;
 
 	ft_putstr("sa\n");
-	if (!*a || !(*a)->next)
-		return ;
-	tmp = *a;
-	*a = (*a)->next;
-	tmp->next = (*a)->next;
-	(*a)->next = tmp;
+	if (!var->a || !var->a->next)
+		return;
+	tmp = var->a;
+	var->a = var->a->next;
+	tmp->next = var->a->next;
+	var->a->next = tmp;
 }
 
-void	swap_b(t_list **b)
+void	swap_b(t_var *var)
 {
-	t_list	*tmp;
+	t_list *tmp;
 
 	ft_putstr("sb\n");
-	if (!*b || !(*b)->next)
-		return ;
-	tmp = *b;
-	*b = (*b)->next;
-	tmp->next = (*b)->next;
-	(*b)->next = tmp;
+	if (!var->b || !var->b->next)
+		return;
+	tmp = var->b;
+	var->b = var->b->next;
+	tmp->next = var->b->next;
+	var->b->next = tmp;
 }
 
-void	swap_ab(t_list **a, t_list **b)
+void	swap_ab(t_var *var)
 {
-	t_list	*tmp;
+	t_list *tmp;
 
 	ft_putstr("ss\n");
-	if (*a || (*a)->next)
+	if (var->a && var->a->next)
 	{
-		tmp = *a;
-		*a = (*a)->next;
-		tmp->next = (*a)->next;
-		(*a)->next = tmp;
+		tmp = var->a;
+		var->a = var->a->next;
+		tmp->next = var->a->next;
+		var->a->next = tmp;
 	}
-	if (*b || (*b)->next)
+	if (var->b && var->b->next)
 	{
-		tmp = *b;
-		*b = (*b)->next;
-		tmp->next = (*b)->next;
-		(*b)->next = tmp;
+		tmp = var->b;
+		var->b = var->b->next;
+		tmp->next = var->b->next;
+		var->b->next = tmp;
 	}
 }

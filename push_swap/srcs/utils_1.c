@@ -1,45 +1,74 @@
 #include "push_swap.h"
 
-void	move_to_top_a(t_list **a, t_list *el)
+int	chunk_is_in_ascending_order(t_list *lst, int chunk_size)
 {
-	int	n;
-	int	index;
+	t_list	*prev;
+	int		i;
 
-	n = ft_lstsize(*a);
-	index = get_index(*a, el);
-	if (index < n / 2)
-		while (index--)
-			rotate_a(a);
-	else
-		while (index++ < n)
-			reverse_rotate_a(a);
-}
-
-void	move_to_top_b(t_list **b, t_list *el)
-{
-	int	n;
-	int	index;
-
-	n = ft_lstsize(*b);
-	index = get_index(*b, el);
-	if (index < n / 2)
-		while (index--)
-			rotate_b(b);
-	else
-		while (index++ < n)
-			reverse_rotate_b(b);
-}
-
-t_list	*get_next_min(t_list *lst, t_list *prev_min)
-{
-	t_list	*next_min;
-
-	next_min = NULL;
-	while (lst)
+	if (!lst)
+		return (1);
+	prev = lst;
+	lst = lst->next;
+	i = 1;
+	while (lst && i < chunk_size)
 	{
-		if (is_bigger(lst, prev_min) && is_smaller(lst, next_min))
-			next_min = lst;
+		if (*(int *)lst->content < *(int *)prev->content)
+			return (0);
+		prev = lst;
 		lst = lst->next;
+		i++;
 	}
-	return (next_min);
+	return (1);
+}
+
+int	chunk_is_in_descending_order(t_list *lst, int chunk_size)
+{
+	t_list	*prev;
+	int		i;
+
+	if (!lst)
+		return (1);
+	prev = lst;
+	lst = lst->next;
+	i = 1;
+	while (lst && i < chunk_size)
+	{
+		if (*(int *)lst->content > *(int *)prev->content)
+			return (0);
+		prev = lst;
+		lst = lst->next;
+		i++;
+	}
+	return (1);
+}
+
+void	swap_int(int *x, int *y)
+{
+	int	tmp;
+
+	if (!x || !y)
+		return ;
+	tmp = *x;
+	*x = *y;
+	*y = tmp;
+}
+
+void	ft_lstdel_first(t_list **lst)
+{
+	t_list	*tmp;
+
+	tmp = *lst;
+	*lst = (*lst)->next;
+	ft_lstdelone(tmp, &free);
+}
+
+t_list	*ft_lstcreate(int x)
+{
+	int	*n;
+
+	n = malloc(sizeof(int) * 1);
+	if (!n)
+		return (NULL);
+	*n = x;
+	return (ft_lstnew(n));
 }
