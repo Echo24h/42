@@ -1,6 +1,7 @@
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
+# define LEN_INT_MAX 10
 # define A_TO_B	0
 # define B_TO_A 1
 
