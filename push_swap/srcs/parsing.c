@@ -46,22 +46,23 @@ static int	parse_one_param(char *param, t_list **a)
 
 	entries = ft_split(param, ' ');
 	if (!entries || !entries[0])
-		return (0);
+		return (free_strs(entries, 0));
 	i = 0;
 	while (entries[i])
 	{
 		val = get_int(entries[i]);
+		if (!val)
+			return (free_strs(entries, 0));
 		el = ft_lstnew(val);
-		if (!val || !el)
+		if (!el)
 		{
-			free(entries);
-			return (0);
+			free(val);
+			return (free_strs(entries, 0));
 		}
 		ft_lstadd_back(a, el);
 		i++;
 	}
-	free(entries);
-	return (1);
+	return(free_strs(entries, 1));
 }
 
 static int	parse_multiple_params(int ac, char **av, t_list **a)
@@ -74,9 +75,14 @@ static int	parse_multiple_params(int ac, char **av, t_list **a)
 	while (i < ac)
 	{
 		val = get_int(av[i]);
-		el = ft_lstnew(val);
-		if (!val || !el)
+		if (!val)
 			return (0);
+		el = ft_lstnew(val);
+		if (!el)
+		{
+			free(val);
+			return (0);
+		}
 		ft_lstadd_back(a, el);
 		i++;
 	}

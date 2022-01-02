@@ -33,11 +33,18 @@ void	ft_lstdel_first(t_list **lst)
 
 t_list	*ft_lstcreate(int x)
 {
-	int	*n;
+	int		*n;
+	t_list	*new;
 
 	n = malloc(sizeof(int) * 1);
 	if (!n)
 		return (NULL);
 	*n = x;
-	return (ft_lstnew(n));
+	new = ft_lstnew(n);
+	if (!new)
+	{
+		free(n);
+		return (NULL);
+	}
+	return (new);
 }

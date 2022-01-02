@@ -41,3 +41,16 @@ int	chunk_is_in_descending_order(t_list *lst, int chunk_size)
 	}
 	return (1);
 }
+
+int	free_strs(char **strs, int x)
+{
+	int	i;
+
+	i = 0;
+	if (!strs)
+		return (x);
+	while (strs[i])
+		free(strs[i++]);
+	free(strs);
+	return (x);
+}
