@@ -1,54 +1,51 @@
 CC			=	gcc
-CFLAGS		=	#-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror
 NAME		=	push_swap
 I_DIR		=	includes
+SRCS_DIR	=	srcs
+OBJS_DIR	=	srcs/objs
 
-SRCS		=	srcs/main.c	\
-				srcs/parsing.c	\
-				srcs/swap.c	\
-				srcs/push.c	\
-				srcs/rotate.c	\
-				srcs/reverse_rotate.c	\
-				srcs/utils_0.c	\
-				srcs/utils_1.c	\
-				srcs/dev.c	\
-				srcs/sorts.c	\
-				srcs/quick_sort.c	\
+SRCS		=	main.c	\
+				parsing.c	\
+				swap.c	\
+				push.c	\
+				rotate.c	\
+				reverse_rotate.c	\
+				utils_0.c	\
+				utils_1.c	\
+				dev.c	\
+				sorts.c	\
+				quick_sort.c	\
+				free.c	\
+				handle_first_b_chunk.c	\
+				mid_point_a_to_b.c	\
+
+SRCS_PFX	=	$(addprefix $(SRCS_DIR)/, $(SRCS))
 
 OBJS		=	$(SRCS:%.c=%.o)
+OBJS_PFX	=	$(addprefix $(OBJS_DIR)/, $(OBJS))
 
 all: $(NAME)
 
 libft/libft.a:
 	make -C libft
 
-$(NAME): libft/libft.a $(OBJS)
-	$(CC) -o $(NAME) $(OBJS) -I$(I_DIR) -Llibft -lft
+$(NAME): libft/libft.a $(OBJS_PFX)
+	$(CC) -o $(NAME) $(OBJS_PFX) -I$(I_DIR) -Llibft -lft
 
 average: all
 	./get_average.sh
-	$(CC) -o print_average srcs/print_average.c -Llibft -lft -I$(I_DIR)
+	$(CC) -o print_average print_average.c -Llibft -lft -I$(I_DIR)
 	./print_average
-	@rm -f print_average
+	@rm -f print_average results_3.txt results_5.txt results_100.txt results_500.txt
 
-20: all
-	./$(NAME) `ruby -e "puts (0..19).to_a.shuffle.join(' ')"`
-
-21: all
-	./$(NAME) `ruby -e "puts (0..20).to_a.shuffle.join(' ')"`
-
-100: all
-	./$(NAME) `ruby -e "puts (0..99).to_a.shuffle.join(' ')"`
-
-500: all
-	./$(NAME) `ruby -e "puts (0..499).to_a.shuffle.join(' ')"`
-
-%.o: %.c
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
+	@mkdir -p $(OBJS_DIR)
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(I_DIR)
 
 clean:
 	make clean -C libft
-	rm -f $(OBJS)
+	rm -rf $(OBJS_DIR)
 
 fclean: clean
 	make fclean -C libft
@@ -56,4 +53,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re average 20 21 100 500
+.PHONY: all clean fclean re average

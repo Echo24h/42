@@ -21,8 +21,8 @@
 # include "libft.h"
 
 // W / 1.125 = H
-# define W 810
-# define H 720
+# define W 2000
+# define H (W / 1.125)
 # define MAX_RE 0.6
 # define MIN_RE -2.1
 # define MAX_IM 1.2

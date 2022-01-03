@@ -69,7 +69,7 @@ static void	sigusr_handler(int signum)
 		exit(EXIT_SUCCESS);
 	}
 	else
-		send_bit(0, 0);
+		send_bit(0, NULL);
 }
 
 int	main(int ac, char **av)

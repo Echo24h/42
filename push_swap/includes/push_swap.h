@@ -42,7 +42,6 @@ void	print_stack(t_list *stack);
 void	print_stacks(t_list *a, t_list *b);
 void	print_var(t_var *var);
 void	print_array(int *array, int n);
-void	print_medians(t_var *var);
 
 // utils
 int		chunk_is_in_ascending_order(t_list *lst, int chunk_size);
@@ -51,10 +50,15 @@ void	swap_int(int *x, int *y);
 void	ft_lstdel_first(t_list **lst);
 t_list	*ft_lstcreate(int x);
 int		is_max(t_list *lst, t_list *el);
+int		*get_array(t_list *lst, int n);
+int		get_median(t_list *lst, int chunk_size, int *median, int direction);
+
+// free
 int		free_strs(char **strs, int x);
+int		free_and_return(t_var *var, int return_val);
+void	free_and_exit(t_var *var, int exit_code);
 
 // sorts
-int		*get_array(t_list *lst, int n);
 int		mid_point_a_to_b(t_var *var);
 int		handle_first_b_chunk(t_var *var);
 int		chunk_sort(t_var *var);
