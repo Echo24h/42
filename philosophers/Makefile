@@ -11,7 +11,8 @@ SRC			=	main.c	\
 				parse.c	\
 				print_log.c	\
 				time_diff.c	\
-				utils_0.c
+				utils_0.c	\
+				utils_1.c
 SRC_PFX		=	$(addprefix $(SRC_DIR)/, $(SRC))
 
 OBJ			=	$(SRC:%.c=%.o)

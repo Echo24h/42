@@ -21,7 +21,7 @@ int	parse(int ac, char **av, t_ctx *ctx)
 	if (!ctx->philo)
 		return (on_error(0));
 	memset(ctx->philo, NOT_READY, ctx->nb_philo);
-	ctx->is_running = 1;
+	ctx->stop = 0;
 	ctx->n = 1;
 	return (1);
 }

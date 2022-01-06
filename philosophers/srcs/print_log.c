@@ -1,16 +1,20 @@
 #include "philo.h"
 
-void	print_log(float time, int n, int action)
+void	print_log(t_ctx *ctx, float time, int n, int action)
 {
-	printf("%.6f %d ", time, n);
+	pthread_mutex_lock(&ctx->lock);
+	ft_putms(time);
+	ft_putchar(' ');
+	ft_putnbr(n);
 	if (action == TAKE_FORK)
-		printf("has taken a fork\n");
+		ft_putstr(" has taken a fork\n");
 	else if (action == EAT)
-		printf("is eating\n");
+		ft_putstr(" is eating\n");
 	else if (action == SLEEP)
-		printf("is sleeping\n");
+		ft_putstr(" is sleeping\n");
 	else if (action == THINK)
-		printf("is thinking\n");
+		ft_putstr(" is thinking\n");
 	else if (action == DIE)
-		printf("died\n");
+		ft_putstr(" died\n");
+	pthread_mutex_unlock(&ctx->lock);
 }

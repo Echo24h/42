@@ -2,6 +2,7 @@
 # define PHILO_H
 
 #include <string.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
@@ -19,7 +20,9 @@
 
 typedef struct	s_philo_status
 {
-	int	n;
+	int				n;
+	struct timeval	t_last_meal;
+	int				forks;
 }	t_philo_status;
 
 typedef struct	s_ctx
@@ -33,13 +36,13 @@ typedef struct	s_ctx
 	int				nb_meal_per_philo;
 	char			*forks;
 	char			*philo;
-	int				is_running;
+	int				stop;
 	pthread_mutex_t	lock;
 }	t_ctx;
 
 float	time_diff(struct timeval start, struct timeval end);
 int		on_error(int code);
-void	print_log(float time, int n, int action);
+void	print_log(t_ctx *ctx, float time, int n, int action);
 
 // parse
 int		parse(int ac, char **av, t_ctx *ctx);
@@ -47,6 +50,10 @@ int		parse(int ac, char **av, t_ctx *ctx);
 // utils
 int		ft_atoi(const char *str);
 float	ft_atof(char *s);
+void	ft_putnbr(int nbr);
+void	ft_putstr(char *str);
+void	ft_putms(float nbr);
+void	ft_putchar(char c);
 
 // dev
 void	print_forks(t_ctx *ctx);
