@@ -24,22 +24,3 @@ int	ft_atoi(const char *str)
 		res = res * 10 + ((int)*(str++) - 48);
 	return (res);
 }
-
-float	ft_atof(char *s)
-{
-	float	res;
-	float	x;
-
-	res = 0;
-	while (*s && ft_isdigit(*s))
-		res = res * 10 + *s++ - 48;
-	if (*s == '.' || *s == ',')
-		s++;
-	x = 0.1;
-	while (*s && ft_isdigit(*s))
-	{
-		res = res + x * (*s++ - 48);
-		x *= 0.1;
-	}
-	return (res);
-}

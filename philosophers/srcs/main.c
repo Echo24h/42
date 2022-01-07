@@ -16,78 +16,81 @@ int	everyone_is_ready(t_ctx *ctx)
 
 int	philo_is_dead(t_ctx *ctx, t_philo_status *status)
 {
-	struct timeval	time;
+	long	time;
 
-	gettimeofday(&time, NULL);
+	time = get_time();
 	if (time_diff(status->t_last_meal, time) > ctx->t_death)
 	{
-			print_log(ctx, time_diff(ctx->start_time, time), status->n, DIE);
-			return (1);
+		print_log(ctx, time_diff(ctx->start_time, time), status->n, DIE);
+		return (1);
 	}
 	return (0);
 }
 
 void	philo_eat(t_ctx *ctx, t_philo_status *status)
 {
-	struct timeval	time;
+	long	time;
 
-	gettimeofday(&time, NULL);
+	time = get_time();
 	print_log(ctx, time_diff(ctx->start_time, time), status->n, EAT);
-	usleep(1e3 * ctx->t_eat);
+	status->t_last_meal = time;
+	msleep(ctx->t_sleep);
 	status->forks = 0;
-	pthread_mutex_lock(&ctx->lock);
+	pthread_mutex_lock(&ctx->lock_forks);
 	ctx->forks[status->n - 1] = AVAILABLE;
 	ctx->forks[status->n % ctx->nb_philo] = AVAILABLE;
-	pthread_mutex_unlock(&ctx->lock);
-	gettimeofday(&status->t_last_meal, NULL);
+	pthread_mutex_unlock(&ctx->lock_forks);
 }
 
 void	philo_sleep(t_ctx *ctx, t_philo_status *status)
 {
-	struct timeval	time;
+	long	time;
 
-	gettimeofday(&time, NULL);
+	time = get_time();
 	print_log(ctx, time_diff(ctx->start_time, time), status->n, SLEEP);
-	usleep(1e3 * ctx->t_sleep);
+	msleep(ctx->t_sleep);
 }
 
 void	philo_try_to_take_forks(t_ctx *ctx, t_philo_status *status)
 {
-	struct timeval	time;
+	long	time;
 
-	pthread_mutex_lock(&ctx->lock);
-	gettimeofday(&time, NULL);
+	pthread_mutex_lock(&ctx->lock_forks);
+	time = get_time();
 	if (ctx->forks[status->n - 1] == AVAILABLE)
 	{
-		print_log(ctx, time_diff(ctx->start_time, time), status->n, TAKE_FORK);
 		ctx->forks[status->n - 1] = TAKEN;
 		status->forks++;
+		print_log(ctx, time_diff(ctx->start_time, time), status->n, TAKE_FORK);
 	}
 	if (ctx->forks[status->n % ctx->nb_philo] == AVAILABLE)
 	{
-		print_log(ctx, time_diff(ctx->start_time, time), status->n, TAKE_FORK);
 		ctx->forks[status->n % ctx->nb_philo] = TAKEN;
 		status->forks++;
+		print_log(ctx, time_diff(ctx->start_time, time), status->n, TAKE_FORK);
 	}
-	pthread_mutex_unlock(&ctx->lock);
+	pthread_mutex_unlock(&ctx->lock_forks);
 }
 
 void	*philo_life(void *arg)
 {
 	t_ctx			*ctx;
 	t_philo_status	status;
-
+	
 	ctx = (t_ctx *)arg;
-	pthread_mutex_lock(&ctx->lock);
+	status.forks = 0;
+	pthread_mutex_lock(&ctx->lock_forks);
 	status.n = ctx->n;
 	ctx->philo[ctx->n - 1] = READY;
 	ctx->n++;
-	pthread_mutex_unlock(&ctx->lock);
-	status.forks = 0;
+	pthread_mutex_unlock(&ctx->lock_forks);
 	while (!everyone_is_ready(ctx))
 		continue ;
-	gettimeofday(&status.t_last_meal, NULL); // check error ?
-	printf("Philo %d is born !\n", status.n);
+	pthread_mutex_lock(&ctx->lock);
+	if (!ctx->start_time)
+		ctx->start_time = get_time();
+	pthread_mutex_unlock(&ctx->lock);
+	status.t_last_meal = get_time();
 	while (!ctx->stop)
 	{
 		if (philo_is_dead(ctx, &status))
@@ -103,12 +106,17 @@ void	*philo_life(void *arg)
 }
 
 // need to check errors
+// check errors on gettimeofday returns ?
 int	main(int ac, char **av)
 {
 	int			i;
 	t_ctx		ctx;
 	pthread_t	*th;
 
+	if (pthread_mutex_init(&ctx.lock_forks, NULL) != 0)
+		return (on_error(EXIT_FAILURE));
+	if (pthread_mutex_init(&ctx.lock_print, NULL) != 0)
+		return (on_error(EXIT_FAILURE));
 	if (pthread_mutex_init(&ctx.lock, NULL) != 0)
 		return (on_error(EXIT_FAILURE));
 	if (!parse(ac, av, &ctx))
@@ -116,8 +124,6 @@ int	main(int ac, char **av)
 	print_ctx(&ctx);
 	th = malloc(sizeof(pthread_t) * ctx.nb_philo);
 	if (!th)
-		return (on_error(EXIT_FAILURE)); // need free
-	if (gettimeofday(&ctx.start_time, NULL) == -1)
 		return (on_error(EXIT_FAILURE)); // need free
 	i = 0;
 	while (i < ctx.nb_philo)
@@ -133,6 +139,8 @@ int	main(int ac, char **av)
 			return (on_error(EXIT_FAILURE)); // need free
 		i++;
 	}
+	pthread_mutex_destroy(&ctx.lock_forks);
+	pthread_mutex_destroy(&ctx.lock_print);
 	pthread_mutex_destroy(&ctx.lock);
 	printf("The end boyss\n");
 	return (EXIT_SUCCESS);

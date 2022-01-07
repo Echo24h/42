@@ -6,15 +6,18 @@ void	print_forks(t_ctx *ctx)
 
 	i = 0;
 	while (i < ctx->nb_philo)
-		printf("%c ", ctx->forks[i++]);
-	printf("\n");
+	{
+		ft_putchar(ctx->forks[i++]);
+		ft_putchar(' ');
+	}
+	ft_putchar('\n');
 }
 
 void	print_ctx(t_ctx *ctx)
 {
 	printf("%d\n", ctx->nb_philo);
-	printf("%.6f\n", ctx->t_death);
-	printf("%.6f\n", ctx->t_eat);
-	printf("%.6f\n", ctx->t_sleep);
+	printf("%ld\n", ctx->t_death);
+	printf("%ld\n", ctx->t_eat);
+	printf("%ld\n", ctx->t_sleep);
 	printf("%d\n", ctx->nb_meal_per_philo);
 }

@@ -10,9 +10,10 @@ SRC			=	main.c	\
 				on_error.c	\
 				parse.c	\
 				print_log.c	\
-				time_diff.c	\
+				time.c	\
 				utils_0.c	\
-				utils_1.c
+				utils_1.c	\
+				msleep.c
 SRC_PFX		=	$(addprefix $(SRC_DIR)/, $(SRC))
 
 OBJ			=	$(SRC:%.c=%.o)

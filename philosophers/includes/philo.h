@@ -21,28 +21,32 @@
 typedef struct	s_philo_status
 {
 	int				n;
-	struct timeval	t_last_meal;
+	long			t_last_meal;
 	int				forks;
 }	t_philo_status;
 
 typedef struct	s_ctx
 {
 	int				n;
-	struct timeval	start_time;
+	long			start_time;
 	int				nb_philo;
-	float			t_death;
-	float			t_eat;
-	float			t_sleep;
+	long			t_death;
+	long			t_eat;
+	long			t_sleep;
 	int				nb_meal_per_philo;
 	char			*forks;
 	char			*philo;
 	int				stop;
+	pthread_mutex_t	lock_forks;
+	pthread_mutex_t	lock_print;
 	pthread_mutex_t	lock;
 }	t_ctx;
 
-float	time_diff(struct timeval start, struct timeval end);
+void	msleep(long ms);
+long	get_time(void);
+long	time_diff(long start, long end);
 int		on_error(int code);
-void	print_log(t_ctx *ctx, float time, int n, int action);
+void	print_log(t_ctx *ctx, long time, int n, int action);
 
 // parse
 int		parse(int ac, char **av, t_ctx *ctx);

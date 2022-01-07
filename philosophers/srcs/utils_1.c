@@ -28,19 +28,3 @@ void	ft_putnbr(int nbr)
 		ft_putnbr(nbr / 10);
 	ft_putchar(nbr % 10 + 48);
 }
-
-void	ft_putms(float nbr)
-{
-	int	i;
-
-	ft_putnbr(nbr);
-	nbr = nbr - (int)nbr;
-	i = 0;
-	ft_putchar('.');
-	while (i < 3)
-	{
-		nbr *= 10;
-		ft_putchar((int)nbr % 10 + 48);
-		i++;
-	}
-}
