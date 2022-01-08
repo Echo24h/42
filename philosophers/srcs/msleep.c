@@ -8,5 +8,8 @@ void	msleep(long ms)
 	t = 0;
 	t_start = get_time();
 	while (t < ms)
+	{
+		usleep(10);
 		t = get_time() - t_start;
+	}
 }
