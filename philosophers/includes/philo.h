@@ -8,8 +8,8 @@
 #include <sys/time.h>
 #include <pthread.h>
 
-# define NOT_READY '0'
-# define READY '1'
+# define NOT_READY 1
+# define READY 0
 # define TAKEN '0'
 # define AVAILABLE '1'
 # define TAKE_FORK 0
@@ -18,34 +18,33 @@
 # define THINK 3
 # define DIE 4
 
-typedef struct	s_philo_status
+typedef struct s_status
 {
 	int				n;
 	long			t_last_meal;
 	int				forks;
-}	t_philo_status;
+}	t_status;
 
-typedef struct	s_ctx
+typedef struct s_ctx
 {
 	int				n;
-	long			start_time;
+	long			t_start;
 	int				nb_philo;
 	long			t_death;
 	long			t_eat;
 	long			t_sleep;
 	int				nb_meal_per_philo;
 	char			*forks;
-	char			*philo;
-	int				stop;
-	pthread_mutex_t	lock_forks;
-	pthread_mutex_t	lock_print;
-	pthread_mutex_t	lock;
+	int				*philo;
+	int				end_simulation;
+	pthread_mutex_t	*mutex_forks;
+	pthread_mutex_t	mutex_log;
+	pthread_mutex_t	mutex_random;
 }	t_ctx;
 
 void	msleep(long ms);
 long	get_time(void);
 long	time_diff(long start, long end);
-int		on_error(int code);
 void	print_log(t_ctx *ctx, long time, int n, int action);
 
 // parse
@@ -53,11 +52,7 @@ int		parse(int ac, char **av, t_ctx *ctx);
 
 // utils
 int		ft_atoi(const char *str);
-float	ft_atof(char *s);
-void	ft_putnbr(int nbr);
-void	ft_putstr(char *str);
-void	ft_putms(float nbr);
-void	ft_putchar(char c);
+void	set_int_array(int *array, int value, int size);
 
 // dev
 void	print_forks(t_ctx *ctx);

@@ -3,13 +3,8 @@
 void	msleep(long ms)
 {
 	long	t_start;
-	long	t;
 
-	t = 0;
 	t_start = get_time();
-	while (t < ms)
-	{
-		usleep(10);
-		t = get_time() - t_start;
-	}
+	while (get_time() - t_start < ms)
+		usleep(1);
 }

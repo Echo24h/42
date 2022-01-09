@@ -7,12 +7,10 @@ I_DIR		=	includes
 
 SRC			=	main.c	\
 				dev.c	\
-				on_error.c	\
 				parse.c	\
 				print_log.c	\
 				time.c	\
 				utils_0.c	\
-				utils_1.c	\
 				msleep.c
 SRC_PFX		=	$(addprefix $(SRC_DIR)/, $(SRC))
 

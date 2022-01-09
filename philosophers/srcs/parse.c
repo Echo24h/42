@@ -11,17 +11,18 @@ int	parse(int ac, char **av, t_ctx *ctx)
 	ctx->nb_meal_per_philo = -1;
 	if (ac == 6)
 		ctx->nb_meal_per_philo = ft_atoi(av[5]);
-	
-	// check if prec. values produce errors
-	ctx->forks = malloc(sizeof(char) * ctx->nb_philo);
-	if (!ctx->forks)
-		return (on_error(0));
-	memset(ctx->forks, AVAILABLE, ctx->nb_philo);
-	ctx->philo = malloc(sizeof(char) * ctx->nb_philo);
-	if (!ctx->philo)
-		return (on_error(0));
-	memset(ctx->philo, NOT_READY, ctx->nb_philo);
-	ctx->stop = 0;
+	ctx->end_simulation = 0;
 	ctx->n = 1;
+	if (ctx->nb_philo != 0 && ctx->nb_meal_per_philo != 0)
+	{
+		ctx->forks = malloc(sizeof(char) * ctx->nb_philo);
+		if (!ctx->forks)
+			return (0);
+		memset(ctx->forks, AVAILABLE, ctx->nb_philo);
+		ctx->philo = malloc(sizeof(char) * ctx->nb_philo);
+		if (!ctx->philo)
+			return (0);
+		set_int_array(ctx->philo, NOT_READY, ctx->nb_philo);
+	}
 	return (1);
 }

@@ -24,3 +24,14 @@ int	ft_atoi(const char *str)
 		res = res * 10 + ((int)*(str++) - 48);
 	return (res);
 }
+
+void	set_int_array(int *array, int value, int size)
+{
+	int	i;
+
+	if (!array)
+		return ;
+	i = 0;
+	while (i < size)
+		array[i++] = value;
+}

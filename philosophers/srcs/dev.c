@@ -7,10 +7,10 @@ void	print_forks(t_ctx *ctx)
 	i = 0;
 	while (i < ctx->nb_philo)
 	{
-		ft_putchar(ctx->forks[i++]);
-		ft_putchar(' ');
+		printf("%c ", ctx->forks[i]);
+		i++;
 	}
-	ft_putchar('\n');
+	printf("\n");
 }
 
 void	print_ctx(t_ctx *ctx)
