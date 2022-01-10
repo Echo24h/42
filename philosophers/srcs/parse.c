@@ -12,13 +12,10 @@ int	parse(int ac, char **av, t_ctx *ctx)
 	if (ac == 6)
 		ctx->nb_meal_per_philo = ft_atoi(av[5]);
 	ctx->end_simulation = 0;
-	ctx->n = 1;
+	ctx->n = 0;
+	ctx->t_start = 0;
 	if (ctx->nb_philo != 0 && ctx->nb_meal_per_philo != 0)
 	{
-		ctx->forks = malloc(sizeof(char) * ctx->nb_philo);
-		if (!ctx->forks)
-			return (0);
-		memset(ctx->forks, AVAILABLE, ctx->nb_philo);
 		ctx->philo = malloc(sizeof(char) * ctx->nb_philo);
 		if (!ctx->philo)
 			return (0);

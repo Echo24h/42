@@ -1,5 +1,33 @@
 #include "philo.h"
 
+/*
+int	philo_die_while_eating(t_ctx *ctx, t_status *status, long time)
+{
+	if (time + ctx->t_eat > status->t_last_meal + ctx->t_death)
+	{
+		if (!ctx->end_simulation)
+			msleep(status->t_last_meal + ctx->t_death - time);
+		print_log(ctx, get_time(), status->n, DIE);
+		ctx->end_simulation = 1;
+		return (1);
+	}
+	return (0);
+}
+
+int	philo_die_while_sleeping(t_ctx *ctx, t_status *status, long time)
+{
+	if (time + ctx->t_sleep > status->t_last_meal + ctx->t_death)
+	{
+		if (!ctx->end_simulation)
+			msleep(status->t_last_meal + ctx->t_death - time);
+		print_log(ctx, get_time(), status->n, DIE);
+		ctx->end_simulation = 1;
+		return (1);
+	}
+	return (0);
+}
+*/
+
 int	everyone_is_ready(t_ctx *ctx)
 {
 	int	i;
@@ -30,24 +58,6 @@ int	everyone_is_happy(t_ctx *ctx)
 	return (1);
 }
 
-int	only_one_fork_left(t_ctx *ctx)
-{
-	int	n;
-	int	i;
-
-	n = 0;
-	i = 0;
-	while (i < ctx->nb_philo && n < 2)
-	{
-		if (ctx->forks[i] == AVAILABLE)
-			n++;
-		i++;
-	}
-	if (n == 1)
-		return (1);
-	return (0);
-}
-
 int	philo_is_dead(t_ctx *ctx, t_status *status)
 {
 	long	time;
@@ -55,10 +65,25 @@ int	philo_is_dead(t_ctx *ctx, t_status *status)
 	time = get_time();
 	if (time_diff(status->t_last_meal, time) > ctx->t_death)
 	{
-		print_log(ctx, time_diff(ctx->t_start, time), status->n, DIE);
+		print_log(ctx, time, status->n, DIE);
 		return (1);
 	}
 	return (0);
+}
+
+void	take_forks(t_ctx *ctx, t_status *status)
+{
+	pthread_mutex_lock(&ctx->mutex_forks[status->left_fork]);
+	print_log(ctx, get_time(), status->n, TAKE_FORK);
+	pthread_mutex_lock(&ctx->mutex_forks[status->right_fork]);
+	print_log(ctx, get_time(), status->n, TAKE_FORK);
+	status->next_action = EAT;
+}
+
+void	put_forks_back(t_ctx *ctx, t_status *status)
+{
+	pthread_mutex_unlock(&ctx->mutex_forks[status->left_fork]);
+	pthread_mutex_unlock(&ctx->mutex_forks[status->right_fork]);
 }
 
 void	philo_eat(t_ctx *ctx, t_status *status)
@@ -66,85 +91,49 @@ void	philo_eat(t_ctx *ctx, t_status *status)
 	long	time;
 
 	time = get_time();
-	print_log(ctx, time_diff(ctx->t_start, time), status->n, EAT);
+	print_log(ctx, time, status->n, EAT);
 	status->t_last_meal = time;
-	ctx->philo[status->n - 1] += 1;
+	ctx->philo[status->n] += 1;
 	if (everyone_is_happy(ctx))
-	{
 		ctx->end_simulation = 1;
-		return ;
-	}
 	if (!ctx->end_simulation)
 		msleep(ctx->t_eat);
-	status->forks = 0;
-	pthread_mutex_lock(&ctx->mutex_forks[status->n - 1]);
-	ctx->forks[status->n - 1] = AVAILABLE;
-	pthread_mutex_unlock(&ctx->mutex_forks[status->n - 1]);
-	pthread_mutex_lock(&ctx->mutex_forks[status->n % ctx->nb_philo]);
-	ctx->forks[status->n % ctx->nb_philo] = AVAILABLE;
-	pthread_mutex_unlock(&ctx->mutex_forks[status->n % ctx->nb_philo]);
+	put_forks_back(ctx, status);
+	status->next_action = SLEEP;
 }
 
 void	philo_sleep(t_ctx *ctx, t_status *status)
 {
-	long	time;
-
-	time = get_time();
-	print_log(ctx, time_diff(ctx->t_start, time), status->n, SLEEP);
+	print_log(ctx, get_time(), status->n, SLEEP);
 	if (!ctx->end_simulation)
 		msleep(ctx->t_sleep);
+	status->next_action = THINK;
 }
 
 void	philo_think(t_ctx *ctx, t_status *status)
 {
-	long	time;
-
-	time = get_time();
-	print_log(ctx, time_diff(ctx->t_start, time), status->n, THINK);
-}
-
-void	philo_try_to_take_forks(t_ctx *ctx, t_status *status)
-{
-	long	time;
-
-	pthread_mutex_lock(&ctx->mutex_forks[status->n - 1]);
-	if (ctx->nb_philo > 1)
-		pthread_mutex_lock(&ctx->mutex_forks[status->n % ctx->nb_philo]);
-	time = get_time();
-	if (ctx->forks[status->n - 1] == AVAILABLE)
-	{
-		ctx->forks[status->n - 1] = TAKEN;
-		status->forks++;
-		print_log(ctx, time_diff(ctx->t_start, time), status->n, TAKE_FORK);
-	}
-	pthread_mutex_unlock(&ctx->mutex_forks[status->n - 1]);
-	if (ctx->nb_philo == 1)
-		return ;
-	if (ctx->forks[status->n % ctx->nb_philo] == AVAILABLE)
-	{
-		ctx->forks[status->n % ctx->nb_philo] = TAKEN;
-		status->forks++;
-		print_log(ctx, time_diff(ctx->t_start, time), status->n, TAKE_FORK);
-	}
-	pthread_mutex_unlock(&ctx->mutex_forks[status->n % ctx->nb_philo]);
+	print_log(ctx, get_time(), status->n, THINK);
+	status->next_action = TAKE_FORKS;
 }
 
 void	init_status(t_ctx *ctx, t_status *status)
 {
-	status->forks = 0;
+	status->next_action = TAKE_FORKS;
 	pthread_mutex_lock(&ctx->mutex_random);
 	status->n = ctx->n;
-	ctx->philo[ctx->n - 1] = READY;
+	status->right_fork = status->n;
+	status->left_fork = (status->n + 1) % ctx->nb_philo;
+	ctx->philo[ctx->n] = READY;
 	ctx->n += 1;
 	pthread_mutex_unlock(&ctx->mutex_random);
 }
 
 void	set_t_start(t_ctx *ctx)
 {
-	//pthread_mutex_lock(&ctx->mutex_random);
+	pthread_mutex_lock(&ctx->mutex_random);
 	if (!ctx->t_start)
 		ctx->t_start = get_time();
-	//pthread_mutex_unlock(&ctx->mutex_random);
+	pthread_mutex_unlock(&ctx->mutex_random);
 }
 
 void	*philo_life(void *arg)
@@ -154,21 +143,22 @@ void	*philo_life(void *arg)
 	
 	ctx = (t_ctx *)arg;
 	init_status(ctx, &status);
-	//while (!everyone_is_ready(ctx))
-	//	continue ;
+	while (!everyone_is_ready(ctx))
+		continue ;
 	set_t_start(ctx);
 	status.t_last_meal = get_time();
 	while (!ctx->end_simulation)
 	{
 		if (philo_is_dead(ctx, &status))
 			ctx->end_simulation = 1;
-		philo_try_to_take_forks(ctx, &status);
-		if (status.forks == 2)
-		{
+		else if (status.next_action == EAT)
 			philo_eat(ctx, &status);
+		else if (status.next_action == SLEEP)
 			philo_sleep(ctx, &status);
+		else if (status.next_action == THINK)
 			philo_think(ctx, &status);
-		}
+		else if (status.next_action == TAKE_FORKS)
+			take_forks(ctx, &status);
 	}
 	return (NULL);
 }
@@ -241,7 +231,6 @@ int	join_threads(t_ctx *ctx, pthread_t *th)
 
 void	free_everything(t_ctx *ctx, pthread_t *th)
 {
-	free(ctx->forks);
 	free(ctx->philo);
 	free(ctx->mutex_forks);
 	free(th);

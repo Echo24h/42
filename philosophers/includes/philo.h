@@ -12,17 +12,20 @@
 # define READY 0
 # define TAKEN '0'
 # define AVAILABLE '1'
-# define TAKE_FORK 0
-# define EAT 1
-# define SLEEP 2
-# define THINK 3
-# define DIE 4
+# define TAKE_FORKS 0
+# define TAKE_FORK 1
+# define EAT 2
+# define SLEEP 3
+# define THINK 4
+# define DIE 5
 
 typedef struct s_status
 {
 	int				n;
 	long			t_last_meal;
-	int				forks;
+	int				left_fork;
+	int				right_fork;
+	int				next_action;
 }	t_status;
 
 typedef struct s_ctx
@@ -34,7 +37,6 @@ typedef struct s_ctx
 	long			t_eat;
 	long			t_sleep;
 	int				nb_meal_per_philo;
-	char			*forks;
 	int				*philo;
 	int				end_simulation;
 	pthread_mutex_t	*mutex_forks;

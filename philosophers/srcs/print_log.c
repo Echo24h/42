@@ -2,27 +2,24 @@
 
 void	print_log(t_ctx *ctx, long time, int n, int action)
 {
-	int	i;
+	long	timestamps;
+	int		i;
 
 	pthread_mutex_lock(&ctx->mutex_log);
 	if (!ctx->end_simulation)
 	{
+		n += 1;
+		timestamps = time_diff(ctx->t_start, time);
 		if (action == TAKE_FORK)
-			printf("%ld %d has taken a fork\n", time, n);
+			printf("%ld %d has taken a fork\n", timestamps, n);
 		else if (action == EAT)
-			printf("%ld %d is eating\n", time, n);
+			printf("%ld %d is eating\n", timestamps, n);
 		else if (action == SLEEP)
-			printf("%ld %d is sleeping\n", time, n);
+			printf("%ld %d is sleeping\n", timestamps, n);
 		else if (action == THINK)
-			printf("%ld %d is thinking\n", time, n);
+			printf("%ld %d is thinking\n", timestamps, n);
 		else if (action == DIE)
-			printf("%ld %d died\n", time, n);
-		/*
-		i = 0;
-		while (i < ctx->nb_philo)
-			printf("%d ", ctx->philo[i++]);
-		printf("\n");
-		*/
+			printf("%ld %d died\n", timestamps, n);
 	}
 	pthread_mutex_unlock(&ctx->mutex_log);
 }
