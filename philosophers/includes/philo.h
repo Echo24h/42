@@ -48,6 +48,15 @@ void	msleep(long ms);
 long	get_time(void);
 long	time_diff(long start, long end);
 void	print_log(t_ctx *ctx, long time, int n, int action);
+void	*philo_life(void *arg);
+void	destroy_mutex(t_ctx *ctx);
+void	set_t_start(t_ctx *ctx);
+void	init_status(t_ctx *ctx, t_status *status);
+int		init_mutex(t_ctx *ctx);
+int		create_threads(t_ctx *ctx, pthread_t **th);
+int		everyone_is_happy(t_ctx *ctx);
+int		everyone_is_ready(t_ctx *ctx);
+int		join_threads(t_ctx *ctx, pthread_t *th);
 
 // parse
 int		parse(int ac, char **av, t_ctx *ctx);
@@ -57,7 +66,6 @@ int		ft_atoi(const char *str);
 void	set_int_array(int *array, int value, int size);
 
 // dev
-void	print_forks(t_ctx *ctx);
 void	print_ctx(t_ctx *ctx);
 
 #endif

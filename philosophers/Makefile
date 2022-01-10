@@ -11,7 +11,13 @@ SRC			=	main.c	\
 				print_log.c	\
 				time.c	\
 				utils_0.c	\
-				msleep.c
+				msleep.c	\
+				everyone_checks.c	\
+				destroy_mutex.c	\
+				set_t_start.c	\
+				init.c	\
+				create_threads.c	\
+				join_threads.c
 SRC_PFX		=	$(addprefix $(SRC_DIR)/, $(SRC))
 
 OBJ			=	$(SRC:%.c=%.o)
