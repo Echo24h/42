@@ -1,5 +1,18 @@
 #include "philo.h"
 
+void	free_everything(t_ctx *ctx, pthread_t *th)
+{
+	free(ctx->philo);
+	free(ctx->mutex_forks);
+	free(th);
+}
+
+int	on_error(char *msg, int code)
+{
+	printf("Error: %s\n", msg);
+	return (code);
+}
+
 int	philo_is_dead(t_ctx *ctx, t_status *status)
 {
 	long	time;
@@ -83,19 +96,6 @@ void	*philo_life(void *arg)
 			take_forks(ctx, &status);
 	}
 	return (NULL);
-}
-
-void	free_everything(t_ctx *ctx, pthread_t *th)
-{
-	free(ctx->philo);
-	free(ctx->mutex_forks);
-	free(th);
-}
-
-int	on_error(char *msg, int code)
-{
-	printf("Error: %s\n", msg);
-	return (code);
 }
 
 int	main(int ac, char **av)

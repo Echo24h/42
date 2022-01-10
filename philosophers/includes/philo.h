@@ -67,5 +67,6 @@ void	set_int_array(int *array, int value, int size);
 
 // dev
 void	print_ctx(t_ctx *ctx);
+void	print_status(t_ctx *ctx, t_status *status);
 
 #endif
