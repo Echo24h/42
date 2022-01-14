@@ -6,18 +6,13 @@ OBJ_DIR		=	srcs/objs
 I_DIR		=	includes
 
 SRC			=	main.c	\
-				dev.c	\
-				parse.c	\
 				print_log.c	\
 				time.c	\
-				utils_0.c	\
-				msleep.c	\
-				everyone_checks.c	\
-				destroy_mutex.c	\
-				set_t_start.c	\
+				utils.c	\
 				init.c	\
-				create_threads.c	\
-				join_threads.c
+				threads.c	\
+				philo_life.c	\
+				msleep.c
 SRC_PFX		=	$(addprefix $(SRC_DIR)/, $(SRC))
 
 OBJ			=	$(SRC:%.c=%.o)

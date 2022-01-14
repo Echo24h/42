@@ -1,5 +1,0 @@
-n: 2 | l_fork: 2 | r_fork: 1
-n: 1 | l_fork: 1 | r_fork: 0
-n: 3 | l_fork: 3 | r_fork: 2
-n: 4 | l_fork: 4 | r_fork: 3
-n: 5 | l_fork: 0 | r_fork: 4

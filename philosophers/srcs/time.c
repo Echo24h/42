@@ -6,10 +6,7 @@ long	get_time(void)
 	struct timeval	time;
 
 	if (gettimeofday(&time, NULL) == -1)
-	{
-		printf("here\n");
 		return (-1);
-	}
 	ms = time.tv_sec * 1000;
 	ms += time.tv_usec * 1e-3;
 	return (ms);

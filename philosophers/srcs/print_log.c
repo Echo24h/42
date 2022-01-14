@@ -1,15 +1,15 @@
 #include "philo.h"
 
-void	print_log(t_ctx *ctx, long time, int n, int action)
+void	print_log(t_philo *ph, long time, int action)
 {
 	long	timestamps;
-	int		i;
+	int		n;
 
-	pthread_mutex_lock(&ctx->mutex_log);
-	if (!ctx->end_simulation)
+	n = ph->id + 1;
+	pthread_mutex_lock(&ph->mu->log);
+	if (!ph->info->stop)
 	{
-		n += 1;
-		timestamps = time_diff(ctx->t_start, time);
+		timestamps = time_diff(ph->t_start, time);
 		if (action == TAKE_FORK)
 			printf("%ld %d has taken a fork\n", timestamps, n);
 		else if (action == EAT)
@@ -20,6 +20,8 @@ void	print_log(t_ctx *ctx, long time, int n, int action)
 			printf("%ld %d is thinking\n", timestamps, n);
 		else if (action == DIE)
 			printf("%ld %d died\n", timestamps, n);
+		else if (action == ALL_FED)
+			printf("Everyone is happy and has le ventre rempli !\n");
 	}
-	pthread_mutex_unlock(&ctx->mutex_log);
+	pthread_mutex_unlock(&ph->mu->log);
 }
