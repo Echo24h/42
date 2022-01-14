@@ -13,7 +13,8 @@ int	init_info(int ac, char **av, t_info *info)
 		info->nb_meal_per_ph = ft_atoi(av[5]);
 	info->stop = 0;
 	info->nb_ph_fed = 0;
-	if (info->nb_ph == 0 || info->nb_meal_per_ph == 0)
+	info->t_start = 0;
+	if (info->nb_ph < 2 || info->nb_meal_per_ph == 0)
 		return (0);
 	return (1);
 }
@@ -23,8 +24,7 @@ int	init_mutex(t_info *info, t_mutex *mu)
 	int	i;
 
 	if (pthread_mutex_init(&mu->log, NULL)
-		|| pthread_mutex_init(&mu->nb_ph_fed, NULL)
-		|| pthread_mutex_init(&mu->stop, NULL))
+		|| pthread_mutex_init(&mu->nb_ph_fed, NULL))
 		return (0);
 	mu->forks = malloc(sizeof(pthread_mutex_t) * info->nb_ph);
 	if (!mu->forks)

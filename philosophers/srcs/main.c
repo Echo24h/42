@@ -13,7 +13,6 @@ void	clean(t_philo *ph, t_mutex *mu)
 	}
 	pthread_mutex_destroy(&mu->log);
 	pthread_mutex_destroy(&mu->nb_ph_fed);
-	pthread_mutex_destroy(&mu->stop);
 	free(mu->forks);
 	free(mu->eat_or_die);
 	free(ph);
@@ -25,7 +24,7 @@ int	on_error(char *msg, int code)
 	return (code);
 }
 
-// check nb_ph == 1
+// need handle only 1 philo
 int	main(int ac, char **av)
 {
 	t_info	info;
@@ -35,11 +34,15 @@ int	main(int ac, char **av)
 	if (!init_info(ac, av, &info))
 		return (on_error("Invalid parameters", EXIT_FAILURE));
 	if (!init_mutex(&info, &mu) || !init_philo(&ph, &info, &mu))
-		return (on_error("Initialisation", EXIT_FAILURE));
+		return (on_error("Failed initialisation", EXIT_FAILURE));
+	if (ph->info->nb_ph == 0 || ph->info->nb_meal_per_ph == 0)
+	{
+		clean(ph, &mu);
+		return (EXIT_SUCCESS);
+	}
 	if (!create_threads(ph))
-		return (on_error("Failed creating the threads", EXIT_FAILURE));
-	if (!join_threads(ph))
-		return (on_error("Failed joining the threads", EXIT_FAILURE));
+		return (on_error("Failed to create the threads", EXIT_FAILURE));
+	join_threads(ph);
 	clean(ph, &mu);
 	return (EXIT_SUCCESS);
 }

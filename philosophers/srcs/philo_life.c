@@ -4,23 +4,23 @@ static void	take_forks(t_philo *ph)
 {
 	if (ph->id % 2)
 	{
-		pthread_mutex_lock(&ph->mu->forks[ph->right_fork]);
-		print_log(ph, get_time(), TAKE_FORK);
 		pthread_mutex_lock(&ph->mu->forks[ph->left_fork]);
+		print_log(ph, get_time(), TAKE_FORK);
+		pthread_mutex_lock(&ph->mu->forks[ph->right_fork]);
 	}
 	else
 	{
-		pthread_mutex_lock(&ph->mu->forks[ph->left_fork]);
-		print_log(ph, get_time(), TAKE_FORK);
 		pthread_mutex_lock(&ph->mu->forks[ph->right_fork]);
+		print_log(ph, get_time(), TAKE_FORK);
+		pthread_mutex_lock(&ph->mu->forks[ph->left_fork]);
 	}
 	print_log(ph, get_time(), TAKE_FORK);
 }
 
 static void	put_forks_back(t_philo *ph)
 {
-	pthread_mutex_unlock(&ph->mu->forks[ph->right_fork]);
 	pthread_mutex_unlock(&ph->mu->forks[ph->left_fork]);
+	pthread_mutex_unlock(&ph->mu->forks[ph->right_fork]);
 }
 
 static void	philo_eat(t_philo *ph)

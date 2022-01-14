@@ -12,8 +12,6 @@
 # define EAT 1
 # define SLEEP 2
 # define THINK 3
-# define DIE 4
-# define ALL_FED 5
 
 typedef struct s_mutex
 {
@@ -21,7 +19,6 @@ typedef struct s_mutex
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	log;
 	pthread_mutex_t	nb_ph_fed;
-	pthread_mutex_t	stop;
 }	t_mutex;
 
 typedef struct s_info
@@ -33,6 +30,7 @@ typedef struct s_info
 	int		nb_meal_per_ph;
 	int		nb_ph_fed;
 	int		stop;
+	long	t_start;
 }	t_info;
 
 typedef struct s_philo
@@ -43,7 +41,6 @@ typedef struct s_philo
 	int			right_fork;
 	int			nb_meal;
 	t_mutex		*mu;		
-	long		t_start;
 	long		t_last_meal;
 	t_info		*info;
 }	t_philo;
@@ -63,7 +60,7 @@ void	print_log(t_philo *ph, long time, int action);
 
 // threads
 int		create_threads(t_philo *ph);
-int		join_threads(t_philo *ph);
+void	join_threads(t_philo *ph);
 
 // init
 int		init_info(int ac, char **av, t_info *info);

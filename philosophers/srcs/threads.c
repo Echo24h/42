@@ -2,13 +2,16 @@
 
 static void	protected_stop(t_philo *ph, long time)
 {
-	pthread_mutex_lock(&ph->mu->stop);
-	if (time)
-		print_log(ph, time, DIE);
-	else
-		print_log(ph, 0, ALL_FED);
-	ph->info->stop = 1;
-	pthread_mutex_unlock(&ph->mu->stop);
+	pthread_mutex_lock(&ph->mu->log);
+	if (!ph->info->stop)
+	{
+		if (time)
+			printf("%ld %d died\n", time_diff(ph->info->t_start, time), ph->id + 1);
+		else
+			printf("Everyone is happy and has le ventre rempli !\n");
+		ph->info->stop = 1;
+	}
+	pthread_mutex_unlock(&ph->mu->log);
 }
 
 static void	*monitor(void *arg)
@@ -37,8 +40,9 @@ static void	*routine(void *arg)
 	pthread_t	th;
 	
 	ph = (t_philo *)arg;
-	ph->t_start = get_time();
-	ph->t_last_meal = ph->t_start;
+	if (!ph->info->t_start)
+		ph->info->t_start = get_time();
+	ph->t_last_meal = ph->info->t_start;
 	if (pthread_create(&th, NULL, &monitor, ph))
 		return (NULL);
 	while (!ph->info->stop)
@@ -58,13 +62,11 @@ int	create_threads(t_philo *ph)
 	return (1);
 }
 
-int	join_threads(t_philo *ph)
+void	join_threads(t_philo *ph)
 {
 	int	i;
 
 	i = 0;
 	while (i < ph->info->nb_ph)
-		if (pthread_join(ph[i++].th, NULL))
-			return (0);
-	return (1);
+		pthread_join(ph[i++].th, NULL);
 }
