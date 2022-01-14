@@ -35,14 +35,12 @@ int	main(int ac, char **av)
 		return (on_error("Invalid parameters", EXIT_FAILURE));
 	if (!init_mutex(&info, &mu) || !init_philo(&ph, &info, &mu))
 		return (on_error("Failed initialisation", EXIT_FAILURE));
-	if (ph->info->nb_ph == 0 || ph->info->nb_meal_per_ph == 0)
+	if (ph->info->nb_ph != 0 && ph->info->nb_meal_per_ph != 0)
 	{
-		clean(ph, &mu);
-		return (EXIT_SUCCESS);
+		if (!create_threads(ph))
+			return (on_error("Failed to create the threads", EXIT_FAILURE));
+		join_threads(ph);
 	}
-	if (!create_threads(ph))
-		return (on_error("Failed to create the threads", EXIT_FAILURE));
-	join_threads(ph);
 	clean(ph, &mu);
 	return (EXIT_SUCCESS);
 }
