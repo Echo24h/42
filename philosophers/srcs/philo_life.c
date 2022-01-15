@@ -31,6 +31,7 @@ static void	philo_eat(t_philo *ph)
 	time = get_time();
 	print_log(ph, time, EAT);
 	ph->t_last_meal = time;
+	pthread_mutex_unlock(&ph->mu->eat_or_die[ph->id]);
 	ph->nb_meal++;
 	if (ph->nb_meal == ph->info->nb_meal_per_ph)
 	{
@@ -38,7 +39,6 @@ static void	philo_eat(t_philo *ph)
 		ph->info->nb_ph_fed++;
 		pthread_mutex_unlock(&ph->mu->nb_ph_fed);
 	}
-	pthread_mutex_unlock(&ph->mu->eat_or_die[ph->id]);
 	if (!ph->info->stop)
 		msleep(ph->info->t_eat);
 }
