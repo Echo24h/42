@@ -37,7 +37,10 @@ int	main(int ac, char **av)
 	if (ph->info->nb_ph != 0 && ph->info->nb_meal_per_ph != 0)
 	{
 		if (!create_threads(ph))
+		{
+			clean(ph, &mu);
 			return (on_error("Failed to create the threads", EXIT_FAILURE));
+		}
 		join_threads(ph);
 	}
 	if (ph->info->nb_meal_per_ph == 0)

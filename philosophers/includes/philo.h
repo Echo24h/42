@@ -69,5 +69,6 @@ int		init_philo(t_philo **ph, t_info *info, t_mutex *mu);
 
 // utils
 int		ft_atoi(const char *str);
+int		str_is_number(char *str);
 
 #endif
