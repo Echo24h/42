@@ -24,7 +24,6 @@ int	on_error(char *msg, int code)
 	return (code);
 }
 
-// need handle only 1 philo
 int	main(int ac, char **av)
 {
 	t_info	info;
@@ -41,6 +40,8 @@ int	main(int ac, char **av)
 			return (on_error("Failed to create the threads", EXIT_FAILURE));
 		join_threads(ph);
 	}
+	if (ph->info->nb_meal_per_ph == 0)
+		printf("Everyone is happy and has le ventre rempli !\n");
 	clean(ph, &mu);
 	return (EXIT_SUCCESS);
 }

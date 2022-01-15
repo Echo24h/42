@@ -40,14 +40,14 @@ static void	philo_eat(t_philo *ph)
 	}
 	pthread_mutex_unlock(&ph->mu->eat_or_die[ph->id]);
 	if (!ph->info->stop)
-		usleep(ph->info->t_eat * 1000);
+		msleep(ph->info->t_eat);
 }
 
 static void	philo_sleep(t_philo *ph)
 {
 	print_log(ph, get_time(), SLEEP);
 	if (!ph->info->stop)
-		usleep(ph->info->t_sleep * 1000);
+		msleep(ph->info->t_sleep);
 }
 
 void	philo_life(t_philo *ph)
@@ -57,5 +57,5 @@ void	philo_life(t_philo *ph)
 	put_forks_back(ph);
 	philo_sleep(ph);
 	print_log(ph, get_time(), THINK);
-	usleep(1000);
+	usleep(100);
 }

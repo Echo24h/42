@@ -14,8 +14,6 @@ int	init_info(int ac, char **av, t_info *info)
 	info->stop = 0;
 	info->nb_ph_fed = 0;
 	info->t_start = 0;
-	if (info->nb_ph < 2 || info->nb_meal_per_ph == 0)
-		return (0);
 	return (1);
 }
 
