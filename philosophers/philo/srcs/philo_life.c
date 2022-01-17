@@ -57,6 +57,6 @@ void	philo_life(t_philo *ph)
 	put_forks_back(ph);
 	philo_sleep(ph);
 	print_log(ph, get_time(), THINK);
-	if (ph->info->nb_ph % 1)
+	if (ph->info->nb_ph % 2)
 		usleep(100);
 }
