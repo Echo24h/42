@@ -40,8 +40,6 @@ static void	*routine(void *arg)
 	pthread_t	th;
 	
 	ph = (t_philo *)arg;
-	if (!ph->info->t_start)
-		ph->info->t_start = get_time();
 	ph->t_last_meal = ph->info->t_start;
 	if (pthread_create(&th, NULL, &monitor, ph))
 		return (NULL);
@@ -64,6 +62,7 @@ int	create_threads(t_philo *ph)
 {
 	int	i;
 
+	ph->info->t_start = get_time();
 	i = 0;
 	while (i < ph->info->nb_ph)
 	{
