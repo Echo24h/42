@@ -20,8 +20,7 @@
 # include "X.h"
 # include "libft.h"
 
-// W / 1.125 = H
-# define W 2000
+# define W 1000
 # define H (W / 1.125)
 # define MAX_RE 0.6
 # define MIN_RE -2.1
@@ -109,7 +108,6 @@ unsigned int	palette_0(t_var *var, int nb_iteration);
 unsigned int	palette_1(t_var *var, int nb_iteration);
 unsigned int	palette_2(t_var *var, int nb_iteration);
 unsigned int	palette_3(t_var *var, int nb_iteration);
-unsigned int	brain_fuck(t_var *var, int nb_iteration);
 unsigned int	grey(t_var *var, int nb_iteration);
 unsigned int	smooth_red(t_var *var, int nb_iteration);
 unsigned int	rainbow_0(t_var *var, int nb_iteration);
