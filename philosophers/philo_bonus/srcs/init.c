@@ -35,8 +35,6 @@ int	init_info(int ac, char **av, t_info *info)
 		info->nb_meal_per_ph = ft_atoi(av[5]);
 	if (!check_info(ac, info))
 		return (0);
-	info->stop = 0;
-	info->nb_ph_fed = 0;
 	info->t_start = 0;
 	return (1);
 }

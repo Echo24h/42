@@ -11,7 +11,8 @@ SRC			=	main.c	\
 				utils.c	\
 				init.c	\
 				msleep.c	\
-				sem.c
+				sem.c	\
+				philo_life.c
 SRC_PFX		=	$(addprefix $(SRC_DIR)/, $(SRC))
 
 OBJ			=	$(SRC:%.c=%.o)
