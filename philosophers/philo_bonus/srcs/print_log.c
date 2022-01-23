@@ -6,9 +6,7 @@ void	print_log(t_philo *ph, long time, int action)
 	int		n;
 
 	n = ph->id + 1;
-	printf("before\n");
 	sem_wait(ph->sem->log);
-	printf("after\n");
 	timestamps = time_diff(ph->info->t_start, time);
 	if (action == TAKE_FORK)
 		printf("%ld %d has taken a fork\n", timestamps, n);
@@ -21,4 +19,13 @@ void	print_log(t_philo *ph, long time, int action)
 	else if (action == DIE)
 		printf("%ld %d died\n", timestamps, n);
 	sem_post(ph->sem->log);
+}
+
+void	print_last_log(t_info *info, t_sema *sem, int id, long time)
+{
+	sem_wait(sem->log);
+	if (time)
+		printf("%ld %d died\n", time_diff(info->t_start, time), id + 1);
+	else
+		printf("Everyone is happy and has le ventre rempli !\n");
 }

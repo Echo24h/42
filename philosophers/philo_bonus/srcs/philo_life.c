@@ -2,12 +2,9 @@
 
 static void	take_forks(t_philo *ph)
 {
-	printf("try to take forks\n");
 	sem_wait(ph->sem->forks);
-	printf("took first fork\n");
 	print_log(ph, get_time(), TAKE_FORK);
 	sem_wait(ph->sem->forks);
-	printf("took second fork\n");
 	print_log(ph, get_time(), TAKE_FORK);
 }
 
@@ -40,11 +37,8 @@ static void	philo_sleep(t_philo *ph)
 
 void	philo_life(t_philo *ph)
 {
-	printf("first steps in this cruel world...\n");
 	take_forks(ph);
-	printf("managed to get forks, will he eat?\n");
 	philo_eat(ph);
-	printf("damn boys he did it, he is well fed!\n");
 	put_forks_back(ph);
 	philo_sleep(ph);
 	print_log(ph, get_time(), THINK);

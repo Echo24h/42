@@ -18,14 +18,14 @@
 # define THINK 3
 # define DIE 4
 
-typedef struct s_sem
+typedef struct s_sema
 {
 	sem_t		*forks;
 	sem_t		*stop;
 	sem_t		*eat_or_die;
 	sem_t		*log;
 	sem_t		*ph_fed;
-}	t_sem;
+}	t_sema;
 
 typedef struct s_info
 {
@@ -44,7 +44,7 @@ typedef struct s_philo
 	int			nb_meal;
 	long		t_last_meal;
 	t_info		*info;
-	t_sem		*sem;
+	t_sema		*sem;
 	int			alive;
 }	t_philo;
 
@@ -52,7 +52,7 @@ typedef struct s_data
 {
 	int		stop;
 	t_info	*info;
-	t_sem	*sem;
+	t_sema	*sem;
 }	t_data;
 
 // msleep
@@ -64,24 +64,44 @@ long	time_diff(long start, long end);
 
 // print_log
 void	print_log(t_philo *ph, long time, int action);
+void	print_last_log(t_info *info, t_sema *sem, int id, long time);
 
 // init
 int		init_info(int ac, char **av, t_info *info);
+void	init_data(t_data *data, t_info *info, t_sema *sem);
+int		init_sem(t_sema *sem, int nb_ph);
+int		init_sem_eat_or_die(sem_t *eat_or_die, int id);
+int		init_philo(t_philo *ph, t_info *info, int id);
 
 // utils
 int		ft_atoi(const char *str);
 int		str_is_number(char *str);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_itoa(int n);
+void	ft_puterror(char *str);
 
-// sem
-void	unlink_sem(void);
-void	close_sem(t_sem *sem);
-int		init_sem(t_sem *sem, t_info *info);
-int		init_sem_eat_or_die(t_sem *sem, int id);
-void	delete_sem_eat_or_die(t_sem *sem, int id);
+// delete
+void	delete_sem(t_sema *sem);
+void	delete_sem_eat_or_die(sem_t *eat_or_die, int id);
+void	delete_philo(t_philo *ph);
 
 // philo_life
 void	philo_life(t_philo *ph);
+
+// processes
+void	kill_processes(pid_t *pids, int nb_ph);
+int		wait_processes(pid_t *pids, int nb_ph);
+int		create_processes(pid_t *pids, t_info *info);
+
+// task
+int	task(t_info *info, int id);
+
+// error
+int		on_error(char *msg, int code);
+void	exit_error(char *msg);
+
+// check
+int		check_params(int ac, char **av);
+int		check_info(int ac, t_info *info);
 
 #endif

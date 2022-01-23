@@ -1,40 +1,16 @@
 #include "philo_bonus.h"
 
+void	unlink_sem()
+{
+	sem_unlink("/forks");
+	sem_unlink("/stop");
+	sem_unlink("/log");
+	sem_unlink("/ph_fed");
+}
+
 void	clean(t_philo *ph)
 {
 	return ;
-}
-
-int	on_error(char *msg, int code)
-{
-	printf("Error: %s\n", msg);
-	return (code);
-}
-
-void	exit_error(char *msg)
-{
-	printf("Error: %s\n", msg);
-	exit(1);
-}
-
-t_philo	*init_philo(t_info *info, t_sem *sem, int id)
-{
-	t_philo	*ph;
-
-	ph = malloc(sizeof(t_philo) * 1);
-	if (!ph)
-		return (NULL);
-	ph->id = id;
-	ph->nb_meal = 0;
-	ph->alive = 1;
-	ph->info = info;
-	ph->t_last_meal = info->t_start;
-	//if (!init_sem(sem, info))
-	//	return (NULL);
-	ph->sem = sem;
-	if (!init_sem_eat_or_die(sem, id))
-		return (NULL);
-	return (ph);
 }
 
 void	*monitor_all_fed(void *arg)
@@ -45,145 +21,67 @@ void	*monitor_all_fed(void *arg)
 
 	data = (t_data *)arg;
 	i = 0;
-	while (i < data->info->nb_ph && !data->stop)
+	while (i < data->info->nb_ph)
 	{
 		sem_wait(data->sem->ph_fed);
 		i++;
+		if (data->stop)
+			return (NULL);
 	}
+	if (i == data->info->nb_ph)
+		print_last_log(data->info, data->sem, 0, 0);
 	sem_post(data->sem->stop);
 	return (NULL);
 }
 
-void	*monitor(void *arg)
+void	stop_monitor_all_fed(t_data *data)
 {
-	t_philo	*ph;
-	long	time;
-
-	ph = (t_philo *)arg;
-	while (ph->alive)
-	{
-		sem_wait(ph->sem->eat_or_die);
-		time = get_time();
-		if (time > ph->t_last_meal + ph->info->t_death)
-		{
-			print_log(ph, time, DIE);
-			ph->alive = 0;
-		}
-		sem_post(ph->sem->eat_or_die);
-	}
-	return (NULL);
-}
-
-int	process_routine(t_info *info, int id)
-{
-	t_philo	*ph;
-	t_sem	sem;
-
-	if (!init_sem(&sem, info))
-		exit_error("Failed to initialize sem");
-	ph = init_philo(info, &sem, id);
-	if (!ph)
-		exit_error("Failed to initialize philo");
-	if (pthread_create(&ph->th, NULL, &monitor_all_fed, &ph))
-		exit_error("Failed to create thread");
-	while (ph->alive)
-	{
-		printf("living ma life\n");
-		philo_life(ph);
-	}
-	pthread_join(ph->th, NULL);
-	sem_post(sem.stop);
-	close_sem(&sem);
-	delete_sem_eat_or_die(&sem, id);
-	free(ph);
-	printf("process %d exit\n", id);
-	exit(0);
-}
-
-int	create_processes(t_info *info, t_sem *sem, pid_t *pids)
-{
-	int	i;
-
-	i = 0;
-	while (i < info->nb_ph)
-	{
-		pids[i] = fork();
-		if (pids[i] == 0)
-			process_routine(info, i);
-		i++;
-		usleep(100);
-	}
-	return (1);
-}
-
-int	wait_processes(t_info *info, pid_t *pids)
-{
-	int	i;
-
-	i = 0;
-	while (i < info->nb_ph)
-		waitpid(pids[i++], NULL, 0);
-	return (1);
-}
-
-void	kill_processes(t_info *info, pid_t *pids)
-{
-	int	i;
-
-	i = 0;
-	while (i < info->nb_ph)
-	{
-		kill(pids[i], SIGTERM);
-		i++;
-	}
+	data->stop = 1;
+	sem_post(data->sem->ph_fed);
 }
 
 int	main(int ac, char **av)
 {
 	t_info		info;
+	t_sema		sem;
 	pid_t		*pids;
-	t_sem		sem;
 	pthread_t	th;
 	t_data		data;
 
+	//unlink_sem();
+	//exit(EXIT_SUCCESS);
 	if (!init_info(ac, av, &info))
 		return (on_error("Invalid parameters", EXIT_FAILURE));
-	if (info.nb_ph != 0 && info.nb_meal_per_ph != 0)
-	{
-		pids = malloc(sizeof(pid_t) * info.nb_ph);
-		if (!pids)
-			return (on_error("Failed to malloc", EXIT_FAILURE));
-		if (!init_sem(&sem, &info))
-			return (on_error("Failed semaphores initialization", EXIT_FAILURE));
-		sem_wait(sem.log);
-		printf("mdr\n");
-		sem_post(sem.log);
-		data.info = &info;
-		data.sem = &sem;
-		data.stop = 0;
-		printf("before creating process\n");
-		create_processes(&info, &sem, pids);
-		pthread_create(&th, NULL, &monitor_all_fed, &data);
-		printf("\nwent here\n\n");
-		sem_wait(sem.stop);
-		printf("simul stop\n");
-		data.stop = 1;
-		kill_processes(&info, pids);
-		wait_processes(&info, pids);
-		printf("All processes finished\n");
-		free(pids);
-		pthread_join(th, NULL);
-		close_sem(&sem);
-		unlink_sem();
-	}
-	if (info.nb_meal_per_ph == 0)
-		printf("Everyone is happy and has le ventre rempli !\n");
+	pids = malloc(sizeof(pid_t) * info.nb_ph);
+	if (!pids)
+		return (on_error("Malloc failed", EXIT_FAILURE));
+	if (!init_sem(&sem, info.nb_ph))
+		return (on_error("Failed semaphores initialization", EXIT_FAILURE));
+	init_data(&data, &info, &sem);
+	pthread_create(&th, NULL, &monitor_all_fed, &data);
+
+	//printf("before creating process\n");
+	create_processes(pids, &info);
+	
+	//printf("waiting for stop\n");
+	sem_wait(sem.stop);
+	//printf("stop simulation\n");
+	stop_monitor_all_fed(&data);
+	kill_processes(pids, info.nb_ph);
+	wait_processes(pids, info.nb_ph);
+	//printf("all processes finished\n");
+	pthread_join(th, NULL);
+	//printf("all_fed monitor finished\n");
+	free(pids);
+	delete_sem(&sem);
+	//system("leaks philo_bonus");
 	return (EXIT_SUCCESS);
 }
 
+/*
 # define N 2
 
-void	*routine1(void *arg)
+void	*routine(void *arg)
 {
 	int	*x;
 	int	i;
@@ -194,7 +92,7 @@ void	*routine1(void *arg)
 	return (NULL);
 }
 
-void	*routine2(void *arg)
+void	*task(void *arg)
 {
 	int	*x;
 
@@ -206,18 +104,25 @@ void	*routine2(void *arg)
 
 int	main2()
 {
-	int	i;
-	int	x;
-	int y;
-	pthread_t	th1;
-	pthread_t	th2;
-	pid_t	pids[N];
+	pid_t	pid;
+	sem_t	*sem;
 
-	x = 1;
-	y = 2;
-	pthread_create(&th1, NULL, &routine1, &x);
-	pthread_create(&th2, NULL, &routine2, &y);
-	if (!pthread_join(th1, NULL) || !pthread_join(th2, NULL))
-		return (EXIT_SUCCESS);
+	sem = sem_open("/xd", O_CREAT, 764, 1);
+	if (sem == SEM_FAILED)
+		perror("open");
+	pid = fork();
+	if (pid == 0)
+	{
+		sem_wait(sem);
+		printf("there\n");
+		sem_post(sem);
+		exit(EXIT_SUCCESS);
+	}
+	waitpid(pid, NULL, 0);
+	if (sem_unlink("/xd"))
+		perror("unlink");
+	if (sem_close(sem))
+		perror("close");
 	return (EXIT_SUCCESS);
 }
+*/
