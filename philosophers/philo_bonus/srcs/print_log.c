@@ -16,8 +16,6 @@ void	print_log(t_philo *ph, long time, int action)
 		printf("%ld %d is sleeping\n", timestamps, n);
 	else if (action == THINK)
 		printf("%ld %d is thinking\n", timestamps, n);
-	else if (action == DIE)
-		printf("%ld %d died\n", timestamps, n);
 	sem_post(ph->sem->log);
 }
 
