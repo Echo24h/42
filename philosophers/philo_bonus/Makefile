@@ -1,5 +1,5 @@
 CC			=	gcc
-CFLAGS		=	#-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror
 NAME		=	philo_bonus
 SRC_DIR		=	srcs
 OBJ_DIR		=	srcs/objs
@@ -8,7 +8,8 @@ I_DIR		=	includes
 SRC			=	main.c	\
 				print_log.c	\
 				time.c	\
-				utils.c	\
+				utils_0.c	\
+				utils_1.c	\
 				init.c	\
 				msleep.c	\
 				philo_life.c	\

@@ -50,9 +50,10 @@ typedef struct s_philo
 
 typedef struct s_data
 {
-	int		stop;
-	t_info	*info;
-	t_sema	*sem;
+	pthread_t	th;
+	int			stop;
+	t_info		*info;
+	t_sema		*sem;
 }	t_data;
 
 // msleep
@@ -78,7 +79,7 @@ int		ft_atoi(const char *str);
 int		str_is_number(char *str);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_itoa(int n);
-void	ft_puterror(char *str);
+int		ft_strlen(char *str);
 
 // delete
 void	delete_sem(t_sema *sem);
@@ -90,11 +91,8 @@ void	philo_life(t_philo *ph);
 
 // processes
 void	kill_processes(pid_t *pids, int nb_ph);
-int		wait_processes(pid_t *pids, int nb_ph);
+void	wait_processes(pid_t *pids, int nb_ph);
 int		create_processes(pid_t *pids, t_info *info);
-
-// task
-int	task(t_info *info, int id);
 
 // error
 int		on_error(char *msg, int code);

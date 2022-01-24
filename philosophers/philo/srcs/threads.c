@@ -50,10 +50,8 @@ static void	*routine(void *arg)
 			continue ;
 	}
 	else
-	{
 		while (!ph->info->stop)
 			philo_life(ph);
-	}
 	pthread_join(th, NULL);
 	return (NULL);
 }

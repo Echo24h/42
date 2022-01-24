@@ -20,9 +20,9 @@ static void	philo_eat(t_philo *ph)
 
 	sem_wait(ph->sem->eat_or_die);
 	time = get_time();
-	print_log(ph, time, EAT);
 	ph->t_last_meal = time;
 	sem_post(ph->sem->eat_or_die);
+	print_log(ph, time, EAT);
 	ph->nb_meal++;
 	if (ph->nb_meal == ph->info->nb_meal_per_ph)
 		sem_post(ph->sem->ph_fed);

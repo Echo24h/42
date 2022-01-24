@@ -1,6 +1,6 @@
 #include "philo.h"
 
-void	clean(t_philo *ph, t_mutex *mu)
+static void	clean(t_philo *ph, t_mutex *mu)
 {
 	int	i;
 
@@ -18,7 +18,7 @@ void	clean(t_philo *ph, t_mutex *mu)
 	free(ph);
 }
 
-int	on_error(char *msg, int code)
+static int	on_error(char *msg, int code)
 {
 	printf("Error: %s\n", msg);
 	return (code);
@@ -32,19 +32,21 @@ int	main(int ac, char **av)
 
 	if (!init_info(ac, av, &info))
 		return (on_error("Invalid parameters", EXIT_FAILURE));
-	if (!init_mutex(&info, &mu) || !init_philo(&ph, &info, &mu))
-		return (on_error("Failed initialization", EXIT_FAILURE));
-	if (ph->info->nb_ph != 0 && ph->info->nb_meal_per_ph != 0)
+	if (!info.nb_ph)
+		return (EXIT_SUCCESS);
+	if (info.nb_meal_per_ph == 0)
 	{
-		if (!create_threads(ph))
-		{
-			clean(ph, &mu);
-			return (on_error("Failed to create the threads", EXIT_FAILURE));
-		}
-		join_threads(ph);
-	}
-	if (ph->info->nb_meal_per_ph == 0)
 		printf("Everyone is happy and has le ventre rempli !\n");
+		return (EXIT_SUCCESS);
+	}
+	if (!init_mutex(&info, &mu) || !init_philo(&ph, &info, &mu))
+		return (on_error("Initialisation failure", EXIT_FAILURE));
+	if (!create_threads(ph))
+	{
+		clean(ph, &mu);
+		return (on_error("pthread_create() failure", EXIT_FAILURE));
+	}
+	join_threads(ph);		
 	clean(ph, &mu);
 	return (EXIT_SUCCESS);
 }
