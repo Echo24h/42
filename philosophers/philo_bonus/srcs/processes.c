@@ -83,5 +83,4 @@ void	kill_processes(pid_t *pids, int nb_ph)
 	i = 0;
 	while (i < nb_ph)
 		kill(pids[i++], SIGTERM);
-		i++;
 }
