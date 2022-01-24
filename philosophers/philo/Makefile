@@ -27,9 +27,6 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(I_DIR) -pthread
 
-run: all
-	./$(NAME)
-
 clean:
 	rm -rf $(OBJ_DIR)
 
