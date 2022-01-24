@@ -46,16 +46,16 @@ int	init_philo(t_philo *ph, t_info *info, int id)
 
 int	init_sem(t_sema *sem, int nb_ph)
 {
-	sem->forks = sem_open("/forks", O_CREAT, 761, nb_ph);
+	sem->forks = sem_open("/forks", O_CREAT, 0761, nb_ph);
 	if (sem->forks == SEM_FAILED)
 		return (0);
-	sem->stop = sem_open("/stop", O_CREAT, 761, 0);
+	sem->stop = sem_open("/stop", O_CREAT, 0761, 0);
 	if (sem->stop == SEM_FAILED)
 		return (0);
-	sem->log = sem_open("/log", O_CREAT, 761, 1);
+	sem->log = sem_open("/log", O_CREAT, 0761, 1);
 	if (sem->log == SEM_FAILED)
 		return (0);
-	sem->ph_fed = sem_open("/ph_fed", O_CREAT, 761, 0);
+	sem->ph_fed = sem_open("/ph_fed", O_CREAT, 0761, 0);
 	if (sem->ph_fed == SEM_FAILED)
 		return (0);
 	return (1);
@@ -72,7 +72,7 @@ int	init_sem_eat_or_die(sem_t *eat_or_die, int id)
 	sem_name = ft_strjoin("/eat_or_die", str_id);
 	if (!sem_name)
 		return (0);
-	eat_or_die = sem_open(sem_name, O_CREAT, 761, 1);
+	eat_or_die = sem_open(sem_name, O_CREAT, 0761, 1);
 	free(sem_name);
 	free(str_id);
 	if (eat_or_die == SEM_FAILED)
