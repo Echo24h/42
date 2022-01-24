@@ -25,7 +25,7 @@ OBJ_PFX		=	$(addprefix $(OBJ_DIR)/, $(OBJ))
 all: $(NAME)
 
 $(NAME): $(OBJ_PFX)
-	$(CC) -o $(NAME) $(OBJ_PFX) -pthread
+	$(CC) -o $(NAME) $(OBJ_PFX)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
