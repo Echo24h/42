@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   threads.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/25 15:10:48 by ydanset           #+#    #+#             */
+/*   Updated: 2022/01/25 15:12:09 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static void	protected_stop(t_philo *ph, long time)
@@ -6,7 +18,8 @@ static void	protected_stop(t_philo *ph, long time)
 	if (!ph->info->stop)
 	{
 		if (time)
-			printf("%ld %d died\n", time_diff(ph->info->t_start, time), ph->id + 1);
+			printf("%ld %d died\n", \
+				time_diff(ph->info->t_start, time), ph->id + 1);
 		else
 			printf("Everyone is happy and has le ventre rempli !\n");
 		ph->info->stop = 1;
@@ -16,7 +29,7 @@ static void	protected_stop(t_philo *ph, long time)
 
 static void	*monitor(void *arg)
 {
-	t_philo *ph;
+	t_philo	*ph;
 	long	time;
 
 	ph = (t_philo *)arg;
@@ -38,7 +51,7 @@ static void	*routine(void *arg)
 {
 	t_philo		*ph;
 	pthread_t	th;
-	
+
 	ph = (t_philo *)arg;
 	ph->t_last_meal = ph->info->t_start;
 	if (pthread_create(&th, NULL, &monitor, ph))

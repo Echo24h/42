@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   processes.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/25 15:03:43 by ydanset           #+#    #+#             */
+/*   Updated: 2022/01/25 15:08:49 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_bonus.h"
 
 static void	*monitor(void *arg)
@@ -43,16 +55,15 @@ int	create_processes(pid_t *pids, t_info *info)
 	int	i;
 
 	n = info->nb_ph / 2;
-	i = 0;
+	i = -1;
 	info->t_start = get_time();
-	while (i < n)
+	while (++i < n)
 	{
 		pids[i] = fork();
 		if (pids[i] < 0)
 			return (0);
 		if (pids[i] == 0)
 			task(info, i);
-		i++;
 	}
 	usleep(100);
 	while (i < info->nb_ph)
