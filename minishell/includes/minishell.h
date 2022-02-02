@@ -9,15 +9,17 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-typedef struct s_cap
+typedef struct s_envvar
 {
-	char	*clean;
-	char	*font_color;
-	char	*bg_color;
-	char	*bold;
-	char	*reset;
-	char	*underline;
-	char	*cursor;
-}	t_cap;
+	char	*name;
+	char	*value;
+}	t_envvar;
+
+// expand 
+void	expand(char **line, t_envvar *envvar);
+void	insert_str(char **dst, char *src, size_t n);
+char	*trunc_str(char *str, int start, int len);
+void	my_strncpy(char *dst, char *src, int n);
+void	exit_error(char *msg, int code);
 
 #endif
