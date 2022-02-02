@@ -97,6 +97,7 @@ char	*get_var_value(t_envvar *envvar, char *var_name)
 	{
 		if (!ft_strncmp(envvar[i].name, var_name, ft_strlen(var_name)))
 		{
+			free(var_value);
 			var_value = ft_strdup(envvar[i].value);
 			if (!var_value)
 				exit_error("malloc() failed", 1);
