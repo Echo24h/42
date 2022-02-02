@@ -123,6 +123,7 @@ void	expand(char **line, t_envvar *envvar)
 				; // expand to the exit status of the most recently executed foreground pipeline ; incr i
 			else if (ft_isalnum((*line)[i + 1]))
 			{
+				// proceed to expand env var value which is "" if var doesn't exist
 				var_name = get_var_name(&(*line)[i + 1]);
 				*line = trunc_str(*line, i + 1, ft_strlen(var_name));
 				var_value = get_var_value(envvar, var_name);
