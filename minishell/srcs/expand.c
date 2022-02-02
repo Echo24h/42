@@ -1,6 +1,20 @@
 #include "minishell.h"
 #include "libft.h"
 
+int	ft_strcmp(char *s1, char *s2)
+{
+	if (!s1 && !s2)
+		return (0);
+	if (s1 || s2)
+		return (1);
+	while (*s1 && *s2 && *s1 != *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return (*s1 - *s2);
+}
+
 void	my_strncpy(char *dst, char *src, int n)
 {
 	int	i;
@@ -95,7 +109,7 @@ char	*get_var_value(t_envvar *envvar, char *var_name)
 	i = 0;
 	while (envvar[i].name)
 	{
-		if (!ft_strncmp(envvar[i].name, var_name, ft_strlen(var_name)))
+		if (!ft_strcmp(envvar[i].name, var_name))
 		{
 			free(var_value);
 			var_value = ft_strdup(envvar[i].value);
@@ -124,7 +138,7 @@ void	expand(char **line, t_envvar *envvar)
 				; // expand to the exit status of the most recently executed foreground pipeline ; incr i
 			else if (ft_isalnum((*line)[i + 1]))
 			{
-				// proceed to expand env var value which is "" if var doesn't exist
+				// proceed to expand env var value ; which is "" if var doesn't exist
 				var_name = get_var_name(&(*line)[i + 1]);
 				*line = trunc_str(*line, i + 1, ft_strlen(var_name));
 				var_value = get_var_value(envvar, var_name);
@@ -134,7 +148,7 @@ void	expand(char **line, t_envvar *envvar)
 				free(var_value);
 			}
 			else if ((*line)[i + 1] == '$')
-				; // expand to the process pid (not necessary?)
+				; // expand to the process pid (not necessary?) ; incr i
 			else
 				i++;
 		}
