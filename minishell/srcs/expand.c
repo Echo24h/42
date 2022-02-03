@@ -5,9 +5,11 @@ int	ft_strcmp(char *s1, char *s2)
 {
 	if (!s1 && !s2)
 		return (0);
-	if (s1 || s2)
+	if (!s1)
+		return (-1);
+	if (!s2)
 		return (1);
-	while (*s1 && *s2 && *s1 != *s2)
+	while (*s1 && *s2 && *s1 == *s2)
 	{
 		s1++;
 		s2++;
@@ -15,7 +17,7 @@ int	ft_strcmp(char *s1, char *s2)
 	return (*s1 - *s2);
 }
 
-void	my_strncpy(char *dst, char *src, int n)
+void	my_strncpy(char *dst, const char *src, int n)
 {
 	int	i;
 
@@ -30,21 +32,37 @@ void	my_strncpy(char *dst, char *src, int n)
 	dst[i] = '\0';	
 }
 
-void	exit_error(char *msg, int code)
-{
-	ft_printf("Error: %s\n", msg);
-	exit(code);
-}
-
-// delete len char at index start of str and rearrange the string
-char	*trunc_str(char *str, int start, int len)
+/*
+	description :
+		delete len char at index start of str and rearrange the string
+*/
+char	*trunc_str(const char *str, int start, int len)
 {
 	int		i;
 	char	*new;
 
 	new = malloc(ft_strlen(str) - len + 1);
 	if (!new)
-		exit_error("malloc() failed", 1);
+		return (NULL);
+	my_strncpy(new, str, start);
+	i = 0;
+	while (str[start + len + i])
+	{
+		new[start + i] = str[start + len + i];
+		i++;
+	}
+	new[start + i] = '\0';
+	return (new);
+}
+
+char	*trunc_and_free_str(char *str, int start, int len)
+{
+	int		i;
+	char	*new;
+
+	new = malloc(ft_strlen(str) - len + 1);
+	if (!new)
+		return (NULL);
 	my_strncpy(new, str, start);
 	i = 0;
 	while (str[start + len + i])
@@ -57,8 +75,11 @@ char	*trunc_str(char *str, int start, int len)
 	return (new);
 }
 
-// insert src in dst at index n
-void	insert_str(char **dst, char *src, size_t n)
+/*
+	description :
+		insert src in dst at index n
+*/
+int	insert_str(char **dst, char *src, size_t n)
 {
 	int		i;
 	int		j;
@@ -66,7 +87,7 @@ void	insert_str(char **dst, char *src, size_t n)
 
 	new = malloc(ft_strlen(*dst) + ft_strlen(src)); // omitted +1 for \0 because of $ that we need to soustract
 	if (!new)
-		exit_error("malloc() failed", 1);
+		return (0);
 	my_strncpy(new, *dst, n);
 	i = 0;
 	while (src[i])
@@ -81,53 +102,75 @@ void	insert_str(char **dst, char *src, size_t n)
 	}
 	free(*dst);
 	*dst = new;
+	return (1);
 }
 
-char	*get_var_name(char *line)
+char	*get_ev_name(char *str)
 {
 	int		i;
-	char	*var_name;
+	char	*ev_name;
 
-	i = 0;
-	while (line[i] && ft_isalnum(line[i]))
-		i++;
-	var_name = malloc(i + 1);
-	if (!var_name)
-		exit_error("malloc() failed", 1);
-	my_strncpy(var_name, line, i);
-	return (var_name);
-}
-
-char	*get_var_value(t_envvar *envvar, char *var_name)
-{
-	char	*var_value;
-	int		i;
-
-	var_value = ft_strdup("");
-	if (!var_value)
-		exit_error("malloc() failed", 1);
-	i = 0;
-	while (envvar[i].name)
+	if (ft_isdigit(str[0]))
 	{
-		if (!ft_strcmp(envvar[i].name, var_name))
+		ev_name = ft_calloc(2, 1);
+		if (!ev_name)
+			return (NULL);
+		ev_name[0] = str[0];
+		return (ev_name);
+	}
+	i = 0;
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+		i++;
+	ev_name = malloc(i + 1);
+	if (!ev_name)
+		return (NULL);
+	my_strncpy(ev_name, str, i);
+	return (ev_name);
+}
+
+char	*get_ev_value(char **local_env, char *ev_name)
+{
+	char	*ev_value;
+	char	*tmp;
+	int		i;
+
+	i = 0;
+	while (local_env[i])
+	{
+		tmp = get_ev_name(local_env[i]);
+		if (!tmp)
+			return (NULL);
+		if (!ft_strcmp(tmp, ev_name))
 		{
-			free(var_value);
-			var_value = ft_strdup(envvar[i].value);
-			if (!var_value)
-				exit_error("malloc() failed", 1);
-			break ;
+			ev_value = trunc_str(local_env[i], 0, ft_strlen(ev_name) + 1);
+			if (!ev_value)
+				return (NULL);
+			free(tmp);
+			return (ev_value);
 		}
+		free(tmp);
 		i++;
 	}
-	return (var_value);
+	return (ft_strdup(""));
 }
 
-void	expand(char **line, t_envvar *envvar)
+/*
+	to do :
+		- handle errors properly
+		- handle $?
+		- handle $$
+		- investigate on cases where there is ' or " after $
+
+	description :
+		replace '$NAME' in the line by it's value retrivied
+		from process local environnement
+*/
+void	expand(char **line, char **local_env)
 {
 	int	i;
 	int	j;
-	char	*var_name;
-	char	*var_value;
+	char	*ev_name;
+	char	*ev_value;
 
 	i = 0;
 	while ((*line)[i])
@@ -138,14 +181,20 @@ void	expand(char **line, t_envvar *envvar)
 				; // expand to the exit status of the most recently executed foreground pipeline ; incr i
 			else if (ft_isalnum((*line)[i + 1]))
 			{
-				// proceed to expand env var value ; which is "" if var doesn't exist
-				var_name = get_var_name(&(*line)[i + 1]);
-				*line = trunc_str(*line, i + 1, ft_strlen(var_name));
-				var_value = get_var_value(envvar, var_name);
-				insert_str(line, var_value, i);
-				i += ft_strlen(var_value) - 1;
-				free(var_name);
-				free(var_value);
+				ev_name = get_ev_name(&(*line)[i + 1]);
+				if (!ev_name)
+					exit_error("malloc() failed", 1);
+				*line = trunc_and_free_str(*line, i + 1, ft_strlen(ev_name));
+				if (!*line)
+					exit_error("malloc() failed", 1);
+				ev_value = get_ev_value(local_env, ev_name);
+				if (!ev_value)
+					exit_error("malloc() failed", 1);
+				if (!insert_str(line, ev_value, i))
+					exit_error("malloc() failed", 1);
+				i += ft_strlen(ev_value) - 1;
+				free(ev_value);
+				free(ev_name);
 			}
 			else if ((*line)[i + 1] == '$')
 				; // expand to the process pid (not necessary?) ; incr i

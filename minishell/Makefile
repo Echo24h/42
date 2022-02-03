@@ -6,7 +6,10 @@ OBJ_DIR		=	srcs/objs
 I_DIR		=	includes
 
 SRC			=	main.c	\
-				expand.c
+				expand.c	\
+				error.c	\
+				strs.c	\
+				dev.c
 SRC_PFX		=	$(addprefix $(SRC_DIR)/, $(SRC))
 
 OBJ			=	$(SRC:%.c=%.o)
@@ -17,10 +20,6 @@ all: $(NAME)
 $(NAME): $(OBJ_PFX)
 	make -C libft
 	$(CC) -o $(NAME) $(OBJ_PFX) -lncurses -lreadline -Llibft -lft
-
-debug: $(OBJ_PFX)
-	make -C libft
-	$(CC) -g -o $(NAME)-debug $(SRC_PFX) -lncurses -lreadline -Llibft -lft -I$(I_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
