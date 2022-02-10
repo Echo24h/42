@@ -17,9 +17,11 @@ OBJ_PFX		=	$(addprefix $(OBJ_DIR)/, $(OBJ))
 
 all: $(NAME)
 
-$(NAME): $(OBJ_PFX)
-	make -C libft
+$(NAME): libft $(OBJ_PFX)
 	$(CC) -o $(NAME) $(OBJ_PFX) -lncurses -lreadline -Llibft -lft
+
+libft:
+	make -C libft
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
@@ -38,4 +40,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re run
+.PHONY: all clean fclean re run libft

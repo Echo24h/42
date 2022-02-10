@@ -1,18 +1,20 @@
-/*
-	to do :
-		- write errors on stderr
-*/
-
 #include "libft.h"
+
+void	print_error(char *msg)
+{
+	ft_putstr_fd("Error: ", STDERR_FILENO);
+	ft_putstr_fd(msg, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
+}
 
 void	exit_error(char *msg, int code)
 {
-	ft_printf("Error: %s\n", msg);
+	print_error(msg);
 	exit(code);
 }
 
-int	error(char *msg, int code)
+int	return_error(char *msg, int code)
 {
-	ft_printf("Error: %s\n", msg);
+	print_error(msg);
 	return (code);
 }
