@@ -68,23 +68,18 @@ char	**strs_append(char **strs, const char *str)
 	new = malloc(sizeof(char *) * (strs_len(strs) + 2));
 	if (!new)
 		return (NULL);
-	if (!strs)
-	{
-		new[0] = ft_strdup(str);
-		if (!new[0])
-			return (NULL);
-		new[1] = NULL;
-		return (new);
-	}
 	i = 0;
-	while (strs[i])
+	while (strs && strs[i])
 	{
 		new[i] = ft_strdup(strs[i]);
 		if (!new[i])
 			return (NULL);
 		i++;
 	}
-	new[i] = NULL;
+	new[i] = ft_strdup(str);
+	if (!new[i])
+		return (NULL);
+	new[i + 1] = NULL; 
 	free_strs(strs);
 	return (new);
 }

@@ -113,7 +113,7 @@ char	*get_ev_name(char *ev)
 	{
 		ev_name = ft_calloc(2, 1);
 		if (!ev_name)
-			exit_error(strerror(errno), EXIT_FAILURE);
+			exit_error("Cannot allocate memory", EXIT_FAILURE);
 		ev_name[0] = ev[0];
 		return (ev_name);
 	}
@@ -122,7 +122,7 @@ char	*get_ev_name(char *ev)
 		i++;
 	ev_name = malloc(i + 1);
 	if (!ev_name)
-		exit_error(strerror(errno), EXIT_FAILURE);
+		exit_error("Cannot allocate memory", EXIT_FAILURE);
 	my_strncpy(ev_name, ev, i);
 	return (ev_name);
 }
@@ -141,7 +141,7 @@ char	*get_ev_value(char **local_env, char *ev_name)
 		{
 			ev_value = get_str_truncated(local_env[i], 0, ft_strlen(ev_name) + 1);
 			if (!ev_value)
-				exit_error(strerror(errno), EXIT_FAILURE);
+				exit_error("Cannot allocate memory", EXIT_FAILURE);
 			free(tmp);
 			return (ev_value);
 		}
@@ -150,7 +150,7 @@ char	*get_ev_value(char **local_env, char *ev_name)
 	}
 	ev_value = ft_strdup("");
 	if (!ev_value)
-		exit_error(strerror(errno), EXIT_FAILURE);
+		exit_error("Cannot allocate memory", EXIT_FAILURE);
 	return (ev_value);
 }
 
@@ -180,11 +180,11 @@ void	expand_ev(char **line, char **local_env)
 				ev_name = get_ev_name(&(*line)[i + 1]);
 				*line = trunc_str(*line, i + 1, ft_strlen(ev_name));
 				if (!*line)
-					exit_error(strerror(errno), EXIT_FAILURE);
+					exit_error("Cannot allocate memory", EXIT_FAILURE);
 				ev_value = get_ev_value(local_env, ev_name);
 				*line = str_insert(*line, ev_value, i);
 				if (!line)
-					exit_error(strerror(errno), EXIT_FAILURE);
+					exit_error("Cannot allocate memory", EXIT_FAILURE);
 				i += ft_strlen(ev_value);
 				free(ev_value);
 				free(ev_name);

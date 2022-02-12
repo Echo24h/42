@@ -4,6 +4,38 @@
 
 # define PROMPT "minishell> "
 
+void	print_redir(void *ptr)
+{
+	t_redir	*redir;
+
+	redir = ptr;
+	if (redir->type == REDIR_RR)
+		ft_printf(">> %s\n", redir->filename);
+	else if (redir->type == REDIR_R)
+		ft_printf("> %s\n", redir->filename);
+	else if (redir->type == REDIR_LL)
+		ft_printf("<< %s\n", redir->filename);
+	else if (redir->type == REDIR_L)
+		ft_printf("< %s\n", redir->filename);
+	else
+		ft_printf("error in print_redir\n");
+}
+
+void	print_cmd(void *ptr)
+{
+	t_cmd	*cmd;
+
+	cmd = ptr;
+	ft_printf("NEW CMD\n");
+	printf("--- args ---\n");
+	print_strs(cmd->args);
+	printf("--- redir_in ---\n");
+	ft_lstiter(cmd->redir_in, &print_redir);
+	printf("--- redir_out ---\n");
+	ft_lstiter(cmd->redir_out, &print_redir);
+	ft_printf("--- ---\n");
+}
+
 int	is_in_env(char **env, char *ev_name)
 {
 	int		i;
@@ -85,7 +117,7 @@ int	builtin_export(char **local_env, char **args)
 				local_env = strs_append(local_env, args[i]);
 				if (!local_env)
 				{
-					print_error(strerror(errno));
+					print_error("Cannot allocate memory");
 					return (EXIT_FAILURE);
 				}
 			}
@@ -162,7 +194,7 @@ char	*extract_word(char **line)
 		return (NULL);
 	word = malloc(i + 1);
 	if (!word)
-		exit_error(strerror(errno), EXIT_FAILURE);
+		exit_error("Cannot allocate memory", EXIT_FAILURE);
 	i = 0;
 	while (**line && !is_whitespace(**line) && !is_symbol(**line))
 	{
@@ -187,7 +219,7 @@ t_token	*get_next_token(char **line)
 
 	tok = malloc(sizeof(t_token) * 1);
 	if (!tok)
-		exit_error(strerror(errno), EXIT_FAILURE);
+		exit_error("Cannot allocate memory", EXIT_FAILURE);
 	tok->val = NULL;
 	if (**line == '|')
 		tok->type = PIPE;
@@ -236,7 +268,7 @@ t_list	*get_tokens(char *line)
 		tok = get_next_token(&line);
 		new = ft_lstnew(tok);
 		if (!new)
-			exit_error(strerror(errno), EXIT_FAILURE);
+			exit_error("Cannot allocate memory", EXIT_FAILURE);
 		ft_lstadd_back(&tokens, new);
 		skip_whitespace(&line);
 	}
@@ -252,7 +284,7 @@ void	set_redir(t_cmd *cmd, t_list **tokens)
 	tok = (*tokens)->content;
 	redir = malloc(sizeof(t_redir) * 1);
 	if (!redir)
-		exit_error(strerror(errno), EXIT_FAILURE);
+		exit_error("Cannot allocate memory", EXIT_FAILURE);
 	redir->type = tok->type;
 	*tokens = (*tokens)->next;
 	if (!*tokens)
@@ -262,10 +294,10 @@ void	set_redir(t_cmd *cmd, t_list **tokens)
 		; // error: missing filename (or keyword for heredoc?)
 	redir->filename = ft_strdup(tok->val);
 	if (!redir->filename)
-		exit_error(strerror(errno), EXIT_FAILURE);
+		exit_error("Cannot allocate memory", EXIT_FAILURE);
 	new = ft_lstnew(redir);
 	if (!new)
-		exit_error(strerror(errno), EXIT_FAILURE);
+		exit_error("Cannot allocate memory", EXIT_FAILURE);
 	if (redir->type == REDIR_LL || redir->type == REDIR_L)
 		ft_lstadd_back(&cmd->redir_in, new);
 	else
@@ -276,7 +308,7 @@ void	init_cmd(t_cmd **cmd)
 {
 	*cmd = malloc(sizeof(t_cmd) * 1);
 	if (!*cmd)
-		exit_error(strerror(errno), EXIT_FAILURE);
+		exit_error("Cannot allocate memory", EXIT_FAILURE);
 	(*cmd)->args = NULL;
 	(*cmd)->redir_in = NULL;
 	(*cmd)->redir_out = NULL;
@@ -296,8 +328,8 @@ t_cmd	*get_next_cmd(t_list **tokens)
 		if (tok->type == WORD)
 		{
 			cmd->args = strs_append(cmd->args, tok->val);
-			if (cmd->args)
-				exit_error(strerror(errno), EXIT_FAILURE);
+			if (!cmd->args)
+				exit_error("Cannot allocate memory", EXIT_FAILURE);
 		}
 		else
 			set_redir(cmd, tokens);
@@ -307,7 +339,8 @@ t_cmd	*get_next_cmd(t_list **tokens)
 	}
 	if (*tokens)
 	{
-		// we reach a pipe
+		if (!(*tokens)->next)
+			; // handle pipe at end of line
 		*tokens = (*tokens)->next;
 	}
 	return (cmd);
@@ -325,7 +358,7 @@ t_list	*get_cmds(t_list *tokens)
 		cmd = get_next_cmd(&tokens);
 		new = ft_lstnew(cmd);
 		if (!new)
-			exit_error(strerror(errno), EXIT_FAILURE);
+			exit_error("Cannot allocate memory", EXIT_FAILURE);
 		ft_lstadd_back(&cmds, new);
 	}
 	return (cmds);
@@ -355,10 +388,14 @@ int	main(int ac, char **av, char **env)
 	char	*line;
 	char	**local_env;
 	t_list	*tokens;
-
+	t_list	*cmds;
+	
+	char *s = malloc(-1);
+	perror("error");
+	exit(0);
 	local_env = copy_strs(env);
 	if (!local_env)
-		exit_error(strerror(errno), EXIT_FAILURE);
+		exit_error("Cannot allocate memory", EXIT_FAILURE);
 	line = readline(PROMPT);
 	while (line)
 	{
@@ -366,7 +403,8 @@ int	main(int ac, char **av, char **env)
 		ft_printf("%s\n", line);
 		tokens = get_tokens(line);
 		print_tokens(tokens);
-		get_cmds(tokens);
+		cmds = get_cmds(tokens);
+		ft_lstiter(cmds, &print_cmd);
 		ft_lstclear(&tokens, &free_token);
 		free(line);
 		line = readline(PROMPT);
