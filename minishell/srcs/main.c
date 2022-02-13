@@ -24,9 +24,10 @@ int	main(int ac, char **av, char **env)
 	while (line)
 	{
 		expand_ev(&line, local_env);
-		ft_printf("ev expansion: %s\n", line);
 		cmds = parse(line);
 		ft_lstiter(cmds, &print_cmd);
+		if (cmds)
+			; // execution
 		ft_lstclear(&cmds, &free_cmd);
 		free(line);
 		line = readline(PROMPT);

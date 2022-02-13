@@ -53,9 +53,7 @@ void	free_cmd(void *ptr);
 char	**copy_strs(char **strs);
 void	free_strs(char **strs);
 int		strs_len(char **strs);
-char	*strs_join(char **strs1, char **strs2);
 char	**strs_append(char **strs, const char *str);
-char	*strs_chr(char **strs, char *s);
 void	print_strs(char **strs);
 
 // error
