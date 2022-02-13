@@ -6,7 +6,7 @@
 typedef struct	s_redir
 {
 	int		type; // "<" or "<<" or ">" or ">>"
-	char	*filename;
+	char	*word;
 }	t_redir;
 
 typedef struct	s_cmd

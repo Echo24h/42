@@ -6,10 +6,15 @@ OBJ_DIR		=	srcs/objs
 I_DIR		=	includes
 
 SRC			=	main.c	\
-				expand.c	\
+				expand_ev.c	\
 				error.c	\
 				strs.c	\
-				dev.c
+				dev.c	\
+				get_tokens.c	\
+				get_cmds.c	\
+				utils.c	\
+				free.c	\
+				parse.c
 SRC_PFX		=	$(addprefix $(SRC_DIR)/, $(SRC))
 
 OBJ			=	$(SRC:%.c=%.o)

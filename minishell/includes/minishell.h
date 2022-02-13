@@ -25,6 +25,27 @@ typedef struct s_token
 	char	*val;
 }	t_token;
 
+// parse
+t_list	*parse(char *line);
+
+// get_tokens
+t_list	*get_tokens(char *line);
+
+// get_cmds
+t_list	*get_cmds(t_list *tokens);
+
+// utils
+int		is_symbol(char c);
+int		is_whitespace(char c);
+void	skip_whitespace(char **line);
+
+// free
+void	free_token(void *token);
+void	free_cmd(void *ptr);
+
+// get_cmds
+t_list	*get_cmds(t_list *tokens);
+
 // main
 char	*get_ev_name(char *str);
 
@@ -43,14 +64,16 @@ int		strs_len(char **strs);
 char	*strs_join(char **strs1, char **strs2);
 char	**strs_append(char **strs, const char *str);
 char	*strs_chr(char **strs, char *s);
+void	print_strs(char **strs);
 
 // error
 void	exit_error(char *msg, int code);
-void	return_error(char *msg, int code);
+int 	error(char *msg, int code);
 void	print_error(char *msg);
 
 // dev
-void	print_strs(char **strs);
+void	print_cmd(void *ptr);
 void	print_tokens(t_list *tokens);
+void	print_redir(void *ptr);
 
 #endif

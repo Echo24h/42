@@ -13,7 +13,7 @@ void	exit_error(char *msg, int code)
 	exit(code);
 }
 
-int	return_error(char *msg, int code)
+int	error(char *msg, int code)
 {
 	print_error(msg);
 	return (code);
