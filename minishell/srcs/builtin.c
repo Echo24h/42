@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+/*
 int	is_in_env(char **env, char *ev_name)
 {
 	int		i;
@@ -10,7 +11,7 @@ int	is_in_env(char **env, char *ev_name)
 	while (env[i])
 	{
 		tmp = get_ev_name(env[i]); // !!!
-		if (!ft_strcmp(tmp, ev_name))
+		if (!my_strcmp(tmp, ev_name))
 		{
 			free(tmp);
 			return (1);
@@ -21,10 +22,6 @@ int	is_in_env(char **env, char *ev_name)
 	return (0);
 }
 
-/*
-	to do:
-		- handle errors properly
-*/
 int	builtin_env(char **local_env, char **args)
 {
 	if (strs_len(args) > 1)
@@ -54,10 +51,6 @@ static int	check_ev_name(char *arg)
 	return (1);
 }
 
-/*
-	to do:
-		- handle errors properly
-*/
 int	builtin_export(char **local_env, char **args)
 {
 	int		i;
@@ -96,3 +89,4 @@ int	builtin_export(char **local_env, char **args)
 	}
 	return (ret);
 }
+*/

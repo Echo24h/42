@@ -83,34 +83,3 @@ char	**strs_append(char **strs, const char *str)
 	free_strs(strs);
 	return (new);
 }
-
-char	**strs_join(char **strs1, char **strs2)
-{
-	int		i;
-	int		j;
-	char	**new;
-
-	new = malloc(sizeof(char *) * (strs_len(strs1) + strs_len(strs2) + 1));
-	if (!new)
-		return (NULL);
-	i = 0;
-	while (strs1 && strs1[i])
-	{
-		new[i] = ft_strdup(strs1[i]);
-		if (!new[i])
-			return (NULL);
-		i++;
-	}
-	j = 0;
-	while (strs2 && strs2[j])
-	{
-		new[i + j] = ft_strdup(strs2[j]);
-		if (!new[i + j])
-			return (NULL);
-		j++;
-	}
-	new[i + j] = NULL;
-	free_strs(strs1);
-	free_strs(strs2);
-	return (new);
-}

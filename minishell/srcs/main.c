@@ -7,7 +7,7 @@
 /*
 	to do :
 		- make a custom prompt
-		- check for potential parsing errors and handle it
+		- research potential parsing errors and handle it
 
 	must ensure that :
 		- env variables must not start by a digit

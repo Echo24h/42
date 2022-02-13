@@ -25,6 +25,9 @@ typedef struct s_token
 	char	*val;
 }	t_token;
 
+// expand 
+void	expand_ev(char **line, char **env);
+
 // parse
 t_list	*parse(char *line);
 
@@ -38,24 +41,15 @@ t_list	*get_cmds(t_list *tokens);
 int		is_symbol(char c);
 int		is_whitespace(char c);
 void	skip_whitespace(char **line);
+int		my_strcmp(char *s1, char *s2);
+void	my_strncpy(char *dst, const char *src, int n);
+char	*str_insert(char *dst, const char *src, size_t n);
+char	*trunc_str(char *str, int start, int len);
+char	*get_str_truncated(const char *str, int start, int len);
 
 // free
 void	free_token(void *token);
 void	free_cmd(void *ptr);
-
-// get_cmds
-t_list	*get_cmds(t_list *tokens);
-
-// main
-char	*get_ev_name(char *str);
-
-// expand 
-void	expand_ev(char **line, char **env);
-char	*str_insert(char *dst, const char *src, size_t n);
-char	*trunc_str(char *str, int start, int len);
-char	*get_str_truncated(const char *str, int start, int len);
-void	my_strncpy(char *dst, const char *src, int n);
-int		ft_strcmp(char *s1, char *s2);
 
 // strs
 char	**copy_strs(char **strs);
