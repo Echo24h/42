@@ -4,13 +4,11 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <curses.h>
-# include <term.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <sys/errno.h>
 # include <string.h>
 # include "libft.h"
+# include "cmds.h"
 
 # define WORD 0
 # define PIPE 1

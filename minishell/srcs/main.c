@@ -1,6 +1,4 @@
 #include "minishell.h"
-#include "libft.h"
-#include "cmds.h"
 
 # define PROMPT "minishell> "
 
@@ -12,7 +10,6 @@
 	must ensure that :
 		- env variables must not start by a digit
 		- env variables consist of alpha, numeric and/or '_' characters
-		- quotes are closed, handle that in parsing
 */
 int	main(int ac, char **av, char **env)
 {

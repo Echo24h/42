@@ -1,6 +1,4 @@
 #include "minishell.h"
-#include "cmds.h"
-#include "libft.h"
 
 static int	get_len_word(char *line)
 {

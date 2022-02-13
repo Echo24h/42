@@ -1,6 +1,4 @@
-#include "libft.h"
 #include "minishell.h"
-#include "cmds.h"
 
 void	print_tokens(t_list *tokens)
 {

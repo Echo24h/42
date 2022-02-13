@@ -1,5 +1,4 @@
 #include "minishell.h"
-#include "cmds.h"
 
 t_list	*parse(char *line)
 {

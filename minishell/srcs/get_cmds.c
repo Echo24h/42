@@ -1,5 +1,4 @@
 #include "minishell.h"
-#include "cmds.h"
 
 static void	init_redir(t_redir **redir, t_list *token)
 {

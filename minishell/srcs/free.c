@@ -1,5 +1,4 @@
 #include "minishell.h"
-#include "cmds.h"
 
 void	free_token(void *ptr)
 {
