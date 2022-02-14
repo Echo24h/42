@@ -18,3 +18,9 @@ int	error(char *msg, int code)
 	print_error(msg);
 	return (code);
 }
+
+void	*error_null(char *msg)
+{
+	print_error(msg);
+	return (NULL);
+}

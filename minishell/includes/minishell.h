@@ -7,6 +7,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <string.h>
+# include <sys/errno.h>
 # include "libft.h"
 # include "cmds.h"
 
@@ -35,6 +36,9 @@ t_list	*get_tokens(char *line);
 // get_cmds
 t_list	*get_cmds(t_list *tokens);
 
+// exec_cmds.c
+int		exec_cmd(t_cmd *cmd, char **local_env);
+
 // utils
 int		is_symbol(char c);
 int		is_whitespace(char c);
@@ -60,6 +64,7 @@ void	print_strs(char **strs);
 void	exit_error(char *msg, int code);
 int 	error(char *msg, int code);
 void	print_error(char *msg);
+void	*error_null(char *msg);
 
 // dev
 void	print_cmd(void *ptr);

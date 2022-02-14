@@ -2,7 +2,25 @@
 
 # define PROMPT "minishell> "
 
+void	expand_words(char **words, char **env)
+{
+	int	i;
+
+	if (!words)
+		return ;
+	i = 0;
+	while (words[i])
+	{
+		if (i > 0 && my_strcmp(words[i - 1], "<<"))
+			expand_ev(&words[i], env);
+		i++;
+	}
+}
+
 /*
+	. get tokens, if prev token is not '<<' expand token value
+	. '<<' should also expand each line read
+
 	to do :
 		- make a custom prompt
 		- research potential parsing errors and handle it
@@ -14,6 +32,7 @@
 int	main(int ac, char **av, char **env)
 {
 	char	*line;
+	char	**words;
 	char	**local_env;
 	t_list	*cmds;
 	
@@ -27,7 +46,9 @@ int	main(int ac, char **av, char **env)
 		cmds = parse(line);
 		ft_lstiter(cmds, &print_cmd);
 		if (cmds)
-			; // execution
+		{
+			exec_cmd(cmds->content, local_env);
+		}
 		ft_lstclear(&cmds, &free_cmd);
 		free(line);
 		line = readline(PROMPT);

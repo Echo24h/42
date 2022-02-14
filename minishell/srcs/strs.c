@@ -83,3 +83,8 @@ char	**strs_append(char **strs, const char *str)
 	free_strs(strs);
 	return (new);
 }
+
+char	*strs_to_str(char **strs)
+{
+	
+}
