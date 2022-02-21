@@ -15,7 +15,8 @@ SRC			=	main.c	\
 				utils.c	\
 				free.c	\
 				parse.c	\
-				exec_cmds.c
+				exec_cmds.c	\
+				ft_strtok.c
 SRC_PFX		=	$(addprefix $(SRC_DIR)/, $(SRC))
 
 OBJ			=	$(SRC:%.c=%.o)

@@ -1,42 +1,39 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_cmds.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/13 14:26:28 by ydanset           #+#    #+#             */
+/*   Updated: 2022/02/16 21:39:26 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static void	init_redir(t_redir **redir, t_list *token)
+#include "../includes/minishell.h"
+// #include "cmds.h"
+
+static void	init_redir(t_redir **redir, int type)
 {
-	t_token	*tok;
-
 	*redir = malloc(sizeof(t_redir) * 1);
-	if (!*redir)
-		exit_error("cannot allocate memory", EXIT_FAILURE);
-	tok = token->content;
-	(*redir)->type = tok->type;
+	(*redir)->type = type;
 	(*redir)->word = NULL;
 }
 
 static int	add_redir(t_cmd *cmd, t_list **tokens)
 {
-	t_token	*tok;
 	t_list	*new;
 	t_redir	*redir;
 
-	init_redir(&redir, *tokens);
+	init_redir(&redir, get_token_type((*tokens)->content));
 	*tokens = (*tokens)->next;
-	if (!*tokens)
+	if (!*tokens || get_token_type((*tokens)->content) != WORD)
 	{
 		free(redir);
 		return (error("missing word after redirection", 0));
 	}
-	tok = (*tokens)->content;
-	if (tok->type != WORD)
-	{
-		free(redir);
-		return (error("missing word after redirection", 0));
-	}
-	redir->word = ft_strdup(tok->val);
-	if (!redir->word)
-		exit_error("cannot allocate memory", EXIT_FAILURE);
+	redir->word = ft_strdup(get_token_value((*tokens)->content));
 	new = ft_lstnew(redir);
-	if (!new)
-		exit_error("cannot allocate memory", EXIT_FAILURE);
 	if (redir->type == REDIR_LL || redir->type == REDIR_L)
 		ft_lstadd_back(&cmd->redir_in, new);
 	else
@@ -47,8 +44,6 @@ static int	add_redir(t_cmd *cmd, t_list **tokens)
 static void	init_cmd(t_cmd **cmd)
 {
 	*cmd = malloc(sizeof(t_cmd) * 1);
-	if (!*cmd)
-		exit_error("cannot allocate memory", EXIT_FAILURE);
 	(*cmd)->args = NULL;
 	(*cmd)->redir_in = NULL;
 	(*cmd)->redir_out = NULL;
@@ -57,32 +52,27 @@ static void	init_cmd(t_cmd **cmd)
 static t_cmd	*get_next_cmd(t_list **tokens)
 {
 	t_cmd	*cmd;
-	t_token	*tok;
 
 	init_cmd(&cmd);
-	tok = (*tokens)->content;
-	while (*tokens && tok->type != PIPE)
+	while (*tokens && get_token_type((*tokens)->content) != PIPE)
 	{
-		if (tok->type == WORD)
-		{
-			cmd->args = strs_append(cmd->args, tok->val);
-			if (!cmd->args)
-				exit_error("cannot allocate memory", EXIT_FAILURE);
-		}
+		if (get_token_type((*tokens)->content) == WORD)
+			cmd->args = strs_append(cmd->args, get_token_value((*tokens)->content));
 		else if (!add_redir(cmd, tokens))
 		{
 			free_cmd(cmd);
 			return (NULL);
 		}
 		*tokens = (*tokens)->next;
-		if (*tokens)
-			tok = (*tokens)->content;
 	}
 	if (*tokens)
 	{
-		if (!(*tokens)->next)
-			; // handle pipe at end of line?
 		*tokens = (*tokens)->next;
+		if (!*tokens || get_token_type((*tokens)->content) == PIPE)
+		{
+			free_cmd(cmd);
+			return (error_null("unexpected token '|'"));
+		}
 	}
 	return (cmd);
 }
@@ -103,8 +93,6 @@ t_list	*get_cmds(t_list *tokens)
 			return (NULL);
 		}
 		new = ft_lstnew(cmd);
-		if (!new)
-			exit_error("cannot allocate memory", EXIT_FAILURE);
 		ft_lstadd_back(&cmds, new);
 	}
 	return (cmds);

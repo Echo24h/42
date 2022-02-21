@@ -1,4 +1,5 @@
 #include "libft.h"
+#include "minishell.h"
 
 int	is_symbol(char c)
 {
@@ -116,4 +117,14 @@ char	*trunc_str(char *str, int start, int len)
 	new[start + i] = '\0';
 	free(str);
 	return (new);
+}
+
+int	get_token_type(t_token *tok)
+{
+	return (tok->type);
+}
+
+char	*get_token_value(t_token *tok)
+{
+	return (tok->val);
 }

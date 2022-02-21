@@ -84,7 +84,27 @@ char	**strs_append(char **strs, const char *str)
 	return (new);
 }
 
-char	*strs_to_str(char **strs)
+char	**strs_join(char **strs1, char **strs2)
 {
-	
+	int	i;
+	int	j;
+	char **new;
+
+	new = malloc(sizeof(char *) * (strs_len(strs1) + strs_len(strs2) + 1));
+	i = 0;
+	while (strs1 && strs1[i])
+	{
+		new[i] = ft_strdup(strs1[i]);
+		i++;
+	}
+	j = 0;
+	while (strs2 && strs2[j])
+	{
+		new[i + j] = ft_strdup(strs2[j]);
+		j++;
+	}
+	new[i + j] = NULL;
+	free_strs(strs1);
+	free_strs(strs2);
+	return (new);
 }
