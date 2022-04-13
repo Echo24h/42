@@ -42,26 +42,3 @@ void	*error_null(char *cmd, const char *msg)
 	print_error(cmd, msg);
 	return (NULL);
 }
-int	all_error(int ret, char *error)
-{
-	if (ret == BF_ERROR)
-		print_error(error, "file not found");
-	else if (ret == OP_ERROR)
-		print_error(error, "open() failed");
-	else if (ret == DUP_ERROR)
-		print_error(error, "dup2() failed");
-	else if (ret == OUT_ERROR)
-		print_error(error, "parse error");
-	else if (ret == CMD_ERROR)
-		print_error(error, "command not found");
-	else if (ret == PERM_ERROR)
-		print_error(error, "Permission denied");
-	return (1);
-}
-
-void	error_manag(int ret)
-{
-	if (ret)
-		return;
-	return;
-}

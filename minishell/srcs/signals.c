@@ -21,13 +21,6 @@ void	sigint_handler(int signum)
 	rl_redisplay();
 }
 
-void	sig_hd_handler(int signum)
-{
-	(void)signum;
-	close(0);
-	g_set.g_check_hd = 1;
-}
-
 void	set_sig(int signum, void (*handler)(int))
 {
 	struct sigaction	sa;

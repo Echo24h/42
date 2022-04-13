@@ -50,7 +50,7 @@ char	*get_ev_value(char *ev_name, char **env)
 	return (ev_value);
 }
 
-void	rearrange_word(char **word, int *i, char **env)
+void	rearrange_word(char **word, int *i, t_var *var)
 {
 	char	*ev_name;
 	char	*ev_value;
@@ -58,9 +58,9 @@ void	rearrange_word(char **word, int *i, char **env)
 	ev_name = get_ev_name(&(*word)[*i + 1]);
 	*word = trunc_str(*word, *i + 1, ft_strlen(ev_name));
 	if (!my_strcmp(ev_name, "?"))
-		ev_value = ft_itoa(g_set.g_exit_status);
+		ev_value = ft_itoa(var->exit_status);
 	else
-		ev_value = get_ev_value(ev_name, env);
+		ev_value = get_ev_value(ev_name, var->local_env);
 	*word = str_insert(*word, ev_value, *i);
 	*i += ft_strlen(ev_value);
 	free(ev_value);

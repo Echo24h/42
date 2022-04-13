@@ -1,11 +1,11 @@
 #include "minishell.h"
 
-char	**get_paths(char **local_env)
+char	**get_paths(char **env)
 {
 	char	**paths;
 	char	*tmp;
 
-	tmp = get_ev_value("PATH", local_env);
+	tmp = get_ev_value("PATH", env);
 	paths = ft_split(tmp, ':');
 	free(tmp);
 	return (paths);
@@ -18,7 +18,7 @@ int	has_access(char *cmd_name)
 	return (0);
 }
 
-char	*get_cmd_path(char *cmd_name, char **local_env)
+char	*get_cmd_path(char *cmd_name, char **env)
 {
 	char	*cmd_path;
 	char	*cmd_pfx;
@@ -30,7 +30,7 @@ char	*get_cmd_path(char *cmd_name, char **local_env)
 	if (ft_strchr(cmd_name, '/') && !has_access(cmd_name))
 		return (NULL);
 	cmd_path = NULL;
-	paths = get_paths(local_env);
+	paths = get_paths(env);
 	cmd_pfx = ft_strjoin("/", cmd_name);
 	i = 0;
 	while (paths[i])
@@ -45,6 +45,17 @@ char	*get_cmd_path(char *cmd_name, char **local_env)
 	free_strs(paths);
 	free(cmd_pfx);
 	return (cmd_path);
+}
+
+int	set_cmd_path(char **cmd_path, char *cmd_name, char **env)
+{
+	*cmd_path = get_cmd_path(cmd_name, env);
+	if (!*cmd_path)
+	{
+		print_error(ft_strdup(cmd_name), "command not found");
+		return (1);
+	}
+	return (0);
 }
 
 int	is_builtin(char *cmd_name)
@@ -81,16 +92,6 @@ void	exec_in_chld(t_cmd *cmd, t_var *var, int pipe_fd[2])
 	char	*cmd_path;
 	pid_t	pid;
 
-	if (cmd->args)
-	{
-		cmd_path = get_cmd_path(cmd->args[0], var->local_env);
-		if (!cmd_path)
-		{
-			print_error(ft_strdup(cmd->args[0]), "command not found");
-			var->exit_status = CMD_NOT_FOUND;
-			return ;
-		}
-	}
 	var->nb_chld++;
 	pid = fork();
 	if (pid == -1)
@@ -114,20 +115,23 @@ void	exec_in_chld(t_cmd *cmd, t_var *var, int pipe_fd[2])
 			exit(FILE_NOT_FOUND);
 		if (!cmd->args)
 			exit(EXIT_SUCCESS);
+		if (set_cmd_path(&cmd_path, cmd->args[0], var->local_env))
+			exit(CMD_NOT_FOUND);
 		if (is_builtin(cmd->args[0]))
 			exit(exec_builtin(cmd->args, var));
 		if (execve(cmd_path, cmd->args, var->local_env) == -1)
 			print_error(ft_strdup("execve"), strerror(errno));
 		exit(EXIT_FAILURE);
 	}
-	free(cmd_path);
 }
 
 void	exec_simple_cmd(t_cmd *cmd, t_var *var)
 {
-	if (!cmd->args)
+	char	*cmd_path;
+
+	if (expand_ev(cmd, var))
 		return ;
-	if (is_builtin(cmd->args[0]))
+	if (cmd->args && is_builtin(cmd->args[0]))
 	{
 		if (redirect_stdout(cmd->redir_out))
 		{
@@ -146,7 +150,9 @@ void	exec_multiple_cmds(t_list *cmds, t_var *var)
 	int		pipe_fd[2];
 	pid_t	pid;
 
-	if (cmds->next)
+	if (expand_ev(cmds->content, var))
+		exec_multiple_cmds(cmds->next, var);
+	else if (cmds->next)
 	{
 		if (pipe(pipe_fd) == -1)
 		{
