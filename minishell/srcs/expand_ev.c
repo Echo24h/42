@@ -6,104 +6,34 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:15 by ydanset           #+#    #+#             */
-/*   Updated: 2022/02/17 05:04:24 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 13:10:05 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-
-static char	*get_ev_name(char *str)
-{
-	int		i;
-	char	*ev_name;
-
-	if (str[0] == '?')
-		return (ft_strdup("?"));
-	i = 0;
-	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-		i++;
-	ev_name = malloc(i + 1);
-	my_strncpy(ev_name, str, i);
-	return (ev_name);
-}
-
-static char	*get_ev_value(char *ev_name, char **env)
-{
-	char	*ev_value;
-	char	*tmp;
-	int		i;
-
-	i = 0;
-	while (env[i])
-	{
-		tmp = get_ev_name(env[i]);
-		if (!my_strcmp(tmp, ev_name))
-		{
-			ev_value = get_str_truncated(env[i], 0, ft_strlen(ev_name) + 1);
-			free(tmp);
-			return (ev_value);
-		}
-		free(tmp);
-		i++;
-	}
-	ev_value = ft_strdup("");
-	return (ev_value);
-}
-
-static void	rearrange_word(char **word, int *i, char **env)
-{
-	char	*ev_name;
-	char	*ev_value;
-	int		exit_status = 666; // must implement exit_status
-
-	ev_name = get_ev_name(&(*word)[*i + 1]);
-	*word = trunc_str(*word, *i + 1, ft_strlen(ev_name));
-	if (!my_strcmp(ev_name, "?"))
-		ev_value = ft_itoa(exit_status);
-	else
-		ev_value = get_ev_value(ev_name, env);
-	*word = str_insert(*word, ev_value, *i);
-	*i += ft_strlen(ev_value);
-	free(ev_value);
-	free(ev_name);
-}
+#include "minishell.h"
 
 void	expand_word(char **word, char **env)
 {
+	int		in_double_quotes;
 	int		i;
 
+	in_double_quotes = 0;
 	i = 0;
 	while ((*word)[i])
 	{
-		if ((*word)[i] == '$')
+		if ((*word)[i] == '"' && !in_double_quotes)
+			in_double_quotes = 1;
+		else if ((*word)[i] == '"' && in_double_quotes)
+			in_double_quotes = 0;
+		if ((*word)[i] == '$' && ((*word)[i + 1] == '?'
+			|| ft_isalpha((*word)[i + 1]) || (*word)[i + 1] == '_'))
+			rearrange_word(word, &i, env);
+		else if ((*word)[i] == '\'' && !in_double_quotes)
 		{
-			if ((*word)[i + 1] == '?' || ft_isalpha((*word)[i + 1]) || (*word)[i + 1] == '_')
-				rearrange_word(word, &i, env);
-			else
+			i++;
+			while ((*word)[i] != '\'')
 				i++;
-		}
-		else if ((*word)[i++] == '\'')
-			while ((*word)[i] && (*word)[i] != '\'')
-				i++;
-	}
-}
-
-void	delete_quotes(char **word)
-{
-	int		i;
-	char	quote;
-
-	i = 0;
-	while ((*word)[i])
-	{
-		if ((*word)[i] == '\'' || (*word)[i] == '"')
-		{
-			quote = (*word)[i];
-			*word = trunc_str(*word, 0, 1);
-			while ((*word)[i] && (*word)[i] != quote)
-				i++;
-			if ((*word)[i])
-				*word = trunc_str(*word, i, 1);
+			i++;
 		}
 		else
 			i++;
@@ -116,10 +46,10 @@ char	**expand_args(char **args, char **env)
 	int		j;
 	char	**new_args;
 	char	**arg_expanded;
-	
+
 	new_args = NULL;
 	i = -1;
-	while (args[++i])
+	while (args && args[++i])
 	{
 		expand_word(&args[i], env);
 		if (!args[i][0])
@@ -151,34 +81,34 @@ int	redir_expanded_is_valid(char *word_expanded)
 int	expand_redir(t_list *redirs, char **env)
 {
 	t_redir	*redir;
+	char	*ev_name;
 
 	while (redirs)
 	{
 		redir = redirs->content;
 		if (redir->type != REDIR_LL)
 		{
-			expand_word(&redir->word, env);
-			if (!redir_expanded_is_valid(redir->word))
-				return (error("ambiguous redirect", 0));
-			delete_quotes(&redir->word);
+			ev_name = ft_strdup(redir->filename);
+			expand_word(&redir->filename, env);
+			if (!redir_expanded_is_valid(redir->filename))
+				return (error(ev_name, "ambiguous redirect", 0));
+			delete_quotes(&redir->filename);
+			free(ev_name);
 		}
 		redirs = redirs->next;
 	}
 	return (1);
 }
 
-int	expand_ev(t_list *cmds, char **env)
+int	expand_ev(t_cmd *cmd, t_env *env)
 {
-	t_cmd	*cmd;
+	char	**envp = NULL;
+	int		ret;
 
-	while (cmds)
-	{
-		cmd = cmds->content;
-		cmd->args = expand_args(cmd->args, env);
-		if (!expand_redir(cmd->redir_in, env)
-			|| !expand_redir(cmd->redir_out, env))
-			return (0);
-		cmds = cmds->next;	
-	}
-	return (1);
+	ret = 1;
+	cmd->args = expand_args(cmd->args, envp);
+	if (!expand_redir(cmd->redir_in, envp)
+		|| !expand_redir(cmd->redir_out, envp))
+		ret = 0;
+	return (ret);
 }

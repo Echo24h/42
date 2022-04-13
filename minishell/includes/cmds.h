@@ -1,28 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmds.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/13 23:30:50 by ydanset           #+#    #+#             */
+/*   Updated: 2022/04/03 08:23:24 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CMDS_H
 # define CMDS_H
 
-# include "libft.h"
-
-typedef struct	s_redir
+typedef struct s_redir
 {
-	int		type; // "<" or "<<" or ">" or ">>"
-	char	*word;
+	int		type;
+	char	*hd_keyword;
+	char	*filename;
 }	t_redir;
 
-typedef struct	s_cmd
+typedef struct s_cmd
 {
-	char	**args; // args[0] = command
-	t_list	*redir_in; // '<' and '<<' ; ordered from first seen to last seen
-	t_list	*redir_out; // '>' and '>>' ; ordered from first seen to last seen
-	// 'redir_in/out->content' will be a pointer on a 't_redir' structure
+	char	**args;
+	t_list	*redir_in;
+	t_list	*redir_out;
 }	t_cmd;
-
-/*
-	. your execution fct will receive a 't_list *cmds' variable
-
-	. 'cmds->content' will be a pointer on a 't_cmd' structure
-
-	. between each 'cmds' elements we assume there is a pipe
-*/
 
 #endif

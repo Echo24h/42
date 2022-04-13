@@ -1,44 +1,60 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
+/*   Updated: 2022/04/07 01:09:41 by jbettini         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-# define PROMPT "minishell> "
+void	free_var(t_var *var)
+{
+	free_strs(var->local_env);
+}
 
-/*
-	. get tokens, if prev token is not '<<' expand token value
-	. '<<' should also expand each line read
-
-	to do :
-		- make a custom prompt
-		- research potential parsing errors and handle it
-
-	must ensure that :
-		- env variables must not start by a digit
-		- env variables consist of alpha, numeric and/or '_' characters
-*/
 int	main(int ac, char **av, char **env)
 {
-	char	*line;
-	char	**words;
-	char	**local_env;
+	t_var	var;
+	char	*cmd_line;
 	t_list	*cmds;
-	
-	local_env = copy_strs(env);
-	if (!local_env)
-		return (error("cannot allocate memory", EXIT_FAILURE));
-	line = readline(PROMPT);
-	while (line)
+	int		fd;
+
+	(void)ac;
+	(void)av;
+	var.exit_status = 0;
+	var.local_env = copy_strs(env);
+	set_sig(SIGQUIT, SIG_IGN);
+	var.fd_stdin = dup(STDIN_FILENO);
+	var.fd_stdout = dup(STDOUT_FILENO);
+	while (1)
 	{
-		cmds = parse(line);
-		if (cmds)
+		set_tty();
+		set_sig(SIGINT, &sigint_handler);
+		dup2(var.fd_stdin, STDIN_FILENO);
+		dup2(var.fd_stdout, STDOUT_FILENO);
+		var.nb_chld = 0;
+		cmd_line = readline(PROMPT);
+		if (!cmd_line) // EOF (^D) sent to readline
 		{
-			expand_ev(cmds, env);
-			;//exec_cmd(cmds->content, local_env);
+			ft_putstr_fd("exit\n", STDOUT_FILENO);
+			reset_tty();
+			free_var(&var);
+			close(var.fd_stdin);
+			close(var.fd_stdout);
+			exit(var.exit_status);
 		}
-		ft_lstiter(cmds, &print_cmd);
+		if (my_strcmp(cmd_line, ""))
+			add_history(cmd_line);
+		cmds = parse(cmd_line);
+		free(cmd_line);
+		exec_cmds(cmds, &var);
+		wait_chld(&var);
 		ft_lstclear(&cmds, &free_cmd);
-		free(line);
-		line = readline(PROMPT);
 	}
-	free_strs(local_env);
-	system("leaks minishell");
 	return (0);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/13 14:26:23 by ydanset           #+#    #+#             */
+/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	free_token(void *ptr)
@@ -9,12 +21,15 @@ void	free_token(void *ptr)
 	free(tok);
 }
 
-static void	free_redir(void *ptr)
+void	free_redir(void *ptr)
 {
 	t_redir	*redir;
 
 	redir = ptr;
-	free(redir->word);
+	free(redir->hd_keyword);
+	if (redir->type == REDIR_LL && redir->filename)
+		unlink(redir->filename);
+	free(redir->filename);
 	free(redir);
 }
 

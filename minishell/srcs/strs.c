@@ -1,15 +1,16 @@
-#include "libft.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   strs.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/01 15:19:26 by jbettini          #+#    #+#             */
+/*   Updated: 2022/04/03 20:00:03 by jbettini         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	print_strs(char **strs)
-{
-	int	i;
-
-	if (!strs)
-		return ;
-	i = 0;
-	while (strs[i])
-		ft_printf("%s\n", strs[i++]);
-}
+#include "minishell.h"
 
 void	free_strs(char **strs)
 {
@@ -79,16 +80,16 @@ char	**strs_append(char **strs, const char *str)
 	new[i] = ft_strdup(str);
 	if (!new[i])
 		return (NULL);
-	new[i + 1] = NULL; 
+	new[i + 1] = NULL;
 	free_strs(strs);
 	return (new);
 }
 
 char	**strs_join(char **strs1, char **strs2)
 {
-	int	i;
-	int	j;
-	char **new;
+	int		i;
+	int		j;
+	char	**new;
 
 	new = malloc(sizeof(char *) * (strs_len(strs1) + strs_len(strs2) + 1));
 	i = 0;
@@ -107,4 +108,15 @@ char	**strs_join(char **strs1, char **strs2)
 	free_strs(strs1);
 	free_strs(strs2);
 	return (new);
+}
+
+void	print_strs(char **strs)
+{
+	int	i;
+
+	if (!strs)
+		return ;
+	i = -1;
+	while (strs[++i])
+		printf("%-3d => |%s|\n", i, strs[i]);
 }

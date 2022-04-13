@@ -1,6 +1,18 @@
-#include "libft.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strtok.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/01 14:59:07 by jbettini          #+#    #+#             */
+/*   Updated: 2022/04/03 21:11:59 by jbettini         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static int	is_in_set(char *str, char c)
+#include "minishell.h"
+
+int	is_in_set(char *str, char c)
 {
 	int	i;
 
@@ -11,7 +23,7 @@ static int	is_in_set(char *str, char c)
 	return (0);
 }
 
-static int	get_len_res(char *str, char *delim)
+int	get_len_res(char *str, char *delim)
 {
 	int	i;
 	int	len;
@@ -30,7 +42,7 @@ static int	get_len_res(char *str, char *delim)
 	return (len);
 }
 
-static void	skip_quotes(char *str, int *j)
+void	skip_quotes(char *str, int *j)
 {
 	char	quote;
 
@@ -47,8 +59,8 @@ char	**ft_strtok(char *str, char *delim)
 	char	**res;
 
 	res = malloc(sizeof(char *) * (get_len_res(str, delim) + 1));
-	i = 0;
 	k = 0;
+	i = 0;
 	while (str[i])
 	{
 		while (str[i] && is_in_set(delim, str[i]))
@@ -57,10 +69,10 @@ char	**ft_strtok(char *str, char *delim)
 		while (str[i + j] && !is_in_set(delim, str[i + j]))
 		{
 			if (str[i + j] == '\'' || str[i + j] == '"')
-				skip_quotes(str, &j);
+				skip_quotes(str, &(j));
 			j++;
 		}
-		if (!j)
+		if (!(j))
 			break ;
 		res[k++] = ft_substr(str, i, j);
 		i += j;

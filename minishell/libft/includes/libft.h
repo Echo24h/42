@@ -74,5 +74,6 @@ long long int	ft_atoi_long_long(const char *str);
 int				is_number(char *s);
 char			*get_next_line(int fd);
 int				ft_printf(const char *format, ...);
+char			*ft_append_char(char *str, char c);
 
 #endif
