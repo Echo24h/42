@@ -172,12 +172,12 @@ void	exec_multiple_cmds(t_list *cmds, t_var *var)
 
 void	exec_cmds(t_list *cmds, t_var *var)
 {
+	tty_show_ctrl();
 	if (!cmds)
 		return ;
 	if (handle_hd(cmds))
 		return ;
 	set_sig(SIGINT, SIG_IGN);
-	reset_tty();
 	var->is_simple_builtin_cmd = 0;
 	if (cmds->next)
 		exec_multiple_cmds(cmds, var);

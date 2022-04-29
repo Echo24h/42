@@ -51,13 +51,14 @@ typedef struct s_token
 
 typedef struct	s_var
 {
-	char	**local_env;
-	int		exit_status;
-	int		fd_stdin;
-	int		fd_stdout;
-	int		nb_chld;
-	int		last_chld_pid;
-	int		is_simple_builtin_cmd;
+	char			**local_env;
+	int				exit_status;
+	int				fd_stdin;
+	int				fd_stdout;
+	int				nb_chld;
+	int				last_chld_pid;
+	int				is_simple_builtin_cmd;
+	struct termios	usr_tty_config;
 }	t_var;
 
 typedef struct	s_global
@@ -138,8 +139,10 @@ char	**strs_append(char **strs, const char *str);
 char	**strs_join(char **strs1, char **strs2);
 
 //		tty.c
-void	set_tty(void);
-void	reset_tty(void);
+void	tty_hide_ctrl(void);
+void	tty_show_ctrl(void);
+void	save_usr_tty_config(t_var *var);
+void	reset_usr_tty_config(t_var *var);
 
 //		utils_0.c.c
 char	*str_insert(char *dst, const char *src, size_t n);
