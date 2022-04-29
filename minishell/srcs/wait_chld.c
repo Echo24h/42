@@ -4,7 +4,7 @@ void	wait_chld(t_var *var)
 {
 	int	status;
 
-	if (var->is_simple_builtin_cmd)
+	if (var->is_simple_builtin_cmd || !var->nb_chld)
 		return ;
 	waitpid(var->last_chld_pid, &status, 0);
 	close(STDIN_FILENO);

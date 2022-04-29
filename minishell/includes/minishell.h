@@ -30,8 +30,7 @@
 
 enum	e_err
 {
-	CMD_NOT_FOUND = 127,
-	FILE_NOT_FOUND = 1
+	CMD_NOT_FOUND = 127
 };
 
 enum	e_redir_type
@@ -125,7 +124,6 @@ int		get_len_word(char *line);
 
 //		parse.c
 t_list	*parse(char *line);
-char	*parse_cmd(char **path, char **cmd);
 void	print_strs(char **strs);
 
 // 		signals.c                                       

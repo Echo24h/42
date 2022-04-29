@@ -25,27 +25,3 @@ t_list	*parse(char *line)
 	ft_lstclear(&tokens, &free_token);
 	return (cmds);
 }
-
-char	*parse_cmd(char **path, char **cmd)
-{
-	char	*cmd_path;
-	char	*tmp;
-	size_t	i;
-
-	if (!path)
-		return (NULL);
-	i = -1;
-	tmp = ft_strjoin("/", cmd[0]);
-	while (path[++i])
-	{
-		cmd_path = ft_strjoin(path[i], tmp);
-		if (access(cmd_path, F_OK | X_OK) == 0)
-		{
-			free(tmp);
-			return (cmd_path);
-		}
-		free(cmd_path);
-	}
-	free(tmp);
-	return (NULL);
-}
