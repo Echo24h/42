@@ -15,10 +15,18 @@
 void	sigint_handler(int signum)
 {
 	(void)signum;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
+	write(STDOUT_FILENO, "\n", 1);
+	if (!g.in_hd)
+	{
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else
+	{
+		g.sigint_in_hd = 1;
+		close(STDIN_FILENO);
+	}
 }
 
 void	set_sig(int signum, void (*handler)(int))

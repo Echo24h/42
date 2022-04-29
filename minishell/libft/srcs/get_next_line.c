@@ -39,22 +39,13 @@ char	*get_next_line(int fd)
 {
 	char	c;
 	char	*line;
-	int		n;
 
 	line = NULL;
-	while ((n = read(fd, &c, 1)) > 0 && c != '\n')
-	{
-		line = ft_append_char(line, c);
-		if (!line)
-			return (NULL);
-	}
-	if (n > 0)
-	{
-		line = ft_append_char(line, c);
-		if (!line)
-			return (NULL);
-	}
-	if (n == -1)
+	if (read(fd, &c, 0) == -1)
 		return (NULL);
+	while (read(fd, &c, 1) > 0 && c != '\n')
+		line = ft_append_char(line, c);
+	if (c == '\n')
+		line = ft_append_char(line, c);
 	return (line);
 }

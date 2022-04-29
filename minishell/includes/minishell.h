@@ -57,9 +57,21 @@ typedef struct	s_var
 	int		fd_stdin;
 	int		fd_stdout;
 	int		nb_chld;
+	int		last_chld_pid;
 }	t_var;
 
-//		index_str;
+typedef struct	s_global
+{
+	int	in_hd;
+	int	sigint_in_hd;
+}	t_global;
+
+t_global	g;
+
+//		get_next_line_hd.c
+char	*get_next_line_hd(int fd);
+
+//		index_str.c
 char	*index_str(const char *str, int index);
 
 //		redirect.c

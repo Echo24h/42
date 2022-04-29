@@ -123,6 +123,8 @@ void	exec_in_chld(t_cmd *cmd, t_var *var, int pipe_fd[2])
 			print_error(ft_strdup("execve"), strerror(errno));
 		exit(EXIT_FAILURE);
 	}
+	if (!pipe_fd)
+		var->last_chld_pid = pid;
 }
 
 void	exec_simple_cmd(t_cmd *cmd, t_var *var)

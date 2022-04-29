@@ -24,8 +24,6 @@ NAME	=	minishell
 I_DIR	=	includes
 SRC_DIR =	srcs
 OBJ_DIR =	srcs/objs
-#USER	=	ydanset
-#USER	=	jbettini
 
 # IF NEEDED at 42 on MacOS10 Install :
 #  rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update
@@ -56,7 +54,8 @@ SRC	= 	main.c \
 		wait_chld.c	\
 		heredoc.c	\
 		redirect.c	\
-		index_str.c
+		index_str.c	\
+		get_next_line_hd.c	\
 
 OBJ	=	$(SRC:%.c=%.o)
 

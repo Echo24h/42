@@ -24,6 +24,9 @@ int	main(int ac, char **av, char **env)
 	t_list	*cmds;
 	int		fd;
 
+	/*char *line = get_next_line_hd(STDIN_FILENO);
+	printf("line: |%s|", line);
+	exit(0);*/
 	(void)ac;
 	(void)av;
 	var.exit_status = 0;
@@ -52,6 +55,7 @@ int	main(int ac, char **av, char **env)
 			add_history(cmd_line);
 		cmds = parse(cmd_line);
 		free(cmd_line);
+		//ft_lstiter(cmds, &print_cmd);
 		exec_cmds(cmds, &var);
 		wait_chld(&var);
 		ft_lstclear(&cmds, &free_cmd);

@@ -37,12 +37,13 @@ int	read_hd(t_redir *redir)
 		print_error(ft_strdup(redir->filename), strerror(errno));
 		return (1);
 	}
+	g.in_hd = 1;
+	g.sigint_in_hd = 0;
 	while (1)
 	{
-		line = readline("> ");
-		if (!line) // send EOF to heredoc
-			break ;
-		if (!my_strcmp(redir->hd_keyword, line))
+		write(STDOUT_FILENO, "> ", 2);
+		line = get_next_line_hd(STDIN_FILENO);
+		if (g.sigint_in_hd || !line || !my_strcmp(redir->hd_keyword, line))
 		{
 			free(line);
 			break ;
@@ -51,6 +52,9 @@ int	read_hd(t_redir *redir)
 		write(fd, "\n", 1);
 		free(line);
 	}
+	g.in_hd = 0;
+	if (g.sigint_in_hd)
+		return (1);
 	close(fd);
 	return (0);
 }
