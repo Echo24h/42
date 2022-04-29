@@ -58,6 +58,7 @@ typedef struct	s_var
 	int		fd_stdout;
 	int		nb_chld;
 	int		last_chld_pid;
+	int		is_simple_builtin_cmd;
 }	t_var;
 
 typedef struct	s_global

@@ -109,10 +109,8 @@ void	exec_in_chld(t_cmd *cmd, t_var *var, int pipe_fd[2])
 			dup2(pipe_fd[1], STDOUT_FILENO);
 			close(pipe_fd[1]);
 		}
-		if (redirect_stdout(cmd->redir_out))
+		if (redirect_stdin(cmd->redir_in) || redirect_stdout(cmd->redir_out))
 			exit(EXIT_FAILURE);
-		if (redirect_stdin(cmd->redir_in))
-			exit(FILE_NOT_FOUND);
 		if (!cmd->args)
 			exit(EXIT_SUCCESS);
 		if (set_cmd_path(&cmd_path, cmd->args[0], var->local_env))
@@ -135,9 +133,10 @@ void	exec_simple_cmd(t_cmd *cmd, t_var *var)
 		return ;
 	if (cmd->args && is_builtin(cmd->args[0]))
 	{
-		if (redirect_stdout(cmd->redir_out))
+		var->is_simple_builtin_cmd = 1;
+		if (redirect_stdin(cmd->redir_in) || redirect_stdout(cmd->redir_out))
 		{
-			var->exit_status = FILE_NOT_FOUND;
+			var->exit_status = EXIT_FAILURE;
 			return ;
 		}
 		var->exit_status = exec_builtin(cmd->args, var);
@@ -179,6 +178,7 @@ void	exec_cmds(t_list *cmds, t_var *var)
 		return ;
 	set_sig(SIGINT, SIG_IGN);
 	reset_tty();
+	var->is_simple_builtin_cmd = 0;
 	if (cmds->next)
 		exec_multiple_cmds(cmds, var);
 	else
