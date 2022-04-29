@@ -56,6 +56,7 @@ SRC	= 	main.c \
 		redirect.c	\
 		index_str.c	\
 		get_next_line_hd.c	\
+		builtin.c	\
 
 OBJ	=	$(SRC:%.c=%.o)
 

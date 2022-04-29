@@ -39,4 +39,3 @@ void	tty_show_ctrl(void)
 	term.c_lflag |= ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
-

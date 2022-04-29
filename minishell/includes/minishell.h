@@ -69,6 +69,10 @@ typedef struct	s_global
 
 t_global	g;
 
+//		builtin.c
+int	ft_pwd(void);
+int	ft_env(t_var *var);
+
 //		get_next_line_hd.c
 char	*get_next_line_hd(int fd);
 

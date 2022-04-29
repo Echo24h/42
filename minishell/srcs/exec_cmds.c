@@ -75,13 +75,13 @@ int	exec_builtin(char **args, t_var *var)
 	else if (!my_strcmp(args[0], "echo"))
 		return (0);
 	else if (!my_strcmp(args[0], "pwd"))
-		return (0);
+		return (ft_pwd());
 	else if (!my_strcmp(args[0], "export"))
 		return (0);
 	else if (!my_strcmp(args[0], "unset"))
 		return (0);
 	else if (!my_strcmp(args[0], "env"))
-		return (0);
+		return (ft_env(var));
 	else if (!my_strcmp(args[0], "exit"))
 		return (0);
 	return (0);
@@ -113,10 +113,10 @@ void	exec_in_chld(t_cmd *cmd, t_var *var, int pipe_fd[2])
 			exit(EXIT_FAILURE);
 		if (!cmd->args)
 			exit(EXIT_SUCCESS);
-		if (set_cmd_path(&cmd_path, cmd->args[0], var->local_env))
-			exit(CMD_NOT_FOUND);
 		if (is_builtin(cmd->args[0]))
 			exit(exec_builtin(cmd->args, var));
+		if (set_cmd_path(&cmd_path, cmd->args[0], var->local_env))
+			exit(CMD_NOT_FOUND);
 		if (execve(cmd_path, cmd->args, var->local_env) == -1)
 			print_error(ft_strdup("execve"), strerror(errno));
 		exit(EXIT_FAILURE);

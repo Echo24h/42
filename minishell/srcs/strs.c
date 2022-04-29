@@ -115,8 +115,12 @@ void	print_strs(char **strs)
 	int	i;
 
 	if (!strs)
+	{
+		printf("NULL\n");
 		return ;
+	}
 	i = -1;
 	while (strs[++i])
 		printf("%-3d => |%s|\n", i, strs[i]);
+	printf("%-3d => |NULL|\n", i);
 }

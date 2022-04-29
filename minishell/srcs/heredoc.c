@@ -48,8 +48,7 @@ int	read_hd(t_redir *redir)
 			free(line);
 			break ;
 		}
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
+		ft_putendl_fd(line, fd);
 		free(line);
 	}
 	g.in_hd = 0;
