@@ -75,15 +75,15 @@ int	exec_builtin(char **args, t_var *var)
 	else if (!my_strcmp(args[0], "echo"))
 		return (0);
 	else if (!my_strcmp(args[0], "pwd"))
-		return (ft_pwd());
+		return (builtin_pwd());
 	else if (!my_strcmp(args[0], "export"))
 		return (0);
 	else if (!my_strcmp(args[0], "unset"))
 		return (0);
 	else if (!my_strcmp(args[0], "env"))
-		return (ft_env(var));
+		return (builtin_env(var));
 	else if (!my_strcmp(args[0], "exit"))
-		return (0);
+		return (builtin_exit(args, var));
 	return (0);
 }
 
@@ -127,8 +127,6 @@ void	exec_in_chld(t_cmd *cmd, t_var *var, int pipe_fd[2])
 
 void	exec_simple_cmd(t_cmd *cmd, t_var *var)
 {
-	char	*cmd_path;
-
 	if (expand_ev(cmd, var))
 		return ;
 	if (cmd->args && is_builtin(cmd->args[0]))
@@ -147,9 +145,7 @@ void	exec_simple_cmd(t_cmd *cmd, t_var *var)
 
 void	exec_multiple_cmds(t_list *cmds, t_var *var)
 {
-	char	*cmd_path;
 	int		pipe_fd[2];
-	pid_t	pid;
 
 	if (expand_ev(cmds->content, var))
 		exec_multiple_cmds(cmds->next, var);

@@ -25,6 +25,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <limits.h>
 
 # define PROMPT		"\033[1;32mminishell$> \033[0m"
 
@@ -59,6 +60,7 @@ typedef struct	s_var
 	int				last_chld_pid;
 	int				is_simple_builtin_cmd;
 	struct termios	usr_tty_config;
+	int				exit_minishell;
 }	t_var;
 
 typedef struct	s_global
@@ -69,9 +71,10 @@ typedef struct	s_global
 
 t_global	g;
 
-//		builtin.c
-int	ft_pwd(void);
-int	ft_env(t_var *var);
+//		builtins
+int	builtin_pwd(void);
+int	builtin_env(t_var *var);
+int	builtin_exit(char **args, t_var *var);
 
 //		get_next_line_hd.c
 char	*get_next_line_hd(int fd);

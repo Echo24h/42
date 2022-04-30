@@ -2,7 +2,6 @@
 
 int	set_hd_filename(t_redir *redir)
 {
-	int			fd;
 	int			index;
 	struct stat	buf;
 

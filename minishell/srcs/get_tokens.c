@@ -89,6 +89,8 @@ t_list	*get_tokens(char *line)
 	t_list	*new;
 	t_token	*tok;
 
+	if (!line)
+		return (NULL);
 	tokens = NULL;
 	while (*line)
 	{

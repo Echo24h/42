@@ -20,6 +20,7 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
+	var.exit_minishell = 0;
 	var.exit_status = 0;
 	var.local_env = copy_strs(env);
 	save_usr_tty_config(&var);
@@ -28,20 +29,18 @@ int	main(int ac, char **av, char **env)
 	var.fd_stdout = dup(STDOUT_FILENO);
 	while (1)
 	{
-		set_sig(SIGINT, &sigint_handler);
 		dup2(var.fd_stdin, STDIN_FILENO);
 		dup2(var.fd_stdout, STDOUT_FILENO);
+		if (var.exit_minishell)
+			break ;
+		set_sig(SIGINT, &sigint_handler);
 		tty_hide_ctrl();
 		var.nb_chld = 0;
 		cmd_line = readline(PROMPT);
 		if (!cmd_line) // EOF (^D) sent to readline
 		{
 			ft_putstr_fd("exit\n", STDOUT_FILENO);
-			free_strs(var.local_env);
-			close(var.fd_stdin);
-			close(var.fd_stdout);
-			reset_usr_tty_config(&var);
-			exit(var.exit_status);
+			break ;
 		}
 		if (my_strcmp(cmd_line, ""))
 			add_history(cmd_line);
@@ -49,8 +48,14 @@ int	main(int ac, char **av, char **env)
 		free(cmd_line);
 		//ft_lstiter(cmds, &print_cmd);
 		exec_cmds(cmds, &var);
-		wait_chld(&var);
+		if (!var.is_simple_builtin_cmd && var.nb_chld > 0)
+			wait_chld(&var);
 		ft_lstclear(&cmds, &free_cmd);
 	}
+	free_strs(var.local_env);
+	close(var.fd_stdin);
+	close(var.fd_stdout);
+	reset_usr_tty_config(&var);
+	exit(var.exit_status);
 	return (0);
 }
