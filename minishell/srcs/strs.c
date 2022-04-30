@@ -21,6 +21,7 @@ void	free_strs(char **strs)
 	i = 0;
 	while (strs[i])
 		free(strs[i++]);
+	free(strs);
 }
 
 char	**copy_strs(char **strs)
@@ -112,11 +113,26 @@ char	**strs_join(char **strs1, char **strs2)
 char	**strs_del_index(char **strs, int index)
 {
 	int		i;
-	char	*tmp;
+	int		j;
+	char	**new;
 
+	if (!strs)
+		return (NULL);
 	if (index < 0 || index >= strs_len(strs))
 		return (strs);
-	free(strs[index]);
-	strs[index] = NULL;
-	return (strs_join(strs, &strs[index + 1]));
+	new = malloc(sizeof(char *) * strs_len(strs));
+	if (!new)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (strs[i])
+	{
+		if (i == index)
+			i++;
+		else
+			new[j++] = ft_strdup(strs[i++]);
+	}
+	new[j] = NULL;
+	free_strs(strs);
+	return (new);
 }

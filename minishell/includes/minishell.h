@@ -92,8 +92,7 @@ char	*get_next_line_hd(int fd);
 char	*index_str(const char *str, int index);
 
 //		redirect.c
-int	redirect_stdin(t_list *redir_in);
-int	redirect_stdout(t_list *redir_out);
+int	redirect(t_list *redirs, t_var *var);
 
 //		heredoc.c
 int	handle_hd(t_list *redir_in);
@@ -116,8 +115,10 @@ void	exit_error(char *cmd, const char *msg, int code);
 int		error(char *cmd, const char *msg, int code);
 void	*error_null(char *cmd, const char *msg);
 
-//		expand_ev.c
-int		expand_ev(t_cmd *cmd, t_var *var);
+//		expand.c
+char	**expand_args(char **args, t_var *var);
+int		expand_redir(t_redir *redir, t_var *var);
+void	expand_word(char **word, t_var *var);
 
 //		expand_utils.c
 char	*get_ev_name(char *str);

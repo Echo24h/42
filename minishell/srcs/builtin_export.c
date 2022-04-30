@@ -33,7 +33,6 @@ int	ev_has_value(char *ev)
 void	export_ev(char *ev, char ***env, int mode)
 {
 	int		i;
-	int		n;
 	char	*ev_name;
 	char	*tmp;
 

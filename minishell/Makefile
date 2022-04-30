@@ -19,7 +19,7 @@ BLUE	=	"\033[0;34m"
 CYAN	=	"\033[0;36m"
 
 CC		=	gcc
-CFLAGS	=	-g #-Wall -Wextra -Werror
+CFLAGS	=	-g -Wall -Wextra -Werror
 NAME	=	minishell
 I_DIR	=	includes
 SRC_DIR =	srcs
@@ -37,7 +37,7 @@ HEADERS	=	-I$(I_DIR) -Ilibft/includes -I/usr/local/opt/readline/include
 
 SRC	= 	main.c \
  		error.c \
- 		expand_ev.c \
+ 		expand.c \
  		free.c \
  		get_cmds.c \
  		get_tokens.c \

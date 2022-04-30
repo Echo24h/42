@@ -40,10 +40,7 @@ static int	add_redir(t_cmd *cmd, t_list **tokens)
 	else
 		redir->filename = ft_strdup(get_token_value((*tokens)->content));
 	new = ft_lstnew(redir);
-	if (redir->type == REDIR_LL || redir->type == REDIR_L)
-		ft_lstadd_back(&cmd->redir_in, new);
-	else
-		ft_lstadd_back(&cmd->redir_out, new);
+	ft_lstadd_back(&cmd->redirs, new);
 	return (1);
 }
 
@@ -51,8 +48,7 @@ static void	init_cmd(t_cmd **cmd)
 {
 	*cmd = malloc(sizeof(t_cmd) * 1);
 	(*cmd)->args = NULL;
-	(*cmd)->redir_in = NULL;
-	(*cmd)->redir_out = NULL;
+	(*cmd)->redirs = NULL;
 }
 
 static t_cmd	*get_next_cmd(t_list **tokens)

@@ -78,35 +78,21 @@ int	redir_expanded_is_valid(char *word_expanded)
 	return (1);
 }
 
-int	expand_redir(t_list *redirs, t_var *var)
+int	expand_redir(t_redir *redir, t_var *var)
 {
-	t_redir	*redir;
+	char	*tmp;
 
-	while (redirs)
+	if (redir->type == REDIR_LL)
+		return (0);
+	tmp = ft_strdup(redir->filename);
+	expand_word(&redir->filename, var);
+	if (!redir_expanded_is_valid(redir->filename))
 	{
-		redir = redirs->content;
-		if (redir->type != REDIR_LL)
-		{
-			expand_word(&redir->filename, var);
-			if (!redir_expanded_is_valid(redir->filename))
-			{
-				print_error(ft_strdup(redir->filename), "ambiguous redirect");
-				return (0);
-			}
-			delete_quotes(&redir->filename);
-		}
-		else
-			delete_quotes(&redir->hd_keyword);
-		redirs = redirs->next;
-	}
-	return (1);
-}
-
-int	expand_ev(t_cmd *cmd, t_var *var)
-{
-	cmd->args = expand_args(cmd->args, var);
-	if (!expand_redir(cmd->redir_in, var)
-		|| !expand_redir(cmd->redir_out, var))
+		print_error(ft_strdup(tmp), "ambiguous redirect");
+		free(tmp);
 		return (1);
+	}
+	delete_quotes(&redir->filename);
+	free(tmp);
 	return (0);
 }

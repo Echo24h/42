@@ -60,21 +60,22 @@ int	read_hd(t_redir *redir)
 
 int	handle_hd(t_list *cmds)
 {
-	t_list	*redir_in;
+	t_list	*redirs;
 	t_redir	*redir;
 
 	while (cmds)
 	{
-		redir_in = ((t_cmd *)(cmds->content))->redir_in;
-		while (redir_in)
+		redirs = ((t_cmd *)(cmds->content))->redirs;
+		while (redirs)
 		{
-			redir = redir_in->content;
+			redir = redirs->content;
 			if (redir->type == REDIR_LL)
 			{
+				delete_quotes(&redir->hd_keyword);
 				if (read_hd(redir))
 					return (1);
 			}
-			redir_in = redir_in->next;
+			redirs = redirs->next;
 		}
 		cmds = cmds->next;
 	}

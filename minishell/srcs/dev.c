@@ -55,10 +55,8 @@ void	print_cmd(void *ptr)
 	ft_printf("\033[1;33mNEW CMD\n\033[0m");
 	ft_printf("\033[1;33m--- args ---\n\033[0m");
 	print_strs(cmd->args);
-	ft_printf("\033[1;33m--- redir_in ---\n\033[0m");
-	ft_lstiter(cmd->redir_in, &print_redir);
-	ft_printf("\033[1;33m--- redir_out ---\n\033[0m");
-	ft_lstiter(cmd->redir_out, &print_redir);
+	ft_printf("\033[1;33m--- redirs ---\n\033[0m");
+	ft_lstiter(cmd->redirs, &print_redir);
 }
 
 void	print_strs(char **strs)

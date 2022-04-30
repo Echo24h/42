@@ -23,8 +23,7 @@ typedef struct s_redir
 typedef struct s_cmd
 {
 	char	**args;
-	t_list	*redir_in;
-	t_list	*redir_out;
+	t_list	*redirs;
 }	t_cmd;
 
 #endif
