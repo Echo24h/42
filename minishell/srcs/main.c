@@ -45,11 +45,11 @@ int	main(int ac, char **av, char **env)
 		if (my_strcmp(cmd_line, ""))
 			add_history(cmd_line);
 		cmds = parse(cmd_line);
-		free(cmd_line);
 		//ft_lstiter(cmds, &print_cmd);
 		exec_cmds(cmds, &var);
 		if (!var.is_simple_builtin_cmd && var.nb_chld > 0)
 			wait_chld(&var);
+		free(cmd_line);
 		ft_lstclear(&cmds, &free_cmd);
 	}
 	free_strs(var.local_env);
