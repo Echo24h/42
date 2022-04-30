@@ -25,15 +25,8 @@ I_DIR	=	includes
 SRC_DIR =	srcs
 OBJ_DIR =	srcs/objs
 
-# IF NEEDED at 42 on MacOS10 Install :
-#  rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update
-#  brew install readline
-#LIBS	=	-L/Users/$(USER)/.brew/opt/readline/lib -lreadline -Llibft -lft
-#HEADERS	=	-I$(I_DIR) -I/Users/$(USER)/.brew/opt/readline/include
-
-# @HOME on MacOS12 Monterey
-LIBS	=	-Llibft -lft
-HEADERS	=	-I$(I_DIR) -Ilibft/includes
+LIBS	=	-Llibft -lft -Lminilibx -lmlx
+HEADERS	=	-I$(I_DIR) -Ilibft/includes -Iminilibx
 
 SRC	= 	main.c \
 
@@ -46,7 +39,7 @@ all: $(NAME)
 $(NAME): $(OBJ_PFX)
 	@make -C libft
 	@printf $(BLUE)
-	$(CC) -o $(NAME) $(OBJ_PFX) $(LIBS)
+	$(CC) -o $(NAME) $(OBJ_PFX) $(LIBS) -framework OpenGL -framework AppKit
 	@printf $(NC)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
