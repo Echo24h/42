@@ -128,7 +128,10 @@ void	exec_in_chld(t_cmd *cmd, t_var *var, int pipe_fd[2])
 void	exec_simple_cmd(t_cmd *cmd, t_var *var)
 {
 	if (expand_ev(cmd, var))
+	{
+		var->exit_status = EXIT_FAILURE;
 		return ;
+	}
 	if (cmd->args && is_builtin(cmd->args[0]))
 	{
 		var->is_simple_builtin_cmd = 1;
@@ -147,8 +150,13 @@ void	exec_multiple_cmds(t_list *cmds, t_var *var)
 {
 	int		pipe_fd[2];
 
+	if (!cmds)
+		return ;
 	if (expand_ev(cmds->content, var))
+	{
+		var->exit_status = EXIT_FAILURE;
 		exec_multiple_cmds(cmds->next, var);
+	}
 	else if (cmds->next)
 	{
 		if (pipe(pipe_fd) == -1)
@@ -166,9 +174,19 @@ void	exec_multiple_cmds(t_list *cmds, t_var *var)
 		exec_in_chld(cmds->content, var, NULL);
 }
 
+/*
+	ev expansion should occurs just before looking at the concerned word
+	see in bash 3.2 :
+		export mdr="f1 f2"
+		echo < $mdr > out	=> wont create out file
+		echo > out < $mdr	=> will create out file
+
+	that means i should also change redirect function to preserve redirections order, but i'mmm lazyyyy, yes so lazyyyyyyyyyyy
+*/
 void	exec_cmds(t_list *cmds, t_var *var)
 {
 	tty_show_ctrl();
+	var->nb_chld = 0;
 	if (!cmds)
 		return ;
 	if (handle_hd(cmds))

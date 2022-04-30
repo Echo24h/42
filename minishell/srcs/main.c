@@ -35,7 +35,6 @@ int	main(int ac, char **av, char **env)
 			break ;
 		set_sig(SIGINT, &sigint_handler);
 		tty_hide_ctrl();
-		var.nb_chld = 0;
 		cmd_line = readline(PROMPT);
 		if (!cmd_line) // EOF (^D) sent to readline
 		{

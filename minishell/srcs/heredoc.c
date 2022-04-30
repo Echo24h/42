@@ -14,6 +14,7 @@ int	set_hd_filename(t_redir *redir)
 	}
 	if (index == 10000 && stat(redir->filename, &buf) != -1)
 	{
+		free(redir->filename);
 		redir->filename = NULL;
 		return (1);
 	}
