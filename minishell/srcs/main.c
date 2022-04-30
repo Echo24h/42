@@ -18,18 +18,6 @@ int	main(int ac, char **av, char **env)
 	char	*cmd_line;
 	t_list	*cmds;
 
-	/*
-	char	**strs;
-
-	strs = malloc(sizeof(char *) * 3);
-	strs[0] = ft_strdup("uno");
-	strs[1] = ft_strdup("dos");
-	strs[2] = NULL;
-	print_strs(strs);
-	strs = strs_append(strs, "salut");
-	print_strs(strs);
-	exit(0);
-	*/
 	(void)ac;
 	(void)av;
 	var.exit_minishell = 0;
