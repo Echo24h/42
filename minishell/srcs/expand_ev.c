@@ -81,23 +81,22 @@ int	redir_expanded_is_valid(char *word_expanded)
 int	expand_redir(t_list *redirs, t_var *var)
 {
 	t_redir	*redir;
-	char	*ev_name;
 
 	while (redirs)
 	{
 		redir = redirs->content;
 		if (redir->type != REDIR_LL)
 		{
-			ev_name = ft_strdup(redir->filename);
 			expand_word(&redir->filename, var);
 			if (!redir_expanded_is_valid(redir->filename))
 			{
-				print_error(NULL, "ambiguous redirect");
+				print_error(ft_strdup(redir->filename), "ambiguous redirect");
 				return (0);
 			}
 			delete_quotes(&redir->filename);
-			free(ev_name);
 		}
+		else
+			delete_quotes(&redir->hd_keyword);
 		redirs = redirs->next;
 	}
 	return (1);

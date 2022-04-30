@@ -19,7 +19,7 @@ BLUE	=	"\033[0;34m"
 CYAN	=	"\033[0;36m"
 
 CC		=	gcc
-CFLAGS	=	-g -Wall -Wextra -Werror
+CFLAGS	=	-g #-Wall -Wextra -Werror
 NAME	=	minishell
 I_DIR	=	includes
 SRC_DIR =	srcs
@@ -59,6 +59,10 @@ SRC	= 	main.c \
 		builtin_env.c	\
 		builtin_pwd.c	\
 		builtin_exit.c	\
+		builtin_cd.c	\
+		builtin_export.c	\
+		builtin_unset.c	\
+		builtin_echo.c	\
 
 OBJ	=	$(SRC:%.c=%.o)
 

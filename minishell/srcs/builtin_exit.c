@@ -66,5 +66,4 @@ int	builtin_exit(char **args, t_var *var)
 		return (1);
 	}
 	return (ft_atoll(args[1]) % 256);
-
 }

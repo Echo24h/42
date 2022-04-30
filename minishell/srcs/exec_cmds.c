@@ -71,15 +71,15 @@ int	is_builtin(char *cmd_name)
 int	exec_builtin(char **args, t_var *var)
 {
 	if (!my_strcmp(args[0], "cd"))
-		return (0);
+		return (builtin_cd(args, var));
 	else if (!my_strcmp(args[0], "echo"))
-		return (0);
+		return (builtin_echo(args));
 	else if (!my_strcmp(args[0], "pwd"))
 		return (builtin_pwd());
 	else if (!my_strcmp(args[0], "export"))
-		return (0);
+		return (builtin_export(args, var));
 	else if (!my_strcmp(args[0], "unset"))
-		return (0);
+		return (builtin_unset(args, var));
 	else if (!my_strcmp(args[0], "env"))
 		return (builtin_env(var));
 	else if (!my_strcmp(args[0], "exit"))
@@ -189,7 +189,7 @@ void	exec_cmds(t_list *cmds, t_var *var)
 	var->nb_chld = 0;
 	if (!cmds)
 		return ;
-	if (handle_hd(cmds))
+	if (handle_hd(cmds)) // must delete hd_keyword quotes
 		return ;
 	set_sig(SIGINT, SIG_IGN);
 	var->is_simple_builtin_cmd = 0;

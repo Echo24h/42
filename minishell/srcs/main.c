@@ -18,11 +18,24 @@ int	main(int ac, char **av, char **env)
 	char	*cmd_line;
 	t_list	*cmds;
 
+	/*
+	char	**strs;
+
+	strs = malloc(sizeof(char *) * 3);
+	strs[0] = ft_strdup("uno");
+	strs[1] = ft_strdup("dos");
+	strs[2] = NULL;
+	print_strs(strs);
+	strs = strs_append(strs, "salut");
+	print_strs(strs);
+	exit(0);
+	*/
 	(void)ac;
 	(void)av;
 	var.exit_minishell = 0;
 	var.exit_status = 0;
 	var.local_env = copy_strs(env);
+	var.local_export = copy_strs(env);
 	save_usr_tty_config(&var);
 	set_sig(SIGQUIT, SIG_IGN);
 	var.fd_stdin = dup(STDIN_FILENO);
@@ -52,9 +65,9 @@ int	main(int ac, char **av, char **env)
 		ft_lstclear(&cmds, &free_cmd);
 	}
 	free_strs(var.local_env);
+	free_strs(var.local_export);
 	close(var.fd_stdin);
 	close(var.fd_stdout);
 	reset_usr_tty_config(&var);
-	exit(var.exit_status);
-	return (0);
+	return (var.exit_status);
 }

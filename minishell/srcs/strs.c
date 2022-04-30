@@ -21,7 +21,6 @@ void	free_strs(char **strs)
 	i = 0;
 	while (strs[i])
 		free(strs[i++]);
-	free(strs);
 }
 
 char	**copy_strs(char **strs)
@@ -110,17 +109,14 @@ char	**strs_join(char **strs1, char **strs2)
 	return (new);
 }
 
-void	print_strs(char **strs)
+char	**strs_del_index(char **strs, int index)
 {
-	int	i;
+	int		i;
+	char	*tmp;
 
-	if (!strs)
-	{
-		printf("NULL\n");
-		return ;
-	}
-	i = -1;
-	while (strs[++i])
-		printf("%-3d => |%s|\n", i, strs[i]);
-	printf("%-3d => |NULL|\n", i);
+	if (index < 0 || index >= strs_len(strs))
+		return (strs);
+	free(strs[index]);
+	strs[index] = NULL;
+	return (strs_join(strs, &strs[index + 1]));
 }

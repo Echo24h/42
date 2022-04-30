@@ -29,6 +29,9 @@
 
 # define PROMPT		"\033[1;32mminishell$> \033[0m"
 
+# define TO_LOCAL_EXPORT 1
+# define TO_LOCAL_ENV 2
+
 enum	e_err
 {
 	CMD_NOT_FOUND = 127
@@ -53,6 +56,7 @@ typedef struct s_token
 typedef struct	s_var
 {
 	char			**local_env;
+	char			**local_export;
 	int				exit_status;
 	int				fd_stdin;
 	int				fd_stdout;
@@ -75,6 +79,11 @@ t_global	g;
 int	builtin_pwd(void);
 int	builtin_env(t_var *var);
 int	builtin_exit(char **args, t_var *var);
+int	builtin_export(char **args, t_var *var);
+int	builtin_unset(char **args, t_var *var);
+int	builtin_cd(char **args, t_var *var);
+int	builtin_echo(char **args);
+void	export_ev(char *ev, char ***env, int mode);
 
 //		get_next_line_hd.c
 char	*get_next_line_hd(int fd);
@@ -99,6 +108,7 @@ void	wait_chld(t_var *var);
 void	print_cmd(void *ptr);
 void	print_redir(void *ptr);
 void	print_tokens(t_list *tokens);
+void	print_strs(char **strs);
 
 //		error.c
 void	print_error(char *cmd, const char *msg);
@@ -132,7 +142,6 @@ int		get_len_word(char *line);
 
 //		parse.c
 t_list	*parse(char *line);
-void	print_strs(char **strs);
 
 // 		signals.c                                       
 void	sigint_handler(int signum);
@@ -144,6 +153,7 @@ char	**copy_strs(char **strs);
 int		strs_len(char **strs);
 char	**strs_append(char **strs, const char *str);
 char	**strs_join(char **strs1, char **strs2);
+char	**strs_del_index(char **strs, int index);
 
 //		tty.c
 void	tty_hide_ctrl(void);
