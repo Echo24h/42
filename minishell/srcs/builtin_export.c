@@ -56,10 +56,9 @@ void	export_ev(char *ev, char ***env, int mode)
 		i++;
 	}
 	free(ev_name);
-	if (mode == TO_LOCAL_ENV && ev_has_value(ev))
-		*env = strs_append(*env, ev);
-	if (mode == TO_LOCAL_EXPORT)
-		*env = strs_append(*env, ev);
+	if (mode == TO_LOCAL_ENV && !ev_has_value(ev))
+		return ;
+	*env = strs_append(*env, ev);
 }
 
 int	builtin_export(char **args, t_var *var)
