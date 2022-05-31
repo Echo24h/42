@@ -24,10 +24,17 @@ int ft_strlen(char *str)
     return (i);
 }
 
-void    print_error(char *msg)
+void    exit_error(char *pfx, char *cmd)
 {
     write(2, "error: ", 7);
-    write(2, msg, ft_strlen(msg));
+    write(2, pfx, ft_strlen(pfx));
+    if (cmd)
+    {
+        write(2, " ", 1);
+        write(2, cmd, ft_strlen(cmd));
+    }
+    write(2, "\n", 1);
+    exit(1);
 }
 
 int strslen(char **strs)
@@ -116,17 +123,56 @@ char    **get_args(char **cmds)
     return (args);
 }
 
-int exec_cmd(char **args, char **env)
+void    exec_last_cmd(char **args, char **env, int fd_in)
 {
-    return (0);
+    int pid;
+
+    pid = fork();
+    if (pid == -1)
+        exit_error("fatal", NULL);
+    if (!pid)
+    {
+        dup2(fd_in, 0);
+        close(fd_in);
+        if (execve(args[0], args, env) == -1)
+            exit_error("cannot execute", args[0]);
+        exit(1);
+    }
+}
+
+void     exec_cmd(char **args, char **env, int fd_in)
+{
+    int pid;
+    int pipe_fd[2];
+
+    if (pipe(pipe_fd) == -1)
+        exit_error("fatal", NULL);
+    pid = fork();
+    if (pid == -1)
+        exit_error("fatal", NULL);
+    if (!pid)
+    {
+        close(pipe_fd[0]);
+        dup2(fd_in, 0);
+        close(fd_in);
+        dup2(pipe_fd[1], 1);
+        close(pipe_fd[1]);
+        if (execve(args[0], args, env) == -1)
+            exit_error("cannot execute", args[0]);
+        exit(1);
+    }
+    close(pipe_fd[1]);
+    dup2(pipe_fd[0], fd_in);
+    close(pipe_fd[0]);
 }
 
 int exec_cmds(char **cmds, char **env)
 {
     char    **args;
     int     i;
-    int     pipe_fd;
+    int     fd_in;
 
+    fd_in = 0;
     i = 0;
     while (cmds[i])
     {
@@ -134,21 +180,14 @@ int exec_cmds(char **cmds, char **env)
         i += strslen(args);
         if (!strcmp(cmds[i], "|"))
         {
-            if (pipe(pipe_fd) == 1)
-            {
-                
-            }
-            // open pipe, fork and exec
+            exec_last_cmd(args, env, fd_in);
         }
         else
         {
-            // 
+            exec_cmd(args, env, fd_in);
         }
-        printf("args[i]: %s\n", cmds[i]);
-        //exec_cmd(args, env);
-        print_strs("args", args);
+        while (waitpid(-1, NULL, 0) > 0) ;
         free_strs(args);
-        printf("i: %d\n", i);
     }
     return (0);
 }
