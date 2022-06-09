@@ -24,16 +24,21 @@ int ft_strlen(char *str)
     return (i);
 }
 
-void    exit_error(char *pfx, char *cmd)
+void    print_error(char *cmd, char *msg)
 {
     write(2, "error: ", 7);
-    write(2, pfx, ft_strlen(pfx));
     if (cmd)
     {
-        write(2, " ", 1);
         write(2, cmd, ft_strlen(cmd));
+        write(2, ": ", 2);
     }
+    write(2, msg, ft_strlen(msg));
     write(2, "\n", 1);
+}
+
+void    exit_error(char *cmd, char *msg)
+{
+    print_error(cmd, msg);
     exit(1);
 }
 
@@ -80,9 +85,12 @@ char    *ft_strdup(char *str)
     return (new);
 }
 
-int builtin_cd()
+void    builtin_cd(char **args)
 {
-    return (0);
+    if (strslen(args) != 2)
+    {
+        return ;
+    }
 }
 
 char    **get_cmds(char **av)
@@ -172,23 +180,29 @@ int exec_cmds(char **cmds, char **env)
     int     i;
     int     fd_in;
 
-    fd_in = 0;
+    fd_in = dup(0);
     i = 0;
     while (cmds[i])
     {
         args = get_args(&cmds[i]);
-        i += strslen(args);
-        if (!strcmp(cmds[i], "|"))
+        if (!strcmp(args[0], "cd"))
         {
-            exec_last_cmd(args, env, fd_in);
+            builtin_cd(args);
+            break ;
         }
+        i += strslen(args);
+        if (!cmds[i])
+            exec_last_cmd(args, env, fd_in);
         else
         {
+            i++;
             exec_cmd(args, env, fd_in);
         }
-        while (waitpid(-1, NULL, 0) > 0) ;
         free_strs(args);
     }
+    close(fd_in);
+    while (waitpid(-1, NULL, 0) > 0)
+        continue ;
     return (0);
 }
 
