@@ -1,0 +1,56 @@
+#!/bin/bash
+
+if [ -z "$1" ]
+then
+	echo "usage: createClass nameOfYourClass"
+	exit 1	
+fi
+
+if [ -f "$1.hpp" ] || [ -f "$1.cpp" ]
+then
+	echo "$1 class already exists"
+	exit 1
+fi
+
+# create .cpp file
+echo "#include \"$1.hpp\"
+#include <iostream>
+
+$1::$1(void) {}
+
+$1::$1($1 const & src) {}
+
+$1::~$1(void) {}
+
+$1 &	$1::operator=($1 const & src) {
+	return (*this);
+}" > "$1".cpp
+
+# create .hpp file
+echo "#ifndef _$1_hpp_
+#define _$1_hpp_
+
+#include <iostream>
+
+class $1 {
+	public:
+		$1(void);
+		$1($1 const & src);
+		~$1(void);
+		$1 &	operator=($1 const & src);
+	
+	private:
+	
+};
+
+#endif" > "$1".hpp
+
+if ! [ -f "main.cpp" ]
+then
+	echo "#include <iostream>
+#include \"$1.hpp\"
+
+int	main(int ac, char *av[]) {
+	return (0);
+}" > main.cpp
+fi
