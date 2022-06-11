@@ -26,11 +26,16 @@ class Fixed {
 		bool	operator>(Fixed const & ros);
 		bool	operator>=(Fixed const & ros);
 	
-		int 	getRawBits(void) const;
-		void 	setRawBits(int const raw);
-		float 	toFloat(void) const;
-		int 	toInt(void) const;
-		void	showRange(void) const;
+		int 			getRawBits(void) const;
+		void 			setRawBits(int const raw);
+		float 			toFloat(void) const;
+		int 			toInt(void) const;
+		void			showRange(void) const;
+
+		static Fixed	min(Fixed & x1, Fixed & x2);
+		static Fixed	min(Fixed const & x1, Fixed const & x2);
+		static Fixed	max(Fixed & x1, Fixed & x2);
+		static Fixed	max(Fixed const & x1, Fixed const & x2);
 
 	private:
 		int					_bits;

@@ -3,12 +3,15 @@
 #include "Fixed.hpp"
 
 int main( void ) {
-	std::cout.precision(12);
-
-	Fixed a(-7.0f);
-	Fixed b(3.0f);
-	a.showRange();
-	//std::cout << a << " " << b << " = " << (a / b) << std::endl;
-	std::cout << (a * b) << std::endl;
+	Fixed a;
+	Fixed c(38);
+	Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
+	std::cout << a << std::endl;
+	std::cout << ++a << std::endl;
+	std::cout << a << std::endl;
+	std::cout << a++ << std::endl;
+	std::cout << a << std::endl;
+	std::cout << b << std::endl;
+	std::cout << Fixed::max( a, c ) << std::endl;
 	return 0;
 }

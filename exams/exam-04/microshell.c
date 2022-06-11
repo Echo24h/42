@@ -221,7 +221,6 @@ int main(int ac, char *av[], char **env)
         }
         cmds = get_cmds(&av[i]);
         i += strslen(cmds);
-        print_strs("cmd", cmds);
         exec_cmds(cmds, env);
         free_strs(cmds);
     }

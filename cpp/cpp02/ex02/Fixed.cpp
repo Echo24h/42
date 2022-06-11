@@ -44,6 +44,7 @@ Fixed	Fixed::operator-(Fixed const & ros) {
 	return (res);
 }
 
+// to implement faster mult and div (but with a loss of precision) => https://www.youtube.com/watch?v=npQF28g6s_k
 Fixed	Fixed::operator*(Fixed const & ros) {
 	Fixed	res;
 
@@ -54,6 +55,7 @@ Fixed	Fixed::operator*(Fixed const & ros) {
 Fixed	Fixed::operator/(Fixed const & ros) {
 	Fixed	res;
 
+	res.setRawBits(((long long int)this->_bits << this->_nbBitsFracPart) / ros.getRawBits());
 	return (res);
 }
 
@@ -131,4 +133,20 @@ void	Fixed::showRange(void) const {
 	int min = -(1 << (nbBitsIntPart - 1));
 	int max = (1 << (nbBitsIntPart - 1)) - 1;
 	std::cout << "Fixed Numbers range is [" << min << " ; " << max << "]\n";
+}
+
+Fixed	Fixed::min(Fixed & x1, Fixed & x2) {
+	return ((x1 <= x2) ? Fixed(x1) : Fixed(x2));
+}
+
+Fixed	Fixed::min(Fixed const & x1, Fixed const & x2) {
+	return (((Fixed)x1 <= x2) ? Fixed(x1) : Fixed(x2));
+}
+
+Fixed	Fixed::max(Fixed & x1, Fixed & x2) {
+	return ((x1 >= x2) ? Fixed(x1) : Fixed(x2));
+}
+
+Fixed	Fixed::max(Fixed const & x1, Fixed const & x2) {
+	return (((Fixed)x1 >= x2) ? Fixed(x1) : Fixed(x2));
 }
