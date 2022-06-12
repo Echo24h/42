@@ -30,7 +30,7 @@ Fixed::~Fixed(void) {
 
 Fixed &	Fixed::operator=(Fixed const & src) {
 	std::cout << "Copy assignment operator called\n";
-	this->_bits = src.getRawBits();
+	this->_bits = src._bits;
 	return (*this);
 }
 
@@ -53,8 +53,8 @@ int 	Fixed::toInt(void) const {
 
 	res = 0;
 	for (int i = 0; i < 32 - this->_nbBitsFracPart; i++) {
-		if ((intPart >> i & 0x1)) {
-			res += (i == 32 - this->_nbBitsFracPart - 1) ? -(0x1 << i) : 0x1 << i;
+		if ((intPart >> i & 1)) {
+			res += (i == 32 - this->_nbBitsFracPart - 1) ? -(1 << i) : 1 << i;
 		}
 	}
 	return (res);

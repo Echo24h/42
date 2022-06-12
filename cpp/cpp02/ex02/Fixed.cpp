@@ -6,41 +6,47 @@ int const	Fixed::_nbBitsFracPart = 8;
 
 // --- constructor ---
 Fixed::Fixed(void) {
+	std::cout << "Default constructor called\n";
 	this->_bits = 0;
 }
 
 Fixed::Fixed(int const x) {
+	std::cout << "Int constructor called\n";
 	this->_bits = x << this->_nbBitsFracPart;
 }
 
 Fixed::Fixed(float const f) {
+	std::cout << "Float constructor called\n";
 	this->_bits = roundf(f * (1 << this->_nbBitsFracPart));
 }
 
 Fixed::Fixed(Fixed const & src) {
+	std::cout << "Copy constructor called\n";
 	*this = src;
 }
 
 // --- destructor ---
-Fixed::~Fixed(void) {}
+Fixed::~Fixed(void) {
+	std::cout << "Destructor called\n";
+}
 
 // --- operator ---
 Fixed &	Fixed::operator=(Fixed const & ros) {
-	this->_bits = ros.getRawBits();
+	this->_bits = ros._bits;
 	return (*this);
 }
 
 Fixed	Fixed::operator+(Fixed const & ros) {
 	Fixed	res;
 
-	res.setRawBits(this->_bits + ros.getRawBits());
+	res.setRawBits(this->_bits + ros._bits);
 	return (res);
 }
 
 Fixed	Fixed::operator-(Fixed const & ros) {
 	Fixed	res;
 
-	res.setRawBits(this->_bits - ros.getRawBits());
+	res.setRawBits(this->_bits - ros._bits);
 	return (res);
 }
 
@@ -48,14 +54,14 @@ Fixed	Fixed::operator-(Fixed const & ros) {
 Fixed	Fixed::operator*(Fixed const & ros) {
 	Fixed	res;
 
-	res.setRawBits(((long long int)this->_bits * ros.getRawBits()) >> this->_nbBitsFracPart);
+	res.setRawBits(((long long int)this->_bits * ros._bits) >> this->_nbBitsFracPart);
 	return (res);
 }
 
 Fixed	Fixed::operator/(Fixed const & ros) {
 	Fixed	res;
 
-	res.setRawBits(((long long int)this->_bits << this->_nbBitsFracPart) / ros.getRawBits());
+	res.setRawBits(((long long int)this->_bits << this->_nbBitsFracPart) / ros._bits);
 	return (res);
 }
 
@@ -82,27 +88,27 @@ Fixed	Fixed::operator--(int) {
 }
 
 bool	Fixed::operator!=(Fixed const & ros) {
-	return (this->_bits != ros.getRawBits() ? true : false);
+	return (this->_bits != ros._bits ? true : false);
 }
 
 bool	Fixed::operator==(Fixed const & ros) {
-	return (this->_bits == ros.getRawBits() ? true : false);
+	return (this->_bits == ros._bits ? true : false);
 }
 
 bool	Fixed::operator<(Fixed const & ros) {
-	return (this->_bits < ros.getRawBits() ? true : false);
+	return (this->_bits < ros._bits ? true : false);
 }
 
 bool	Fixed::operator<=(Fixed const & ros) {
-	return (this->_bits <= ros.getRawBits() ? true : false);
+	return (this->_bits <= ros._bits ? true : false);
 }
 
 bool	Fixed::operator>(Fixed const & ros) {
-	return (this->_bits > ros.getRawBits() ? true : false);
+	return (this->_bits > ros._bits ? true : false);
 }
 
 bool	Fixed::operator>=(Fixed const & ros) {
-	return (this->_bits >= ros.getRawBits() ? true : false);
+	return (this->_bits >= ros._bits ? true : false);
 }
 
 std::ostream &	operator<<(std::ostream &ostrm, Fixed const & ros) {

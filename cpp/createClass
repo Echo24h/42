@@ -59,7 +59,7 @@ if ! [ -f "Makefile" ]
 then
 	echo "CC			=	c++
 CFLAGS		=	-Wall -Wextra -Werror -std=c++98
-NAME		=	fixeeeeed
+NAME		=	prog
 
 SRCS		=	main.cpp	\\
 				$1.cpp	\\

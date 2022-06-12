@@ -5,20 +5,21 @@
 
 class ClapTrap {
 	public:
-		ClapTrap(std::string name);
+		ClapTrap(void);
+		ClapTrap(std::string const name);
 		ClapTrap(ClapTrap const & src);
 		~ClapTrap(void);
 		ClapTrap &	operator=(ClapTrap const & src);
 
-		void	attack(const std::string& target);
+		void	attack(const std::string & target);
 		void	takeDamage(unsigned int amount);
 		void	beRepaired(unsigned int amount);
 	
-	private:
-		std::string	_name;
-		int			_pv;
-		int			_pe;
-		int			_attackDmg;
+	protected:
+		std::string	name;
+		int			pv;
+		int			pe;
+		int			attackDmg;
 
 		bool	is_alive();
 		bool	has_energy();

@@ -17,7 +17,7 @@ Fixed::~Fixed(void) {
 
 Fixed &	Fixed::operator=(Fixed const & src) {
 	std::cout << "Copy assignment operator called\n";
-	this->_bits = src.getRawBits();
+	this->_bits = src._bits;
 	return (*this);
 }
 

@@ -1,9 +1,10 @@
 CC			=	c++
 CFLAGS		=	-Wall -Wextra -Werror -std=c++98
-NAME		=	ClappyTrappou
+NAME		=	imtiredoffindingnewnamesdamn
 
 SRCS		=	main.cpp	\
 				ClapTrap.cpp	\
+				ScavTrap.cpp	\
 
 OBJS		=	$(SRCS:%.cpp=%.o)
 
