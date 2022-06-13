@@ -3,7 +3,7 @@
 #include <iostream>
 
 Form::Form(void) : 
-	name("anonyme"),
+	name("Default"),
 	isSigned(false),
 	gradeReqToSign(150),
 	gradeReqToExec(150) {}

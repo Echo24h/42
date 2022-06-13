@@ -18,6 +18,7 @@ class Form {
 		int				getGradeReqToSign(void) const;
 		int				getGradeReqToExec(void) const;
 		void			beSigned(Bureaucrat const & src);
+		virtual void	execute(Bureaucrat const & executor) const = 0;
 
 	private:
 		std::string const	name;

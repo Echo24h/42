@@ -5,6 +5,10 @@
 
 int	main(int ac, char *av[]) {
 	ShrubberyCreationForm	xx("target");
-	xx = ShrubberyCreationForm("test");
+	Bureaucrat				me("yo", 150);
+
+	xx.execute(me);
+	//xx = ShrubberyCreationForm("test");
+	//std::cout << xx.getName() << std::endl;
 	return (0);
 }
