@@ -2,12 +2,8 @@
 #include <iostream>
 #include "Form.hpp"
 
-ShrubberyCreationForm::ShrubberyCreationForm(std::string target) : Form() {
-	
-}
-
-ShrubberyCreationForm::ShrubberyCreationForm(std::string name) {
-
+ShrubberyCreationForm::ShrubberyCreationForm(std::string target) : Form("shrubbery", 145, 137) {
+	this->target = target;
 }
 
 ShrubberyCreationForm::ShrubberyCreationForm(ShrubberyCreationForm const & src) {}

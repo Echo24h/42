@@ -29,6 +29,7 @@ Form::Form(Form const & src) :
 Form::~Form(void) {}
 
 Form &	Form::operator=(Form const & src) {
+	std::cout << "Form went here\n";
 	return (*this);
 }
 
