@@ -1,5 +1,6 @@
 #include "Literal.hpp"
 #include <iostream>
+#include <sstream>
 
 bool isFloat(std::string str);
 bool isInt(std::string str);
@@ -12,23 +13,30 @@ Literal::Literal(void) :
 
 Literal::Literal(std::string literalVal) :
 	_literalVal(literalVal) {
+	
+	std::stringstream ss;
 	switch (this->getType())
 	{
 		case INT_T:
 			this->_val = new int;
-			*(int *)this->_val = std::atoi(literalVal.data());
+			this->ss << this->_literalVal;
+
+			//*(int *)this->_val = std::atoi(literalVal.data());
 			break;
 		case FLOAT_T:
 			this->_val = new float;
-			*(float *)this->_val = std::atof(literalVal.data());
+			this->ss << this->_literalVal.substr(0, this->_literalVal.length() - 1);
+			//*(float *)this->_val = std::atof(literalVal.data());
 			break;
 		case DOUBLE_T:
 			this->_val = new double;
-			*(int *)this->_val = std::atoi(literalVal.data());
+			this->ss << this->_literalVal;
+			//*(int *)this->_val = std::atoi(literalVal.data());
 			break;
 		case CHAR_T:
 			this->_val = new char;
-			*(char *)this->_val = this->_literalVal[0]; // implicit cast
+			this->ss << this->_literalVal;
+			//*(char *)this->_val = this->_literalVal[0]; // implicit cast
 			break;
 		default:
 			std::cerr << "Invalid Literal\n";
@@ -44,16 +52,16 @@ Literal::~Literal(void) {
 	switch (this->getType())
 	{
 		case INT_T:
-			delete (int *)this->_val;
+			//delete (int *)this->_val;
 			break;
 		case FLOAT_T:
-			delete (float *)this->_val;
+			//delete (float *)this->_val;
 			break;
 		case DOUBLE_T:
-			delete (double *)this->_val;
+			//delete (double *)this->_val;
 			break;
 		case CHAR_T:
-			delete (char *)this->_val;
+			//delete (char *)this->_val;
 			break;
 		default:
 			break;
@@ -95,6 +103,36 @@ char Literal::getChar() const {
 
 float Literal::getFloat() const {
 	return (0.0f);
+}
+
+void	Literal::showValues() const {
+	int			intVal;
+	float		floatVal;
+	double		doubleVal;
+	char		charVal;
+
+	switch (this->getType())
+	{
+		case INT_T:
+			this->ss >> intVal;
+			std::cout << "char: " << static_cast<char>(intVal) << std::endl;
+			std::cout << "int: " << intVal << std::endl;
+			std::cout << "float: " << static_cast<float>(intVal) << std::endl; // think of 'f'
+			std::cout << "double: " << static_cast<double>(intVal) << std::endl;
+			break;
+		case FLOAT_T:
+			this->ss >> floatVal;
+			break;
+		case DOUBLE_T:
+			this->ss >> doubleVal;
+			break;
+		case CHAR_T:
+			this->ss >> charVal;
+			break;
+		default:
+			; // invalid type
+			break;
+	}
 }
 
 // --- non-member functions ---

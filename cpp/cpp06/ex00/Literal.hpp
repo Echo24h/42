@@ -2,6 +2,7 @@
 #define _Literal_hpp_
 
 #include <iostream>
+#include <sstream>
 
 enum literalType {
 	INVALID_T,
@@ -19,15 +20,19 @@ class Literal {
 		~Literal(void);
 		Literal & operator=(Literal const & src);
 	
-		int getType(void) const;
 		int	getInt() const;
 		double getDouble() const;
 		char getChar() const;
 		float getFloat() const;
+		void showValues(void) const;
 
 	private:
-		std::string _literalVal;
+		std::string 		_literalVal;
+		std::stringstream	ss;
+		int					_type;
 		void		*_val;
+
+		int getType(void) const;
 		/*
 		int			_intVal;
 		float		_floatVal;
