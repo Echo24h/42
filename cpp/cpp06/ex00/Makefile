@@ -1,9 +1,8 @@
 CC			=	c++
 CFLAGS		=	-Wall -Wextra -Werror -std=c++98
-NAME		=	prog
+NAME		=	convert
 
 SRCS		=	main.cpp	\
-				Literal.cpp	\
 
 OBJS		=	$(SRCS:%.cpp=%.o)
 
