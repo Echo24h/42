@@ -153,7 +153,7 @@ void convert(double dVal) {
 int	main(int ac, char *av[]) {
 	(void)ac;
 	if (!av[1]) {
-		std::cerr << "usage: ./convert literalValue" << std::endl;
+		std::cerr << "usage: ./convert \"yourLiteralValue\"" << std::endl;
 		return (1);
 	}
 
