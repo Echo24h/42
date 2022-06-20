@@ -60,11 +60,11 @@ bool isChar(std::string str) {
 int getType(std::string str) {
 	if (str.empty()) {
 		return (INVALID_T);
-	} else if (isChar(str)) {
-		return (CHAR_T);
 	} else if (isInt(str)) {
 		return (INT_T);
-	} else if (isFloat(str)) {
+	} else if (isChar(str)) {
+		return (CHAR_T);
+	}  else if (isFloat(str)) {
 		return (FLOAT_T);
 	} else if (isDouble(str)) {
 		return (DOUBLE_T);
