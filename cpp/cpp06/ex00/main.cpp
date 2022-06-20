@@ -200,7 +200,7 @@ int	main(int ac, char *av[]) {
 			}
 			convert(cVal);
 			break;
-		default:
+		case INVALID_T:
 			std::cerr << "Invalid literal, try again nob\n";
 			break;
 	}

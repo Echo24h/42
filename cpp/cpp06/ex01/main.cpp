@@ -18,8 +18,11 @@ int	main(int ac, char *av[]) {
 	x.x = 5;
 	x.y = 6;
 	std::cout << x.x << "|" << x.y << std::endl;
+
 	uintptr_t t = serialize(&x);
+	
 	Data *p = deserialize(t);
+
 	std::cout << p->x << "|" << p->y << std::endl;
 	std::cout << std::hex << t << std::dec << "|" << &x << std::endl;
 	return (0);
