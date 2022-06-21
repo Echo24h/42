@@ -14,6 +14,9 @@ Data* deserialize(uintptr_t raw) {
 }
 
 int	main(int ac, char *av[]) {
+	if (ac == 0 || !av) {
+		return (1);
+	}
 	Data x;
 	x.x = 5;
 	x.y = 6;

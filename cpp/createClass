@@ -2,7 +2,7 @@
 
 if [ -z "$1" ]
 then
-	echo "usage: createClass nameOfYourClass"
+	echo "usage: createClass \"nameOfYourClass\""
 	exit 1	
 fi
 
@@ -18,11 +18,13 @@ echo "#include \"$1.hpp\"
 
 $1::$1(void) {}
 
-$1::$1($1 const & src) {}
+$1::$1($1 const & src) {
+	*this = src;
+}
 
 $1::~$1(void) {}
 
-$1 &	$1::operator=($1 const & src) {
+$1 & $1::operator=($1 const & rhs) {
 	return (*this);
 }" > "$1".cpp
 
@@ -37,13 +39,15 @@ class $1 {
 		$1(void);
 		$1($1 const & src);
 		~$1(void);
-		$1 &	operator=($1 const & src);
+		$1 & operator=($1 const & rhs);
 	
 	private:
 	
 };
 
 #endif" > "$1".hpp
+
+echo "$1.cpp and $1.hpp created"
 
 if ! [ -f "main.cpp" ]
 then
@@ -53,6 +57,7 @@ then
 int	main(int ac, char *av[]) {
 	return (0);
 }" > main.cpp
+	echo "main.cpp created"
 fi
 
 if ! [ -f "Makefile" ]
@@ -71,7 +76,7 @@ all: \$(NAME)
 \$(NAME): \$(OBJS)
 	\$(CC) -o \$(NAME) \$(OBJS)
 
-%.o: %.c
+%.o: %.cpp
 	\$(CC) \$(CFLAGS) -o \$@ -c \$<
 
 run: re
@@ -86,4 +91,5 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re" > Makefile
+	echo "Makefile created"
 fi
