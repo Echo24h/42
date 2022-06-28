@@ -59,6 +59,6 @@ void	ShrubberyCreationForm::execute(Bureaucrat const & executor) const {
 	if (executor.getGrade() > this->getGradeReqToExec()) {
 		throw (std::runtime_error("ShrubberyCreationForm::GradeTooLowException"));
 	} else {
-		drawTree(this->target + "_shrubbery", 10, '*');
+		drawTree(this->target + "_shrubbery", 99, '*');
 	}
 }

@@ -5,7 +5,7 @@
 
 int	main(int ac, char *av[]) {
 	ShrubberyCreationForm	xx("target");
-	Bureaucrat				me("yo", 150);
+	Bureaucrat				me("yo", 1);
 
 	xx.execute(me);
 	//xx = ShrubberyCreationForm("test");

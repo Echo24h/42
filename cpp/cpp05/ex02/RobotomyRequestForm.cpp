@@ -2,7 +2,7 @@
 #include "RobotomyRequestForm.hpp"
 #include "Form.hpp"
 #include "time.h"
-#include "Bureaucrate.hpp"
+#include "Bureaucrat.hpp"
 
 RobotomyRequestForm::RobotomyRequestForm(void) :
 	Form("Robotomy", 72, 45) {}

@@ -150,13 +150,14 @@ void convert(double dVal) {
 	std::cout << std::endl;
 }
 
+#include <iomanip>
+
 int	main(int ac, char *av[]) {
 	(void)ac;
 	if (!av[1]) {
 		std::cerr << "usage: ./convert \"yourLiteralValue\"" << std::endl;
 		return (1);
 	}
-
 	std::string literalVal = av[1];
 	std::stringstream ss;
 	switch (getType(literalVal)) {
