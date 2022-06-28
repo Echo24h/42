@@ -7,6 +7,6 @@ int	main(int ac, char *av[]) {
 	(void)av;
 	//std::cout << std::setprecision(38) << __FLT_MAX__ << std::endl;
 	Array<int> tab;
-	//std::cout << tab << std::endl;
+	std::cout << tab << std::endl;
 	return (0);
 }

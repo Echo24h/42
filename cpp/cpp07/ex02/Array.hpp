@@ -6,14 +6,43 @@
 template<class T>
 class Array {
 	public:
-		Array(void);
-		Array(unsigned int n);
-		Array(Array<T> const & src);
-		~Array(void);
-		Array<T> & operator=(Array<T> const & rhs);
-		T & operator[](unsigned int size);
+		Array<T>(void) {
+			this->array = new T;
+			this->sizeArray = 0;
+		}
 
-		unsigned int size(void) const;
+		Array<T>(unsigned int n) {
+			this->array = new T[n];
+			this->sizeArray = n;
+		}
+
+		Array<T>(Array<T> const & src) {
+			*this = src;
+		}
+
+		~Array<T>(void) {
+			delete [] this->array;
+		}
+
+		Array<T> & operator=(Array<T> const & rhs) {
+			for (int i = 0; i < rhs.sizeArray; i++) {
+				this->array[i] = rhs.array[i];
+			}
+			this->sizeArray = rhs.sizeArray;
+			return (*this);
+		}
+
+		T & operator[](unsigned int idx) {
+			if (idx >= this->sizeArray) {
+				throw (std::runtime_error("invalid access"));
+			}
+			return (this->array[idx]);
+		}
+
+		unsigned int size(void) const {
+			return (this->sizeArray);
+		}
+
 	private:
 		T * array;
 		unsigned int sizeArray;
@@ -21,6 +50,12 @@ class Array {
 };
 
 template<class T>
-std::ostream &	operator<<(std::ostream & ostrm, Array<T> const & rhs);
+std::ostream &	operator<<(std::ostream & ostrm, Array<T> const & rhs) {
+	ostrm << "|"; 
+	for (int i = 0; i < rhs.sizeArray; i++) {
+		ostrm << rhs[i] << "|"; 
+	}
+	ostrm << "|";
+}
 
 #endif

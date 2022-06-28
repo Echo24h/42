@@ -1,6 +1,7 @@
 #include "Array.hpp"
 #include <iostream>
 
+/*
 template<class T>
 Array<T>::Array(void) {
 	this->array = new T;
@@ -53,3 +54,4 @@ template<class T>
 unsigned int Array<T>::size(void) const {
 	return (this->sizeArray);
 }
+*/
