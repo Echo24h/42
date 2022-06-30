@@ -25,14 +25,14 @@ class Array {
 		}
 
 		Array<T> & operator=(Array<T> const & rhs) {
-			for (int i = 0; i < rhs.sizeArray; i++) {
+			for (unsigned int i = 0; i < rhs.size(); i++) {
 				this->array[i] = rhs.array[i];
 			}
 			this->sizeArray = rhs.sizeArray;
 			return (*this);
 		}
 
-		T & operator[](unsigned int idx) {
+		T & operator[](unsigned int idx) const {
 			if (idx >= this->sizeArray) {
 				throw (std::runtime_error("invalid access"));
 			}
@@ -52,10 +52,13 @@ class Array {
 template<class T>
 std::ostream &	operator<<(std::ostream & ostrm, Array<T> const & rhs) {
 	ostrm << "|"; 
-	for (int i = 0; i < rhs.sizeArray; i++) {
-		ostrm << rhs[i] << "|"; 
+	for (unsigned int i = 0; i < rhs.size(); i++) {
+		ostrm << rhs[i];
+		if (i != rhs.size() - 1)
+			ostrm << "|";
 	}
 	ostrm << "|";
+	return (ostrm);
 }
 
 #endif
