@@ -11,10 +11,12 @@ class Span {
 		~Span(void);
 		Span & operator=(Span const & rhs);
 
-		unsigned int 	getSize(void) const;
-		void			addNumber(int nbr);
-		unsigned int	shortestSpan(void);
-		unsigned int	longestSpan(void);
+		unsigned int		getSizeMax(void) const;
+		std::vector<int>	getVec(void) const;
+		void				addNumber(int nbr);
+		void				addRandomNumbers(unsigned int n, int min, int max);		
+		unsigned int		shortestSpan(void);
+		unsigned int		longestSpan(void);
 	
 	private:
 		unsigned int	 	_sizeMax;
@@ -22,5 +24,7 @@ class Span {
 
 		Span(void);
 };
+
+std::ostream & operator<<(std::ostream & ostrm, Span const & rhs);
 
 #endif
