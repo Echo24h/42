@@ -1,8 +1,9 @@
 CC			=	c++
-CFLAGS		=	-Wall -Wextra -Werror -std=c++98
-NAME		=	phonebook
+CFLAGS		=	-std=c++98 -Wall -Wextra -Werror
+NAME		=	elonIcanHelp
 
-SRCS		=	main.cpp
+SRCS		=	tests.cpp	\
+				Account.cpp	\
 
 OBJS		=	$(SRCS:%.cpp=%.o)
 
@@ -11,7 +12,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) -o $(NAME) $(OBJS)
 
-%.o: %.c
+%.o: %.cpp
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 run: re
