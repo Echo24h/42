@@ -35,10 +35,10 @@ Account::~Account(void) {
 }
 
 // static member functions
-int		Account::getNbAccounts( void )			{ return (Account::_nbAccounts); }
-int		Account::getTotalAmount( void )			{ return (Account::_totalAmount); }
-int		Account::getNbDeposits( void )			{ return (Account::_totalNbDeposits); }
-int		Account::getNbWithdrawals( void )		{ return (Account::_totalNbWithdrawals); }
+int		Account::getNbAccounts( void )		{ return (Account::_nbAccounts); }
+int		Account::getTotalAmount( void )		{ return (Account::_totalAmount); }
+int		Account::getNbDeposits( void )		{ return (Account::_totalNbDeposits); }
+int		Account::getNbWithdrawals( void )	{ return (Account::_totalNbWithdrawals); }
 
 void	Account::displayAccountsInfos( void ) {
 	Account::_displayTimestamp();
