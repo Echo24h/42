@@ -1,5 +1,5 @@
 CC			=	c++
-CFLAGS		=	-Wall -Wextra -Werror -std=c++98
+CFLAGS		=	#-Wall -Wextra -Werror -std=c++98
 NAME		=	openOpen
 
 SRCS		=	main.cpp	\
@@ -11,7 +11,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) -o $(NAME) $(OBJS)
 
-%.o: %.c
+%.o: %.cpp
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 run: re

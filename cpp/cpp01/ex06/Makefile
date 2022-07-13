@@ -1,10 +1,9 @@
 CC			=	c++
 CFLAGS		=	-Wall -Wextra -Werror -std=c++98
-NAME		=	zombieHorde
+NAME		=	harlFilter
 
 SRCS		=	main.cpp	\
-				Zombie.cpp	\
-				zombieHorde.cpp	\
+				Harl.cpp	\
 
 OBJS		=	$(SRCS:%.cpp=%.o)
 

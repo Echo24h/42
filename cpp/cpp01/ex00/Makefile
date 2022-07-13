@@ -1,6 +1,6 @@
 CC			=	c++
 CFLAGS		=	-Wall -Wextra -Werror -std=c++98
-NAME		=	phonebook
+NAME		=	zombiiieee
 
 SRCS		=	main.cpp	\
 				Zombie.cpp	\
@@ -14,7 +14,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) -o $(NAME) $(OBJS)
 
-%.o: %.c
+%.o: %.cpp
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 run: re

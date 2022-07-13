@@ -5,15 +5,13 @@
 
 class Zombie {
 	public:
-		Zombie(std::string name = "anonyme") {
-			_name = name;
-		}
+		Zombie(void);
+		Zombie(std::string name);
+		~Zombie();
 
-		~Zombie() {
-			std::cout << _name << " is gone... rip :/\n";
-		}
+	public:
+		void annouce(void);
 
-		void annouce() ;
 	private:
 		std::string	_name;
 };
