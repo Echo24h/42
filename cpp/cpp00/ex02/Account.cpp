@@ -1,11 +1,15 @@
 #include "Account.hpp"
 #include <iostream>
+#include <ctime>
+#include <iomanip>
+
 
 // static variables initialization
 int	Account::_nbAccounts = 0;
 int	Account::_totalAmount = 0;
 int	Account::_totalNbDeposits = 0;
 int	Account::_totalNbWithdrawals = 0;
+
 
 // constructor(s)
 Account::Account(int initial_deposit) {
@@ -24,6 +28,7 @@ Account::Account(int initial_deposit) {
 		<< "amount:" << this->_amount << ";created\n";
 }
 
+
 // destructor
 Account::~Account(void) {
 	Account::_nbAccounts--;
@@ -34,11 +39,13 @@ Account::~Account(void) {
 		<< "closed\n";
 }
 
+
 // static member functions
 int		Account::getNbAccounts( void )		{ return (Account::_nbAccounts); }
 int		Account::getTotalAmount( void )		{ return (Account::_totalAmount); }
 int		Account::getNbDeposits( void )		{ return (Account::_totalNbDeposits); }
 int		Account::getNbWithdrawals( void )	{ return (Account::_totalNbWithdrawals); }
+
 
 void	Account::displayAccountsInfos( void ) {
 	Account::_displayTimestamp();
@@ -48,6 +55,7 @@ void	Account::displayAccountsInfos( void ) {
 		<< "deposits:" << Account::_totalNbDeposits << ";"
 		<< "withdrawals:" << Account::_totalNbWithdrawals << "\n";
 }
+
 
 // member functions
 void	Account::makeDeposit( int deposit ) {
@@ -65,6 +73,7 @@ void	Account::makeDeposit( int deposit ) {
 		<< "amount:" << this->_amount << ";"
 		<< "nb_deposits:" << this->_nbDeposits << "\n";
 }
+
 
 bool	Account::makeWithdrawal( int withdrawal ) {
 	Account::_displayTimestamp();
@@ -91,9 +100,11 @@ bool	Account::makeWithdrawal( int withdrawal ) {
 	}
 }
 
+
 int		Account::checkAmount( void ) const {
 	return (this->_amount);
 }
+
 
 void	Account::displayStatus( void ) const {
 	Account::_displayTimestamp();
@@ -104,7 +115,10 @@ void	Account::displayStatus( void ) const {
 		<< "withdrawals:" << this->_nbWithdrawals << "\n";
 }
 
+
 // private static member functions
 void	Account::_displayTimestamp( void ) {
-	std::cout << "[19920104_091532]";
+	time_t t = time(nullptr);
+	std::tm * time = std::localtime(&t);
+	std::cout << "[" << std::put_time(time, "%Y%m%d %H%M%S") << "]";
 }
