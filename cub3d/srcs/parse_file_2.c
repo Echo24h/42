@@ -1,26 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   parse_file_2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/01 11:04:40 by ydanset           #+#    #+#             */
-/*   Updated: 2022/06/01 11:49:45 by jbettini         ###   ########.fr       */
+/*   Created: 2022/06/01 11:04:42 by ydanset           #+#    #+#             */
+/*   Updated: 2022/06/01 12:27:10 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	main(int ac, char **av)
+int	valide_file_name(char *filename)
 {
-	t_var	v;
+	int		i;
+	int		j;
+	char	*tmp;
 
-	if (!av || !*av || parse(&v, av[1]))
-		return (1);
-	if (init_game(&v))
-		return (1);
-	set_hooks(&v);
-	mlx_loop(v.mlx);
-	return (0);
+	tmp = ".cub";
+	j = ft_strlen(tmp);
+	i = ft_strlen(filename);
+	if (i < 4)
+		return (0);
+	else if (!filename[i])
+	{
+		while (i && j)
+		{
+			if (filename[i] != tmp[j])
+				return (0);
+			i--;
+			j--;
+		}
+	}
+	return (1);
 }

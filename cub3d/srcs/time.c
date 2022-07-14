@@ -1,26 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/01 11:04:40 by ydanset           #+#    #+#             */
-/*   Updated: 2022/06/01 11:49:45 by jbettini         ###   ########.fr       */
+/*   Created: 2022/06/01 11:04:50 by ydanset           #+#    #+#             */
+/*   Updated: 2022/06/01 11:04:51 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	main(int ac, char **av)
+long	get_time(void)
 {
-	t_var	v;
+	long			ms;
+	struct timeval	time;
 
-	if (!av || !*av || parse(&v, av[1]))
-		return (1);
-	if (init_game(&v))
-		return (1);
-	set_hooks(&v);
-	mlx_loop(v.mlx);
-	return (0);
+	if (gettimeofday(&time, NULL) == -1)
+		return (-1);
+	ms = time.tv_sec * 1000;
+	ms += time.tv_usec * 1e-3;
+	return (ms);
+}
+
+long	time_diff(long start, long end)
+{
+	return (end - start);
 }

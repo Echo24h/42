@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/01 11:04:40 by ydanset           #+#    #+#             */
-/*   Updated: 2022/06/01 11:49:45 by jbettini         ###   ########.fr       */
+/*   Created: 2022/06/01 11:04:47 by ydanset           #+#    #+#             */
+/*   Updated: 2022/06/01 11:26:53 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	main(int ac, char **av)
+int	parse(t_var *v, char *map_file)
 {
-	t_var	v;
-
-	if (!av || !*av || parse(&v, av[1]))
+	if (parse_file(v, map_file))
 		return (1);
-	if (init_game(&v))
-		return (1);
-	set_hooks(&v);
-	mlx_loop(v.mlx);
 	return (0);
 }

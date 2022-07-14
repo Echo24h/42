@@ -63,6 +63,8 @@ SRC			=	ft_memset.c		\
 				ft_lstdelone.c		\
 				ft_lstiter.c		\
 				ft_lstmap.c			\
+				ft_join_and_free.c	\
+				ft_base.c \
 
 OBJ				=	$(SRC:%.c=%.o)
 OBJ_PFX			=	$(addprefix $(OBJ_DIR)/, $(OBJ))

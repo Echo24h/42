@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 11:52:56 by ydanset           #+#    #+#             */
-/*   Updated: 2021/12/17 17:53:06 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/06/01 13:18:41 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
 
 typedef struct s_list
 {
@@ -23,6 +24,13 @@ typedef struct s_list
 	struct s_list	*next;
 }				t_list;
 
+void			ft_putendl_strs(char **strs);
+size_t			ft_strslen(char **s);
+int				ft_is_whitespace(int c);
+void			ft_putstrs(char **strs);
+char			*ft_join_free_ss(char *s1, char *s2);
+char			*ft_join_free_s2(char *s1, char *s2);
+char			*ft_join_free_s1(char *s1, char *s2);
 void			*ft_memset(void *s, int c, size_t n);
 void			ft_bzero(void *s, size_t n);
 void			*ft_memcpy(void *dest, const void *src, size_t n);
@@ -66,7 +74,7 @@ void			ft_lstadd_back(t_list **alst, t_list *new);
 void			ft_lstdelone(t_list *lst, void (*del)(void *));
 void			ft_lstclear(t_list **lst, void (*del)(void *));
 void			ft_lstiter(t_list *lst, void (*f)(void *));
-t_list			*ft_lstmap(t_list *lst, void *(*f)(void *),
+t_list			*ft_lstmap(t_list *lst, void *(*f)(void *), \
 					void (*del)(void *));
 void			ft_putstr(char *str);
 void			ft_putchar(char c);
@@ -74,5 +82,9 @@ long long int	ft_atoi_long_long(const char *str);
 int				is_number(char *s);
 char			*get_next_line(int fd);
 int				ft_printf(const char *format, ...);
+char			**ft_lst_to_dpt(t_list *lst);
+void			ft_free_strs(char **strs);
+char			*ft_itoa_base(unsigned long long nb, char *base);
+int				ft_atoi_base(const char *str, char *base);
 
 #endif

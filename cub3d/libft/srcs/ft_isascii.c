@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 12:07:37 by ydanset           #+#    #+#             */
-/*   Updated: 2021/10/18 13:03:13 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/06/01 13:16:05 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,14 @@
 int	ft_isascii(int c)
 {
 	if (c >= 0 && c <= 127)
+		return (1);
+	return (0);
+}
+
+int	ft_is_whitespace(int c)
+{
+	if (c == '\v' || c == '\n' || c == '\t'
+		|| c == '\r' || c == '\f' || c == ' ')
 		return (1);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 17:58:44 by ydanset           #+#    #+#             */
-/*   Updated: 2021/12/17 18:02:22 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/20 16:41:06 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,14 @@ char	*get_next_line(int fd)
 {
 	char	c;
 	char	*line;
-	int		n;
 
-	line = NULL;
-	while ((n = read(fd, &c, 1)) > 0 && c != '\n')
-	{
-		line = ft_append_char(line, c);
-		if (!line)
-			return (NULL);
-	}
-	if (n > 0)
-	{
-		line = ft_append_char(line, c);
-		if (!line)
-			return (NULL);
-	}
-	if (n == -1)
+	if (read(fd, &c, 0) == -1)
 		return (NULL);
+	line = NULL;
+	c = 'J';
+	while (read(fd, &c, 1) > 0 && c != '\n')
+		line = ft_append_char(line, c);
+	if (!line && c == '\n')
+		return (ft_strdup(""));
 	return (line);
 }

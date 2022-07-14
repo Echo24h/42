@@ -1,26 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/01 11:04:40 by ydanset           #+#    #+#             */
-/*   Updated: 2022/06/01 11:49:45 by jbettini         ###   ########.fr       */
+/*   Created: 2022/06/01 11:04:37 by ydanset           #+#    #+#             */
+/*   Updated: 2022/06/01 13:05:33 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	main(int ac, char **av)
+void	draw_circle(t_img *img, int x, int y, int radius)
 {
-	t_var	v;
+	int	i;
+	int	j;
+	int	dist;
 
-	if (!av || !*av || parse(&v, av[1]))
-		return (1);
-	if (init_game(&v))
-		return (1);
-	set_hooks(&v);
-	mlx_loop(v.mlx);
-	return (0);
+	i = 0;
+	while (i < W)
+	{
+		j = 0;
+		while (j < H)
+		{
+			dist = (x - i) * (x - i) + (y - j) * (y - j);
+			if (dist <= radius * radius + 4)
+				put_pixel(img, i, j, INDIAN_RED);
+			if (dist >= radius * radius - 4 && dist <= radius * radius + 4)
+				put_pixel(img, i, j, INDIAN_RED);
+			j++;
+		}
+		i++;
+	}
 }
