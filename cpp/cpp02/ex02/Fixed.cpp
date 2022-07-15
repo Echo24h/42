@@ -72,7 +72,7 @@ Fixed &	Fixed::operator++(void) {
 
 Fixed	Fixed::operator++(int) {
 	Fixed	tmp(*this);
-	operator++();
+	this->_bits++;
 	return (tmp);
 }
 
@@ -83,7 +83,7 @@ Fixed &	Fixed::operator--(void) {
 
 Fixed	Fixed::operator--(int) {
 	Fixed	tmp(*this);
-	operator--();
+	this->_bits--;
 	return (tmp);
 }
 

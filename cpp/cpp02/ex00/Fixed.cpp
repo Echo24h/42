@@ -1,6 +1,8 @@
 #include "Fixed.hpp"
 #include <iostream>
 
+int const	Fixed::_nbBitsFrac = 8;
+
 Fixed::Fixed(void) {
 	std::cout << "Default constructor called\n";
 	this->_bits = 0;

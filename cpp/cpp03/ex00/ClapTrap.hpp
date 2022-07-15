@@ -8,8 +8,11 @@ class ClapTrap {
 		ClapTrap(std::string name);
 		ClapTrap(ClapTrap const & src);
 		~ClapTrap(void);
+	
+	public:
 		ClapTrap &	operator=(ClapTrap const & src);
 
+	public:
 		void	attack(const std::string& target);
 		void	takeDamage(unsigned int amount);
 		void	beRepaired(unsigned int amount);
@@ -20,6 +23,8 @@ class ClapTrap {
 		int			_pe;
 		int			_attackDmg;
 
+	private:
+		ClapTrap(void);
 		bool	is_alive();
 		bool	has_energy();
 };

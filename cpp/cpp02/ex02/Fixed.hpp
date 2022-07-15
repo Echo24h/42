@@ -10,6 +10,8 @@ class Fixed {
 		Fixed(float const f);
 		Fixed(Fixed const & src);
 		~Fixed(void);
+	
+	public:
 		Fixed &	operator=(Fixed const & ros);
 		Fixed	operator+(Fixed const & ros);
 		Fixed	operator-(Fixed const & ros);
@@ -26,12 +28,14 @@ class Fixed {
 		bool	operator>(Fixed const & ros);
 		bool	operator>=(Fixed const & ros);
 	
+	public:
 		int 			getRawBits(void) const;
 		void 			setRawBits(int const raw);
 		float 			toFloat(void) const;
 		int 			toInt(void) const;
 		void			showRange(void) const;
 
+	public:
 		static Fixed	min(Fixed & x1, Fixed & x2);
 		static Fixed	min(Fixed const & x1, Fixed const & x2);
 		static Fixed	max(Fixed & x1, Fixed & x2);

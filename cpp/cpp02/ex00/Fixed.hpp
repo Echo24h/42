@@ -10,12 +10,13 @@ class Fixed {
 		~Fixed(void);
 		Fixed &	operator=(Fixed const & src);
 	
+	public:
 		int getRawBits(void) const;
 		void setRawBits(int const raw);
 
 	private:
 		int					_bits;
-		static int const	_nbBitsFrac = 8;
+		static int const	_nbBitsFrac;
 };
 
 #endif

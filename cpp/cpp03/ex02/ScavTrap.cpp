@@ -15,6 +15,7 @@ ScavTrap::ScavTrap(std::string const name) {
 }
 
 ScavTrap::ScavTrap(ScavTrap const & src) {
+	(void)src;
 	std::cout << "ScavTrap copy constructor called\n";
 }
 
@@ -22,7 +23,8 @@ ScavTrap::~ScavTrap(void) {
 	std::cout << "ScavTrap destructor called\n";
 }
 
-ScavTrap &	ScavTrap::operator=(ScavTrap const & ros) {
+ScavTrap &	ScavTrap::operator=(ScavTrap const & rhs) {
+	(void)rhs;
 	return (*this);
 }
 

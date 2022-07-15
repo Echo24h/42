@@ -15,6 +15,7 @@ FragTrap::FragTrap(std::string const name) {
 }
 
 FragTrap::FragTrap(FragTrap const & src) {
+	(void)src;
 	std::cout << "FragTrap copy constructor called\n";
 }
 
@@ -22,7 +23,8 @@ FragTrap::~FragTrap(void) {
 	std::cout << "FragTrap destructor called\n";
 }
 
-FragTrap &	FragTrap::operator=(FragTrap const & ros) {
+FragTrap &	FragTrap::operator=(FragTrap const & rhs) {
+	(void)rhs;
 	return (*this);
 }
 

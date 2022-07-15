@@ -3,7 +3,6 @@
 #include "Fixed.hpp"
 
 int main( void ) {
-	std::cout << t << std::endl;
 	Fixed a;
 	Fixed const b( 10 );
 	Fixed const c( 42.42f );
