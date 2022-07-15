@@ -7,6 +7,7 @@ Cat::Cat(void) {
 }
 
 Cat::Cat(Cat const & src) {
+	(void)src;
 	std::cout << "Cat copy constructor\n";
 }
 
@@ -15,6 +16,7 @@ Cat::~Cat(void) {
 }
 
 Cat &	Cat::operator=(Cat const & src) {
+	(void)src;
 	return (*this);
 }
 

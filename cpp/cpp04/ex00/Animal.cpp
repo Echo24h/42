@@ -3,6 +3,7 @@
 
 Animal::Animal(void) {
 	std::cout << "Animal default constructor\n";
+	this->type = "";
 }
 
 Animal::Animal(std::string const type) {

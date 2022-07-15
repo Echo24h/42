@@ -12,7 +12,9 @@ class Brain {
 		~Brain(void);
 		Brain &	operator=(Brain const & src);
 	
+	public:
 		void			showIdea(int const index) const;
+		void			addIdea(std::string const idea);
 
 	protected:
 		std::string	ideas[100];

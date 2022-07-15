@@ -4,7 +4,36 @@
 #include "Cat.hpp"
 
 int	main(int ac, char *av[]) {
+	(void)ac;
+	(void)av;
 	Animal* ptr = new Dog;
+	ptr->makeSound();
 	delete ptr;
+
+	// ex01 main
+	std::cout << std::endl;
+	Animal * animals[2];
+
+	for (int i = 0; i < 2; i++) {
+		if (i % 2) {
+			animals[i] = new Dog();
+		} else {
+			animals[i] = new Cat();
+		}
+	}
+
+	for (int i = 0; i < 2; i++) {
+		delete animals[i];
+	}
+
+	Dog d;
+	for (int i = 0; i < 1; i++) {
+		d.showIdea(i);
+	}
+	
+	Dog g = d;
+	for (int i = 0; i < 1; i++) {
+		g.showIdea(i);
+	}
 	return (0);
 }

@@ -13,12 +13,12 @@ Cat::Cat(Cat const & src) {
 }
 
 Cat::~Cat(void) {
-	delete this->brn;
+	delete (this->brn);
 	std::cout << "Cat destructor\n";
 }
 
 Cat &	Cat::operator=(Cat const & src) {
-	this->brn = src.brn;
+	this->brn = new Brain(*src.brn);
 	return (*this);
 }
 

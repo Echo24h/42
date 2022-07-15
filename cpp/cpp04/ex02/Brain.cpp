@@ -8,6 +8,7 @@ Brain::Brain(void) {
 
 Brain::Brain(Brain const & src) {
 	std::cout << "Brain copy constructor\n";
+	*this = src;
 }
 
 Brain::~Brain(void) {

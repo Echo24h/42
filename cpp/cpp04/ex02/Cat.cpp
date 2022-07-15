@@ -18,7 +18,7 @@ Cat::~Cat(void) {
 }
 
 Cat &	Cat::operator=(Cat const & src) {
-	this->brn = src.brn;
+	this->brn = new Brain(*src.brn);
 	return (*this);
 }
 

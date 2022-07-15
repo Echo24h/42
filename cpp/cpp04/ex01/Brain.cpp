@@ -8,6 +8,7 @@ Brain::Brain(void) {
 
 Brain::Brain(Brain const & src) {
 	std::cout << "Brain copy constructor\n";
+	*this = src;
 }
 
 Brain::~Brain(void) {
@@ -25,4 +26,13 @@ void	Brain::showIdea(int const index) const {
 	if (index < 0 || index >= 100)
 		return;
 	std::cout << this->ideas[index] << std::endl;
+}
+
+void	Brain::addIdea(std::string const idea) {
+	static int index = 1;
+
+	if (index == 100) {
+		index = 0;
+	}
+	this->ideas[index++] = idea;
 }
