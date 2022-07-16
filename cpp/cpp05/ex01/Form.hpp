@@ -13,11 +13,23 @@ class Form {
 		~Form(void);
 		Form &	operator=(Form const & src);
 
+	public:
 		std::string		getName(void) const;
 		bool			getIsSigned(void) const;
 		int				getGradeReqToSign(void) const;
 		int				getGradeReqToExec(void) const;
 		void			beSigned(Bureaucrat const & src);
+
+	public:
+		class GradeTooLowException: public std::exception {
+			public:
+				const char * what() const throw() { return ("grade is too low"); };
+		};
+
+		class GradeTooHighException: public std::exception {
+			public:
+				const char * what() const throw() { return ("grade is too high"); };
+		};
 
 	private:
 		std::string const	name;

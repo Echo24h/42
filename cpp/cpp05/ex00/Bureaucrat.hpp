@@ -2,6 +2,7 @@
 #define _Bureaucrat_hpp_
 
 #include <iostream>
+#include <exception>
 
 class Bureaucrat {
 	public:
@@ -9,12 +10,24 @@ class Bureaucrat {
 		Bureaucrat(std::string const name, int const grade) ;
 		Bureaucrat(Bureaucrat const & src);
 		~Bureaucrat(void);
-		Bureaucrat &	operator=(Bureaucrat const & src);
+		Bureaucrat & operator=(Bureaucrat const & src);
 	
+	public:
 		std::string	getName(void) const;
 		int			getGrade(void) const;
 		void		incrGrade(void);
 		void		decrGrade(void);
+
+	public:
+		class GradeTooLowException: public std::exception {
+			public:
+				const char * what() const throw() { return ("grade is too low"); };
+		};
+
+		class GradeTooHighException: public std::exception {
+			public:
+				const char * what() const throw() { return ("grade is too high"); };
+		};
 
 	private:
 		std::string const	name;

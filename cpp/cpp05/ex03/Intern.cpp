@@ -13,13 +13,7 @@ std::string	const	Intern::formsName[3] = {
 
 Intern::Intern(void) {}
 
-Intern::Intern(Intern const & src) {}
-
 Intern::~Intern(void) {}
-
-Intern &	Intern::operator=(Intern const & ros) {
-	return (*this);
-}
 
 Form *	Intern::makeForm(std::string const formName, std::string const target) const {
 	int	i = 0;

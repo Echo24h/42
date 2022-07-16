@@ -10,9 +10,9 @@ Bureaucrat::Bureaucrat(std::string const name, int const grade) :
 	name(name),
 	grade(grade) {
 	if (grade > 150) {
-		throw (std::runtime_error("Bureaucrat::GradeTooLowException"));
+		throw (Bureaucrat::GradeTooLowException());
 	} else if (grade < 1) {
-		throw (std::runtime_error("Bureaucrat::GradeTooHighException"));
+		throw (Bureaucrat::GradeTooHighException());
 	}
 }
 
@@ -42,7 +42,7 @@ int	Bureaucrat::getGrade(void) const {
 
 void	Bureaucrat::incrGrade(void) {
 	if (this->grade == 1) {
-		throw (std::runtime_error("Bureaucrat::GradeTooHighException"));
+		throw (Bureaucrat::GradeTooHighException());
 	} else {
 		this->grade--;
 	}
@@ -50,18 +50,18 @@ void	Bureaucrat::incrGrade(void) {
 
 void	Bureaucrat::decrGrade(void) {
 	if (this->grade == 150) {
-		throw (std::runtime_error("Bureaucrat::GradeTooLowException"));
+		throw (Bureaucrat::GradeTooLowException());
 	} else {
 		this->grade++;
 	}
 }
 
-void	Bureaucrat::signForm(Form & form) const {
+void	Bureaucrat::signForm(Form & frm) const {
 	try {
-		form.beSigned(*this);
-		std::cout << this->name << " signed " << form.getName() << std::endl;
+		frm.beSigned(*this);
+		std::cout << this->name << " signed " << frm.getName() << std::endl;
 	} catch (std::exception & e) {
-		std::cout << this->name << " couldn’t sign " << form.getName() << " because " << e.what() << std::endl;
+		std::cout << this->name << " couldn’t sign " << frm.getName() << " because " << e.what() << std::endl;
 	}
 }
 
@@ -73,3 +73,4 @@ void	Bureaucrat::executeForm(Form const & form) const {
 		std::cerr << e.what() << '\n';
 	}
 }
+

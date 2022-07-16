@@ -7,14 +7,16 @@
 class Intern {
 	public:
 		Intern(void);
-		Intern(Intern const & src);
-		~Intern(void);
-		Intern & operator=(Intern const & src);
 		
+		~Intern(void);
+
 		Form *	makeForm(std::string const formName, std::string const target) const;
 	
 	private:
 		static std::string const	formsName[3];
+
+		Intern(Intern const & src);
+		Intern & operator=(Intern const & src);
 };
 
 #endif

@@ -23,14 +23,17 @@ void	drawTree(std::string const filename, int widthBase, char c) {
 			o << " ";
 		}
 		nbLeaf += 2;
-		o << "\n";
+		o << std::endl;
 	}
-	for (int i = 0; i < indexMiddle; i++) {
-		o << " ";
-	}
-	o << "|";
-	for (int i = indexMiddle + 1; i < widthBase; i++) {
-		o << " ";
+	for (int j = 0; j < 5; j++) {
+		for (int i = 0; i < indexMiddle; i++) {
+			o << " ";
+		}
+		o << "|";
+		for (int i = indexMiddle + 1; i < widthBase; i++) {
+			o << " ";
+		}
+		o << std::endl;
 	}
 	o.close();
 }
@@ -39,7 +42,7 @@ class Bureaucrat;
 
 ShrubberyCreationForm::ShrubberyCreationForm(void) :
 	Form("Shrubbery", 145, 137),
-	target("default") {}
+	target("???") {}
 
 ShrubberyCreationForm::ShrubberyCreationForm(std::string const target) :
 	Form("Shrubbery", 145, 137),
@@ -57,7 +60,7 @@ ShrubberyCreationForm &	ShrubberyCreationForm::operator=(ShrubberyCreationForm c
 
 void	ShrubberyCreationForm::execute(Bureaucrat const & executor) const {
 	if (executor.getGrade() > this->getGradeReqToExec()) {
-		throw (std::runtime_error("ShrubberyCreationForm::GradeTooLowException"));
+		throw (Form::GradeTooLowException());
 	} else {
 		drawTree(this->target + "_shrubbery", 99, '*');
 	}

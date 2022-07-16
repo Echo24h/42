@@ -4,7 +4,7 @@
 
 int	main(int ac, char *av[]) {
 	try {
-		Form	ff("myForm", 1, 70);
+		Form	ff("myForm", 50, 70);
 		Bureaucrat	p1("john", 51);
 		
 		std::cout << p1 << std::endl;

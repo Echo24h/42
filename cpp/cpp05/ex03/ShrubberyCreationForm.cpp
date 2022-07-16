@@ -4,38 +4,6 @@
 #include "Form.hpp"
 #include "Bureaucrat.hpp"
 
-void	drawTree(std::string const filename, int widthBase, char c);
-
-class Bureaucrat;
-
-ShrubberyCreationForm::ShrubberyCreationForm(void) :
-	Form("Shrubbery", 145, 137),
-	target("default") {}
-
-ShrubberyCreationForm::ShrubberyCreationForm(std::string const target) :
-	Form("Shrubbery", 145, 137),
-	target(target) {}
-
-ShrubberyCreationForm::ShrubberyCreationForm(ShrubberyCreationForm const & src) :
-	Form(src.getName(), src.getGradeReqToSign(), src.getGradeReqToExec()),
-	target(src.target) {}
-
-ShrubberyCreationForm::~ShrubberyCreationForm(void) {}
-
-ShrubberyCreationForm &	ShrubberyCreationForm::operator=(ShrubberyCreationForm const & src) {
-	return (*this);
-}
-
-void	ShrubberyCreationForm::execute(Bureaucrat const & executor) const {
-	if (executor.getGrade() > this->getGradeReqToExec()) {
-		throw (std::runtime_error("ShrubberyCreationForm::GradeTooLowException"));
-	} else {
-		drawTree(this->target + "_shrubbery", 10, '*');
-	}
-}
-
-// --- non-member functions ---
-
 void	drawTree(std::string const filename, int widthBase, char c) {
 	std::ofstream	o;
 	o.open(filename);
@@ -55,15 +23,45 @@ void	drawTree(std::string const filename, int widthBase, char c) {
 			o << " ";
 		}
 		nbLeaf += 2;
-		o << "\n";
+		o << std::endl;
 	}
-	for (int i = 0; i < indexMiddle; i++) {
-		o << " ";
+	for (int j = 0; j < 5; j++) {
+		for (int i = 0; i < indexMiddle; i++) {
+			o << " ";
+		}
+		o << "|";
+		for (int i = indexMiddle + 1; i < widthBase; i++) {
+			o << " ";
+		}
+		o << std::endl;
 	}
-	o << "|";
-	for (int i = indexMiddle + 1; i < widthBase; i++) {
-		o << " ";
-	}
-	o << "\n";
 	o.close();
+}
+
+class Bureaucrat;
+
+ShrubberyCreationForm::ShrubberyCreationForm(void) :
+	Form("Shrubbery", 145, 137),
+	target("???") {}
+
+ShrubberyCreationForm::ShrubberyCreationForm(std::string const target) :
+	Form("Shrubbery", 145, 137),
+	target(target) {}
+
+ShrubberyCreationForm::ShrubberyCreationForm(ShrubberyCreationForm const & src) :
+	Form(src.getName(), src.getGradeReqToSign(), src.getGradeReqToExec()),
+	target(src.target) {}
+
+ShrubberyCreationForm::~ShrubberyCreationForm(void) {}
+
+ShrubberyCreationForm &	ShrubberyCreationForm::operator=(ShrubberyCreationForm const & src) {
+	return (*this);
+}
+
+void	ShrubberyCreationForm::execute(Bureaucrat const & executor) const {
+	if (executor.getGrade() > this->getGradeReqToExec()) {
+		throw (Form::GradeTooLowException());
+	} else {
+		drawTree(this->target + "_shrubbery", 99, '*');
+	}
 }

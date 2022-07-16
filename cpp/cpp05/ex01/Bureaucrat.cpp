@@ -10,9 +10,9 @@ Bureaucrat::Bureaucrat(std::string const name, int const grade) :
 	name(name),
 	grade(grade) {
 	if (grade > 150) {
-		throw (std::runtime_error("Bureaucrat::GradeTooLowException"));
+		throw (Bureaucrat::GradeTooLowException());
 	} else if (grade < 1) {
-		throw (std::runtime_error("Bureaucrat::GradeTooHighException"));
+		throw (Bureaucrat::GradeTooHighException());
 	}
 }
 
@@ -42,7 +42,7 @@ int	Bureaucrat::getGrade(void) const {
 
 void	Bureaucrat::incrGrade(void) {
 	if (this->grade == 1) {
-		throw (std::runtime_error("Bureaucrat::GradeTooHighException"));
+		throw (Bureaucrat::GradeTooHighException());
 	} else {
 		this->grade--;
 	}
@@ -50,7 +50,7 @@ void	Bureaucrat::incrGrade(void) {
 
 void	Bureaucrat::decrGrade(void) {
 	if (this->grade == 150) {
-		throw (std::runtime_error("Bureaucrat::GradeTooLowException"));
+		throw (Bureaucrat::GradeTooLowException());
 	} else {
 		this->grade++;
 	}

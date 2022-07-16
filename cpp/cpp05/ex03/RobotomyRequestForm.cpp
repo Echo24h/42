@@ -3,6 +3,8 @@
 #include "Form.hpp"
 #include "time.h"
 #include "Bureaucrat.hpp"
+#include <stdlib.h>
+#include <time.h>
 
 RobotomyRequestForm::RobotomyRequestForm(void) :
 	Form("Robotomy", 72, 45) {}
@@ -23,13 +25,13 @@ RobotomyRequestForm &	RobotomyRequestForm::operator=(RobotomyRequestForm const &
 
 void	RobotomyRequestForm::execute(Bureaucrat const & executor) const {
 	if (executor.getGrade() > this->getGradeReqToExec()) {
-		throw (std::runtime_error("RobotomyRequestForm::GradeTooLowException"));
+		throw (Form::GradeTooLowException());
 	} else {
-		std::cout << "*sale bruit de perceuse*\n";
+		srand(time(nullptr));
 		if (rand() % 2) {
-			std::cout << this->target << " has been robotized\n";
+			std::cout << this->target << "has been robotomized" << std::endl;
 		} else {
-			std::cout << "failure: " << this->target << " could not be robotized\n";
+			std::cout << this->target << "could not been robotomized" << std::endl;
 		}
 	}
 }
