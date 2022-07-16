@@ -6,28 +6,23 @@ int const	Fixed::_nbBitsFracPart = 8;
 
 // --- constructor ---
 Fixed::Fixed(void) {
-	std::cout << "Default constructor called\n";
 	this->_bits = 0;
 }
 
 Fixed::Fixed(int const x) {
-	std::cout << "Int constructor called\n";
 	this->_bits = x << this->_nbBitsFracPart;
 }
 
 Fixed::Fixed(float const f) {
-	std::cout << "Float constructor called\n";
 	this->_bits = roundf(f * (1 << this->_nbBitsFracPart));
 }
 
 Fixed::Fixed(Fixed const & src) {
-	std::cout << "Copy constructor called\n";
 	*this = src;
 }
 
 // --- destructor ---
 Fixed::~Fixed(void) {
-	std::cout << "Destructor called\n";
 }
 
 // --- operator ---
