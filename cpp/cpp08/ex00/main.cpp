@@ -15,7 +15,7 @@ int	main(int ac, char *av[]) {
 	v.push_back(8);
 	v.push_back(1);
 	try {
-		int x = easyfind(v, 10);
+		int x = easyfind(v, 5);
 		std::cout << x << std::endl;
 	} catch (std::runtime_error & e) {
 		std::cout << e.what() << std::endl;

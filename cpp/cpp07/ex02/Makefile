@@ -3,7 +3,6 @@ CFLAGS		=	-Wall -Wextra -Werror -std=c++98
 NAME		=	prog
 
 SRCS		=	main.cpp	\
-				Array.cpp	\
 
 OBJS		=	$(SRCS:%.cpp=%.o)
 

@@ -3,7 +3,7 @@
 
 template<typename T>
 void print(T val) {
-    std::cout << val;
+    std::cout << val << std::endl;
 }
 
 int	main(int ac, char *av[]) {

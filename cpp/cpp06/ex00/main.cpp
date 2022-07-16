@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
+#include <iomanip>
 
 enum literalType {
 	INVALID_T,
@@ -149,8 +150,6 @@ void convert(double dVal) {
 		std::cout << ".0";
 	std::cout << std::endl;
 }
-
-#include <iomanip>
 
 int	main(int ac, char *av[]) {
 	(void)ac;

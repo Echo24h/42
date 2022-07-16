@@ -1,3 +1,5 @@
+#include <algorithm>
+
 template<typename Container>
 int & easyfind(Container ctnr, int toFind) {
 	typename Container::iterator it;
