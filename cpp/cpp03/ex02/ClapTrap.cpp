@@ -3,6 +3,10 @@
 
 ClapTrap::ClapTrap(void) {
 	std::cout << "ClapTrap default constructor called\n";
+	this->name = "unknown";
+	this->pv = 10;
+	this->pe = 10;
+	this->attackDmg = 0;
 }
 
 ClapTrap::ClapTrap(std::string const name) {

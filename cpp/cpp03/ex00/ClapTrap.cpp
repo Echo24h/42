@@ -1,12 +1,12 @@
 #include "ClapTrap.hpp"
 #include <iostream>
 
-ClapTrap::ClapTrap(std::string name) :
-	_name(name),
-	_pv(10),
-	_pe(10),
-	_attackDmg(0) {
+ClapTrap::ClapTrap(std::string name) {
 	std::cout << "constructor called\n";
+	this->_name = "unknown";
+	this->_pv = 10;
+	this->_pe = 10;
+	this->_attackDmg = 0;
 }
 
 ClapTrap::ClapTrap(ClapTrap const & src) {
