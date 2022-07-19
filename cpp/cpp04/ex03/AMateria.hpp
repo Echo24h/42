@@ -2,7 +2,8 @@
 #define _AMateria_hpp_
 
 #include <iostream>
-#include "ICharacter.hpp"
+
+class ICharacter;
 
 class AMateria
 {
@@ -12,13 +13,13 @@ class AMateria
 	public:
 		AMateria(std::string const & type);
 		AMateria(AMateria const & src);
-		AMateria::~AMateria(void);
+		virtual ~AMateria(void);
 
-		AMateria & AMateria::operator=(AMateria const & rhs);
+		AMateria &	operator=(AMateria const & rhs);
 
-		std::string const & getType(void) const;
-		virtual AMateria * clone(void) const = 0;
-		virtual void use(ICharacter& target);
+		std::string const &	getType(void) const;
+		virtual AMateria *	clone(void) const = 0;
+		virtual void		use(ICharacter& target);
 };
 
 #endif

@@ -2,16 +2,17 @@
 #define _Cure_hpp_
 
 #include <iostream>
+#include "AMateria.hpp"
 
-class Cure {
+class Cure: public AMateria {
 	public:
 		Cure(void);
 		Cure(Cure const & src);
 		~Cure(void);
 		Cure & operator=(Cure const & rhs);
 	
-	private:
-	
+		AMateria * 	clone(void) const;
+		void		use(ICharacter& target);
 };
 
 #endif

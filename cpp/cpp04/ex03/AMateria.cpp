@@ -5,7 +5,8 @@ AMateria::AMateria(std::string const & type) : type(type) {}
 
 AMateria::AMateria(AMateria const & src) {
 	(void)src;
-	*this = src;}
+	*this = src;
+}
 
 AMateria::~AMateria(void) {}
 

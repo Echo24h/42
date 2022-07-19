@@ -4,6 +4,10 @@ NAME		=	prog
 
 SRCS		=	main.cpp	\
 				AMateria.cpp	\
+				Cure.cpp	\
+				Ice.cpp	\
+				MateriaSource.cpp	\
+				Character.cpp	\
 
 OBJS		=	$(SRCS:%.cpp=%.o)
 

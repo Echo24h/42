@@ -11,8 +11,8 @@ class Ice: public AMateria {
 		~Ice(void);
 		Ice & operator=(Ice const & rhs);
 	
-	private:
-	
+		AMateria * 	clone(void) const;
+		void		use(ICharacter& target);
 };
 
 #endif
