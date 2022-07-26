@@ -4,24 +4,41 @@
 #include <vector>
 #include "vector.hpp"
 #include <iterator>
+#include <algorithm>
+
+template <typename T>
+void print(T const val) {
+    std::cout << val;
+}
 
 class Test {
     public:
         int         x;
         int         y;
+
+        Test(void) {
+            std::cout << "constructor\n";
+        }
+
+        Test(Test const & src) {
+            this->x = src.x;
+            this->y = src.y;
+            std::cout << "copy constructor\n";
+        }
+
+        ~Test(void) {
+            std::cout << "destructor\n";
+        }
 };
 
 template <typename T>
 void myFunc(T & value) {
-    std::allocator<T> alloc;
     try {
+        std::allocator<T> alloc;
         size_t maxSize = alloc.max_size();
-        size_t smallerSize = maxSize / 4;
-        std::cout << "maxSize: " << maxSize << std::endl;
-        std::cout << "smallerSize: " << smallerSize << std::endl;
         typename std::allocator<T>::pointer ptr = alloc.allocate(sizeof(value));
         alloc.construct(ptr, value);
-        *ptr = value;
+        //*ptr = value;
         std::cout << ptr->x << ";" << ptr->y << std::endl;
         alloc.destroy(ptr);
         alloc.deallocate(ptr, sizeof(value));
@@ -30,21 +47,16 @@ void myFunc(T & value) {
     }
 }
 
+void printInt(int const val) {
+    std::cout << val;
+}
+
 int main(int ac, char *av[]) {
     (void)ac;
     (void)av;
-
-    int x = 5;
     
-    Test t;
-    myFunc<Test>(t);
+    ft::vector<int> v(5, 3);
+    std::cout << v << std::endl;
     system("leaks prog | grep leaked");
     return (0);
 }
-
-/*
-4611686018427387904
-4611686018427387903
-
-1152921504606846975
-*/
