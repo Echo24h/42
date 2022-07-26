@@ -2,6 +2,7 @@
 #define _vector_hpp_
 
 #include <iostream>
+#include <exception>
 
 namespace ft {
 	template <typename T, typename Allocator = std::allocator<T> >
@@ -49,13 +50,7 @@ namespace ft {
 			// TODO
 			vector(vector const & src) {
 				std::cout << "vector constructor | vector(vector const & src) |" << std::endl;
-				this->_alloc = src._alloc;
-				this->~vector();
-				this->_alloc.allocate(src._size, this->_begin);
-				for (int i = 0; i < src._size; i++) {
-					this->_alloc.construct(this->_begin + i, *(src._begin + i));
-				}
-				this->_size = src._size;
+				*this = src;
 			}
 
 			// destructor
@@ -68,13 +63,27 @@ namespace ft {
 			}
 
 			// operator(s)
-			vector & operator=(vector const & rhs);
-
-			// member function(s)
-			pointer getPtr(void) {
-				return (this->_begin);
+			// strange destructor call, must talk about it
+			vector & operator=(vector const & rhs) {
+				this->_alloc = rhs._alloc;
+				this->_size = rhs._size;
+				this->~vector();
+				this->_alloc.allocate(rhs._size, this->_begin);
+				for (int i = 0; i < rhs._size; i++) {
+					this->_alloc.construct(this->_begin + i, *(rhs._begin + i));
+				}
+				return (*this);
 			}
 
+			reference operator[](size_type n) {
+				return (this->_begin + n);
+			}
+
+			const_reference operator[](size_type n) const {
+				return (this->_begin + n);
+			}
+
+			// member function(s)
 			iterator begin(void) {
 				return (this->_begin);
 			}
@@ -91,12 +100,122 @@ namespace ft {
 				return (this->_begin + this->_size);
 			}
 
-			friend std::ostream &	operator<<(std::ostream & ostrm, vector<T, Allocator> const & rhs);
- 
+			size_type size(void) const {
+				return (this->_size);
+			}
+
+			size_type max_size(void) const {
+				return (this->_alloc.max_size());
+			}
+
+			size_type capacity(void) const {
+				return (this->_capacity);
+			}
+
+			bool empty(void) const {
+				return (this->_size == 0 ? true : false);
+			}
+
+			reference at(size_type n) {
+				if (n >= this->_size) {
+					throw std::out_of_range("vector");
+				} else {
+					return (this->_begin + n);
+				}
+			}
+
+			const_reference at(size_type n) const {
+				if (n >= this->_size) {
+					throw std::out_of_range("vector");
+				} else {
+					return (this->_begin + n);
+				}
+			}
+
+			reference front(void) {
+				return (this->_begin);
+			}
+
+			const_reference front(void) const {
+				return (this->_begin);
+			}
+
+			reference back(void) {
+				return (this->_begin + this->_size - 1);
+			}
+
+			const_reference back(void) const {
+				return (this->_begin + this->_size - 1);
+			}
+
+			template <class InputIterator>
+  			void assign(InputIterator first, InputIterator last) {
+
+			}
+
+			void assign(size_type n, const value_type& val) {
+				
+			}
+
+			void push_back(const value_type& val) {
+		
+			}
+
+			void pop_back(void) {
+
+			}
+
+			iterator insert(iterator position, const value_type& val) {
+				return (iterator());
+			}
+
+			void insert(iterator position, size_type n, const value_type& val) {
+
+			}
+
+			template <class InputIterator>
+    		void insert(iterator position, InputIterator first, InputIterator last) {
+
+			}
+
+			iterator erase(iterator position) {
+				return (iterator());
+			}
+
+			iterator erase(iterator first, iterator last) {
+				return (iterator());
+			}
+
+			void swap(vector& x) {
+
+			}
+
+			void clear() {
+
+			}
+
+			allocator_type get_allocator(void) const {
+				return (this->_alloc);
+			}
+
+			// TODO
+			//reverse_iterator rbegin(void);
+			//const_reverse_iterator rbegin(void) const;
+			//reverse_iterator rend(void);
+			//const_reverse_iterator rend(void) const;
+			void resize(size_type n, value_type val = value_type());
+			
+			void reserve(size_type n);
+			
+			// friend(s)
+			template <typename _T, typename _Allocator>
+			friend std::ostream & operator<<(std::ostream &, vector<_T, _Allocator> const &);
+
 		private:
 			pointer 		_begin;
 			size_type		_size;
 			allocator_type	_alloc;
+			size_type		_capacity;
 	};
 
 	// non-member function(s)
@@ -117,13 +236,21 @@ namespace ft {
 
 	template <typename T, typename Allocator>
 	void swap(vector<T, Allocator> & x, vector<T, Allocator> & y);
-}
 
-template <typename T, typename Allocator>
-std::ostream &	operator<<(std::ostream & ostrm, vector<T, Allocator> const & rhs) {
-	for (int i = 0; i < rhs._size; i++) {
-		std::cout << *(rhs._begin + i);
+	template <typename T, typename Allocator>
+	std::ostream &	operator<<(std::ostream & ostrm, vector<T, Allocator> const & rhs) {
+		/*
+		for (int i = 0; i < rhs._size; i++) {
+			std::cout << *(rhs._begin + i);
+		}*/
+		return (ostrm);
 	}
+
+	/*
+	template <typename T, typename Allocator>
+	void ft::vector<T, Allocator>::foo(void) {
+		return ;
+	}*/
 }
 
 #endif

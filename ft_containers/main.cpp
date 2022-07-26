@@ -55,8 +55,14 @@ int main(int ac, char *av[]) {
     (void)ac;
     (void)av;
     
-    ft::vector<int> v(5, 3);
-    std::cout << v << std::endl;
-    system("leaks prog | grep leaked");
+    std::vector<int> v2(3, 5);
+    try {
+        std::cout << v2.at(800);
+    } catch (std::out_of_range & e) {
+        //std::cout << e.what() << std::endl;
+    }
+    //ft::vector<int> v(5, 3);
+    //std::cout << v << std::endl;
+    //system("leaks prog | grep leaked");
     return (0);
 }
