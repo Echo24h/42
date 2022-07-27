@@ -54,15 +54,15 @@ void printInt(int const val) {
 int main(int ac, char *av[]) {
     (void)ac;
     (void)av;
+
+    int x = 5;
+    std::size_t y = 3;
     
-    std::vector<int> v2(3, 5);
-    try {
-        std::cout << v2.at(800);
-    } catch (std::out_of_range & e) {
-        //std::cout << e.what() << std::endl;
-    }
-    //ft::vector<int> v(5, 3);
-    //std::cout << v << std::endl;
+    ft::vector<int> v(y, x);
+    std::vector<int> v2(y, x);
+    std::for_each(v2.begin(), v2.end(), &printInt);
+    std::cout << std::endl;
+    std::cout << v;
     //system("leaks prog | grep leaked");
     return (0);
 }

@@ -25,8 +25,9 @@ namespace ft {
 			explicit vector(allocator_type const & alloc = allocator_type()) {
 				std::cout << "vector constructor | vector(allocator_type const & alloc) |" << std::endl;
 				this->_alloc = alloc;
-				this->_ptr = nullptr;
+				this->_begin = nullptr;
 				this->_size = 0;
+				this->_capacity = 0;
 			}
 
 			// think about n = 0 or n > alloc.max_size()
@@ -34,14 +35,21 @@ namespace ft {
 				std::cout << "vector constructor | vector(size_type n, value_type const & val, allocator_type const & alloc) |" << std::endl;
 				this->_alloc = alloc;
 				this->_size = n;
-				this->_alloc.allocate(n, this->_begin);
+				this->_capacity = n;
+
+				try {
+					this->_begin = this->_alloc.allocate(n);
+				} catch (std::exception & e) {
+					throw (e);
+				}
+
 				for (int i = 0; i < n; i++) {
 					this->_alloc.construct(this->_begin + i, val);
 				}
 			}
 
 			// TODO
-			template <class InputIterator>
+			template <typename InputIterator>
 			vector(InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type()) {
 				std::cout << "vector constructor | vector(InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type()) |" << std::endl;
 				this->_alloc = alloc;
@@ -68,7 +76,7 @@ namespace ft {
 				this->_alloc = rhs._alloc;
 				this->_size = rhs._size;
 				this->~vector();
-				this->_alloc.allocate(rhs._size, this->_begin);
+				this->_begin = this->_alloc.allocate(rhs._size);
 				for (int i = 0; i < rhs._size; i++) {
 					this->_alloc.construct(this->_begin + i, *(rhs._begin + i));
 				}
@@ -186,8 +194,8 @@ namespace ft {
 				return (iterator());
 			}
 
-			void swap(vector& x) {
-
+			void swap(vector & x) {
+				
 			}
 
 			void clear() {
@@ -239,18 +247,16 @@ namespace ft {
 
 	template <typename T, typename Allocator>
 	std::ostream &	operator<<(std::ostream & ostrm, vector<T, Allocator> const & rhs) {
-		/*
+		std::cout << "size: " << rhs._size << std::endl;
+		std::cout << "capacity: " << rhs._capacity << std::endl;
+		std::cout << "begin: " << rhs._begin << std::endl;
+		std::cout << "tab: ";
 		for (int i = 0; i < rhs._size; i++) {
-			std::cout << *(rhs._begin + i);
-		}*/
+			std::cout << *(rhs._begin + i) << " ";
+		}
+		std::cout << std::endl;
 		return (ostrm);
 	}
-
-	/*
-	template <typename T, typename Allocator>
-	void ft::vector<T, Allocator>::foo(void) {
-		return ;
-	}*/
 }
 
 #endif
