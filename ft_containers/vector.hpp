@@ -4,6 +4,10 @@
 #include <iostream>
 #include <exception>
 
+/*
+	should i start by implementing iterators to use them in my functions to search through vector?
+*/
+
 namespace ft {
 	template <typename T, typename Allocator = std::allocator<T> >
 	class vector {
@@ -71,7 +75,6 @@ namespace ft {
 			}
 
 			// operator(s)
-			// strange destructor call, must talk about it
 			vector & operator=(vector const & rhs) {
 				this->_alloc = rhs._alloc;
 				this->_size = rhs._size;
@@ -158,7 +161,7 @@ namespace ft {
 
 			template <class InputIterator>
   			void assign(InputIterator first, InputIterator last) {
-
+				
 			}
 
 			void assign(size_type n, const value_type& val) {
@@ -166,7 +169,7 @@ namespace ft {
 			}
 
 			void push_back(const value_type& val) {
-		
+				
 			}
 
 			void pop_back(void) {
@@ -211,9 +214,32 @@ namespace ft {
 			//const_reverse_iterator rbegin(void) const;
 			//reverse_iterator rend(void);
 			//const_reverse_iterator rend(void) const;
-			void resize(size_type n, value_type val = value_type());
+
+			// use insert / erase
+			void resize(size_type n, value_type val = value_type()) {
+				if (n < this->_size) {
+
+				} else if (n > this->_size) {
+					if (n > this->_capacity) {
+
+					}
+				}
+			}
 			
-			void reserve(size_type n);
+			/*
+				need explicit throw msg
+			*/
+			void reserve(size_type n) {
+				if (n > this->max_size() - this->_size) {
+					throw (std::length_error(""));
+				} else if (n <= this->capacity) {
+					return ;
+				}
+
+				ft::vector<value_type, allocator_type> tmp(n);
+				//ft::swap(*this, tmp);
+				*this = tmp;
+			}
 			
 			// friend(s)
 			template <typename _T, typename _Allocator>
@@ -242,8 +268,11 @@ namespace ft {
 	template <typename T, typename Allocator>
 	bool operator>=(vector<T, Allocator> const & lhs, vector<T, Allocator> const & rhs);
 
+	// should i use assert()?
 	template <typename T, typename Allocator>
-	void swap(vector<T, Allocator> & x, vector<T, Allocator> & y);
+	void swap(vector<T, Allocator> & x, vector<T, Allocator> & y) {
+		;
+	}
 
 	template <typename T, typename Allocator>
 	std::ostream &	operator<<(std::ostream & ostrm, vector<T, Allocator> const & rhs) {

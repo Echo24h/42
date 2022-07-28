@@ -13,6 +13,8 @@ void print(T const val) {
 
 class Test {
     public:
+        typedef int type_t;
+
         int         x;
         int         y;
 
@@ -51,18 +53,55 @@ void printInt(int const val) {
     std::cout << val;
 }
 
+template <typename T>
+void    showInfos(T const & v) {
+    std::cout << "------------" << std::endl;
+    std::cout << "size: " << v.size() << std::endl;
+    std::cout << "capacity: " << v.capacity() << std::endl;
+    std::cout << "begin: " << &*(v.begin()) << std::endl;
+    std::cout << "tab: ";
+    std::for_each(v.begin(), v.end(), &printInt);
+    std::cout << std::endl;
+}
+
+
+/*
 int main(int ac, char *av[]) {
     (void)ac;
     (void)av;
 
-    int x = 5;
-    std::size_t y = 3;
+    std::vector<int> stdVec(10, 3);
+    ft::vector<int>  ftVec;
+
+    showInfos<std::vector<int> >(stdVec);
+    stdVec.resize(523, 7);
+    showInfos<std::vector<int> >(stdVec);
     
-    ft::vector<int> v(y, x);
-    std::vector<int> v2(y, x);
-    std::for_each(v2.begin(), v2.end(), &printInt);
-    std::cout << std::endl;
-    std::cout << v;
+    //std::cout << v;
     //system("leaks prog | grep leaked");
     return (0);
 }
+*/
+
+int main() {
+    unsigned int i;
+  std::vector<int> foo (3,100);   // three ints with a value of 100
+  std::vector<int> bar (5,200);   // five ints with a value of 200
+showInfos(foo);
+  showInfos(bar);
+  foo.swap(bar);
+
+  std::cout << "foo contains:";
+  for (std::vector<int>::iterator it = foo.begin(); it!=foo.end(); ++it)
+    std::cout << ' ' << *it;
+  std::cout << '\n';
+
+  std::cout << "bar contains:";
+  for (std::vector<int>::iterator it = bar.begin(); it!=bar.end(); ++it)
+    std::cout << ' ' << *it;
+  std::cout << '\n';
+  showInfos(foo);
+  showInfos(bar);
+  return (0);
+}
+
