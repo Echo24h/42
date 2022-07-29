@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <exception>
+#include <algorithm>
+#include "iterator.hpp"
 
 /*
 	should i start by implementing iterators to use them in my functions to search through vector?
@@ -21,7 +23,7 @@ namespace ft {
 			typedef typename allocator_type::size_type			size_type;
 			typedef	typename allocator_type::difference_type	difference_type;
 			typedef	pointer										iterator;
-			typedef	const_pointer								const_iterator;
+			typedef const_pointer								const_iterator;
 			// typedef											reverse_iterator
 			// typedef											const_reverse_iterator
 
@@ -53,11 +55,13 @@ namespace ft {
 			}
 
 			// TODO
+			/*
 			template <typename InputIterator>
 			vector(InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type()) {
 				std::cout << "vector constructor | vector(InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type()) |" << std::endl;
 				this->_alloc = alloc;
 			}
+			*/
 			
 			// TODO
 			vector(vector const & src) {
@@ -181,8 +185,8 @@ namespace ft {
 			}
 
 			void insert(iterator position, size_type n, const value_type& val) {
-
-			}
+				
+			} 
 
 			template <class InputIterator>
     		void insert(iterator position, InputIterator first, InputIterator last) {
@@ -198,11 +202,14 @@ namespace ft {
 			}
 
 			void swap(vector & x) {
-				
+				swap(*this, x);
 			}
 
-			void clear() {
-
+			void clear(void) {
+				for (int i = 0; i < this->_size; i++) {
+					this->_alloc.destroy(this->_begin + i);
+				}
+				this->_size = 0;
 			}
 
 			allocator_type get_allocator(void) const {
@@ -240,10 +247,13 @@ namespace ft {
 				//ft::swap(*this, tmp);
 				*this = tmp;
 			}
-			
+
 			// friend(s)
 			template <typename _T, typename _Allocator>
 			friend std::ostream & operator<<(std::ostream &, vector<_T, _Allocator> const &);
+
+			template <typename _T, typename _Allocator>
+			friend void swap(vector<_T, _Allocator> & x, vector<_T, _Allocator> & y);
 
 		private:
 			pointer 		_begin;
@@ -268,10 +278,16 @@ namespace ft {
 	template <typename T, typename Allocator>
 	bool operator>=(vector<T, Allocator> const & lhs, vector<T, Allocator> const & rhs);
 
-	// should i use assert()?
+	/*
+		should i use assert()?
+		should i swap pointers only?
+	*/
 	template <typename T, typename Allocator>
 	void swap(vector<T, Allocator> & x, vector<T, Allocator> & y) {
-		;
+		std::swap(x._begin, y._begin);
+		std::swap(x._size, y._size);
+		std::swap(x._capacity, y._capacity);
+		std::swap(x._alloc, y._alloc);
 	}
 
 	template <typename T, typename Allocator>
@@ -279,6 +295,7 @@ namespace ft {
 		std::cout << "size: " << rhs._size << std::endl;
 		std::cout << "capacity: " << rhs._capacity << std::endl;
 		std::cout << "begin: " << rhs._begin << std::endl;
+		std::cout << "allocator: " << &*(rhs._alloc) << std::endl;
 		std::cout << "tab: ";
 		for (int i = 0; i < rhs._size; i++) {
 			std::cout << *(rhs._begin + i) << " ";

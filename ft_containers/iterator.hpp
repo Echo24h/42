@@ -13,11 +13,11 @@ namespace ft {
 
 	template <typename Iterator>
 	struct iterator_traits {
-		typedef Iterator::difference_type	difference_type;
-		typedef Iterator::value_type		value_type;
-		typedef Iterator::pointer			pointer;
-		typedef Iterator::reference			reference;
-		typedef Iterator::iterator_category	iterator_category;
+		typedef typename Iterator::difference_type		difference_type;
+		typedef typename Iterator::value_type			value_type;
+		typedef typename Iterator::pointer				pointer;
+		typedef typename Iterator::reference			reference;
+		typedef typename Iterator::iterator_category	iterator_category;
 	};
 
 	template <typename T>
@@ -38,20 +38,55 @@ namespace ft {
 		typedef random_access_iterator_tag	iterator_category;
 	};
 
-	template <
-		typename Category,
-		typename T, 
-		typename Distance = ptrdiff_t,
-		typename Pointer = T *,
-		typename Reference = T &
-	>
-	struct iterator {
-		typedef T         value_type;
-		typedef Distance  difference_type;
-		typedef Pointer   pointer;
-		typedef Reference reference;
-		typedef Category  iterator_category;
+	/*
+	template <typename T>
+	struct random_access_iterator: public std::iterator<ft::random_access_iterator_tag, T> {
+		Iterator(pointer ptr) {
+			_ptr = ptr;
+		}
+
+		reference operator*() {
+			return (*(this->_ptr));
+		}
+
+		pointer operator->() {
+			return (this->_ptr);
+		}
+
+		Iterator & operator++(void) {
+			this->_ptr++;
+			return (*this);
+		}
+
+		Iterator operator++(int) {
+			Iterator tmp(*this);
+			this->_ptr++;
+			return (tmp);
+		}
+
+		Iterator & operator--(void) {
+			this->_ptr--;
+			return (*this);
+		}
+
+		Iterator operator--(int) {
+			Iterator tmp(*this);
+			this->_ptr--;
+			return (tmp);
+		}
+
+		friend bool operator==(Iterator const & a, Iterator const & b) {
+			return a._ptr == b._ptr;
+		}
+
+		friend bool operator!=(Iterator const & a, Iterator const & b) {
+			return a._ptr != b._ptr;
+		}  
+
+		private:
+			pointer _ptr;
 	};
+	*/
 }
 
 #endif

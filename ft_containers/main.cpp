@@ -22,6 +22,12 @@ class Test {
             std::cout << "constructor\n";
         }
 
+        Test(int const x, int const y) {
+            std::cout << "constructor x y\n";
+            this->x = x;
+            this->y = y;
+        }
+
         Test(Test const & src) {
             this->x = src.x;
             this->y = src.y;
@@ -32,6 +38,10 @@ class Test {
             std::cout << "destructor\n";
         }
 };
+
+void printTest(Test const & x) {
+    std::cout << x.x << "," << x.y << std::endl;
+}
 
 template <typename T>
 void myFunc(T & value) {
@@ -50,7 +60,7 @@ void myFunc(T & value) {
 }
 
 void printInt(int const val) {
-    std::cout << val;
+    std::cout << val << " ";
 }
 
 template <typename T>
@@ -85,23 +95,35 @@ int main(int ac, char *av[]) {
 
 int main() {
     unsigned int i;
-  std::vector<int> foo (3,100);   // three ints with a value of 100
-  std::vector<int> bar (5,200);   // five ints with a value of 200
-showInfos(foo);
-  showInfos(bar);
-  foo.swap(bar);
+    //std::vector<int> foo (3,100);   // three ints with a value of 100
+    //std::vector<int> bar (100000, 1);   // five ints with a value of 200
+    //ft::vector<int> foo (3,100);   // three ints with a value of 100
+    ft::vector<Test> bar(5, Test(3, 2));   // five ints with a value of 200
+    std::vector<Test> foo;
 
-  std::cout << "foo contains:";
-  for (std::vector<int>::iterator it = foo.begin(); it!=foo.end(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
+     std::cout << std::endl;
+    std::for_each(bar.begin(), bar.end(), &printTest);
+    std::cout << std::endl;
 
-  std::cout << "bar contains:";
-  for (std::vector<int>::iterator it = bar.begin(); it!=bar.end(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
-  showInfos(foo);
-  showInfos(bar);
+    //std::fill(bar.begin(), bar.end(), Test(8, 90));
+
+    std::copy(bar.begin(), bar.end(), back_inserter(foo));
+   // std::for_each(foo.begin(), foo.end(), &printTest);
+    //showInfos(foo);
+    //showInfos(bar);
+    //foo.swap(bar);
+    //bar.clear();
+    std::cout << std::endl;
+    std::for_each(foo.begin(), foo.end(), &printTest);
+    std::cout << std::endl;
+
+    std::cout << std::endl;
+    std::for_each(bar.begin(), bar.end(), &printTest);
+    std::cout << std::endl;
+    //ft::swap(foo, bar);
+
+    //showInfos(foo);
+    //showInfos(bar);
   return (0);
 }
 

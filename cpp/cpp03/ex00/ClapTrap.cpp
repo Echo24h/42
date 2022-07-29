@@ -3,7 +3,7 @@
 
 ClapTrap::ClapTrap(std::string name) {
 	std::cout << "constructor called\n";
-	this->_name = "unknown";
+	this->_name = name;
 	this->_pv = 10;
 	this->_pe = 10;
 	this->_attackDmg = 0;
