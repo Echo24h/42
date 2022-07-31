@@ -31,6 +31,7 @@ namespace ft {
 			// constructor(s)
 			explicit vector(allocator_type const & alloc = allocator_type()) {
 				std::cout << "vector constructor | vector(allocator_type const & alloc) |" << std::endl;
+
 				this->_alloc = alloc;
 				this->_data = nullptr;
 				this->_size = 0;
@@ -38,28 +39,28 @@ namespace ft {
 			}
 
 			// think about n = 0 or n > alloc.max_size()
+			// throw
 			explicit vector(size_type n, value_type const & val = value_type(), allocator_type const & alloc = allocator_type()) {
 				std::cout << "vector constructor | vector(size_type n, value_type const & val, allocator_type const & alloc) |" << std::endl;
+
 				this->_alloc = alloc;
-				this->_size = n;
+				this->_data = this->_alloc.allocate(n);
+				this->_construct_at_end(n, val);
 				this->_capacity = n;
+				this->_size = n;
 
-				try {
-					this->_data = this->_alloc.allocate(n);
-				} catch (std::exception & e) {
-					throw (e);
-				}
-
+				/*
 				for (int i = 0; i < n; i++) {
 					this->_alloc.construct(this->_data + i, val);
 				}
+				*/
 			}
 
 			// TODO
-			
 			template <typename InputIterator>
-			vector(InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type()) {
+			vector(typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type & alloc = allocator_type()) {
 				std::cout << "vector constructor | vector(InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type()) |" << std::endl;
+
 				this->_alloc = alloc;
 			}
 			
@@ -67,32 +68,31 @@ namespace ft {
 			// TODO
 			vector(vector const & src) {
 				std::cout << "vector constructor | vector(vector const & src) |" << std::endl;
+
 				*this = src;
 			}
 
 			// destructor
 			~vector(void) {
 				std::cout << "vector destructor" << std::endl;
+
 				for (int i = 0; i < this->_size; i++) {
 					this->_alloc.destroy(this->_data + i);
 				}
-				this->_alloc.deallocate(this->_data, this->_size);
+
+				this->_alloc.deallocate(this->_data, this->_capacity);
 			}
 
 			// operator(s)
+			// throw
 			vector & operator=(vector const & rhs) {
 				this->~vector();
-
-				try {
-					this->_data = this->_alloc.allocate(rhs._size);
-				} catch (std::exception & e) {
-					throw (e);
-				}
-
 				this->_alloc = rhs._alloc;
 				this->_size = rhs._size;
+				this->_data = this->_alloc.allocate(rhs._size);
+
 				for (int i = 0; i < rhs._size; i++) {
-					this->_alloc.construct(this->_data + i, *(rhs._data + i));
+					this->_alloc.construct(this->_data + i, rhs._data[i]);
 				}
 
 				return (*this);
@@ -228,6 +228,7 @@ namespace ft {
 				for (int i = 0; i < this->_size; i++) {
 					this->_alloc.destroy(this->_data + i);
 				}
+
 				this->_size = 0;
 			}
 
@@ -243,12 +244,18 @@ namespace ft {
 
 			// use insert / erase
 			void resize(size_type n, value_type val = value_type()) {
+				if (n == this->_size) {
+					return ;
+				}
+
 				if (n < this->_size) {
-
-				} else if (n > this->_size) {
-					if (n > this->_capacity) {
-
+					// erase last this->size - n els
+				} else {
+					if (n > this->capacity) {
+						// realloc
 					}
+
+					// append n - this->size els
 				}
 			}
 			
@@ -279,6 +286,25 @@ namespace ft {
 			size_type		_size;
 			allocator_type	_alloc;
 			size_type		_capacity;
+
+			// should i handle reallocation in this function?
+			void _construct_at_end(size_type n, const_reference val) {
+				std::cout << "in _construct_at_end\n";
+
+				pointer ptr = this->end();
+				for (int i = 0; i < n; i++) {
+					this->_alloc.construct(ptr + i, val);
+				}
+			}
+
+			void _destroy_at_end(size_type n) {
+				std::cout << "in _destroy_at_end\n";
+
+				pointer ptr = (n > this->_size) ? this->_data : this->end() - n;
+				for (; ptr != this->end(); ptr++) {
+					this->_alloc.destroy(ptr);
+				}
+			}
 	};
 
 	// non-member function(s)

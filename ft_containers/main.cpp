@@ -102,23 +102,26 @@ int bar() {
 template <typename T>
 struct remove_pointer {
     typedef T type;
-}
+};
 
 template <typename T>
 struct remove_pointer<T *> {
     typedef T type;
+};
+
+void doesThrow(void) {
+    throw (std::runtime_error("error"));
+}
+
+void test(void) {
+    int x = 5;
+    doesThrow();
+    std::cout << x << std::endl;
 }
 
 int main() {
-    unsigned int i;
-    
-    int x[bar()];
-    for (int i = 0; i < 4; i++)
-    {
-        std::cout << x[i] << " ";
-    }
-
-    std::cout << std::endl;
-    return (0);
+    ft::vector<int> v(5, 100);
+    //std::for_each(v.begin(), v.end(), &printInt);
+    std::cout << v << std::endl;
 }
 
