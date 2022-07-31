@@ -5,6 +5,8 @@
 #include "vector.hpp"
 #include <iterator>
 #include <algorithm>
+#include <type_traits>
+#include "type_traits.hpp"
 
 template <typename T>
 void print(T const val) {
@@ -93,37 +95,30 @@ int main(int ac, char *av[]) {
 }
 */
 
+int bar() {
+    return (4);
+}
+
+template <typename T>
+struct remove_pointer {
+    typedef T type;
+}
+
+template <typename T>
+struct remove_pointer<T *> {
+    typedef T type;
+}
+
 int main() {
     unsigned int i;
-    //std::vector<int> foo (3,100);   // three ints with a value of 100
-    //std::vector<int> bar (100000, 1);   // five ints with a value of 200
-    //ft::vector<int> foo (3,100);   // three ints with a value of 100
-    ft::vector<Test> bar(5, Test(3, 2));   // five ints with a value of 200
-    std::vector<Test> foo;
-
-     std::cout << std::endl;
-    std::for_each(bar.begin(), bar.end(), &printTest);
-    std::cout << std::endl;
-
-    //std::fill(bar.begin(), bar.end(), Test(8, 90));
-
-    std::copy(bar.begin(), bar.end(), back_inserter(foo));
-   // std::for_each(foo.begin(), foo.end(), &printTest);
-    //showInfos(foo);
-    //showInfos(bar);
-    //foo.swap(bar);
-    //bar.clear();
-    std::cout << std::endl;
-    std::for_each(foo.begin(), foo.end(), &printTest);
-    std::cout << std::endl;
+    
+    int x[bar()];
+    for (int i = 0; i < 4; i++)
+    {
+        std::cout << x[i] << " ";
+    }
 
     std::cout << std::endl;
-    std::for_each(bar.begin(), bar.end(), &printTest);
-    std::cout << std::endl;
-    //ft::swap(foo, bar);
-
-    //showInfos(foo);
-    //showInfos(bar);
-  return (0);
+    return (0);
 }
 

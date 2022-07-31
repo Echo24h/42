@@ -1,4 +1,4 @@
-CC			=	c++
+CC			=	c++ -g
 CFLAGS		=	-std=c++98 #-Wall -Wextra -Werror 
 NAME		=	prog
 
