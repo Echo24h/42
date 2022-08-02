@@ -19,30 +19,35 @@ class Test {
 
         int         x;
         int         y;
+        int         *w;
 
         Test(void) {
             std::cout << "constructor\n";
+            this->w = new int(5);
         }
 
         Test(int const x, int const y) {
             std::cout << "constructor x y\n";
             this->x = x;
             this->y = y;
+            this->w = new int(5);
         }
 
         Test(Test const & src) {
             this->x = src.x;
             this->y = src.y;
+            //this->w = src.w;
             std::cout << "copy constructor\n";
         }
 
         ~Test(void) {
             std::cout << "destructor\n";
+            delete this->w;
         }
 };
 
 void printTest(Test const & x) {
-    std::cout << x.x << "," << x.y << std::endl;
+    std::cout << x.x << "," << x.y << "," << *x.w << std::endl;
 }
 
 template <typename T>
@@ -121,7 +126,16 @@ void test(void) {
 
 int main() {
     ft::vector<int> v(5, 100);
-    //std::for_each(v.begin(), v.end(), &printInt);
-    std::cout << v << std::endl;
+    //Test t(1, 2);
+    //printTest(t);
+
+    std::cout << std::endl;
+
+    std::cout << v;
+    std::cout << std::endl;
+    v.myRealloc(10);
+    std::cout << v;
+    std::cout << std::endl;
+    system("leaks prog | grep leaked");
 }
 

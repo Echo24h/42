@@ -89,6 +89,7 @@ namespace ft {
 				this->~vector();
 				this->_alloc = rhs._alloc;
 				this->_size = rhs._size;
+				this->_capacity = rhs._capacity;
 				this->_data = this->_alloc.allocate(rhs._size);
 
 				for (int i = 0; i < rhs._size; i++) {
@@ -281,6 +282,10 @@ namespace ft {
 			template <typename _T, typename _Allocator>
 			friend void swap(vector<_T, _Allocator> & x, vector<_T, _Allocator> & y);
 
+			void myRealloc(size_type newCapacity) {
+				this->_realloc(newCapacity);
+			}
+
 		private:
 			pointer 		_data;
 			size_type		_size;
@@ -304,6 +309,24 @@ namespace ft {
 				for (; ptr != this->end(); ptr++) {
 					this->_alloc.destroy(ptr);
 				}
+			}
+
+			void _realloc(size_type newCapacity) {
+				vector tmp;
+
+				// allocate tmp
+				tmp._data = tmp._alloc.allocate(newCapacity);
+
+				// copy *this into tmp ; using insert or assign?
+				for (int i = 0; i < this->_size; i++) {
+					tmp._data[i] = this->_data[i];
+				}
+				tmp._size = this->_size;
+				tmp._capacity = newCapacity;
+
+				// delete *this
+				// *this = tmp
+				*this = tmp;
 			}
 	};
 
