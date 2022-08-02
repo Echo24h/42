@@ -5,6 +5,8 @@
 #include "vector.hpp"
 #include <iterator>
 #include <algorithm>
+#include <type_traits>
+#include "type_traits.hpp"
 
 template <typename T>
 void print(T const val) {
@@ -17,30 +19,35 @@ class Test {
 
         int         x;
         int         y;
+        int         *w;
 
         Test(void) {
             std::cout << "constructor\n";
+            this->w = new int(5);
         }
 
         Test(int const x, int const y) {
             std::cout << "constructor x y\n";
             this->x = x;
             this->y = y;
+            this->w = new int(5);
         }
 
         Test(Test const & src) {
             this->x = src.x;
             this->y = src.y;
+            //this->w = src.w;
             std::cout << "copy constructor\n";
         }
 
         ~Test(void) {
             std::cout << "destructor\n";
+            delete this->w;
         }
 };
 
 void printTest(Test const & x) {
-    std::cout << x.x << "," << x.y << std::endl;
+    std::cout << x.x << "," << x.y << "," << *x.w << std::endl;
 }
 
 template <typename T>
@@ -93,37 +100,42 @@ int main(int ac, char *av[]) {
 }
 */
 
+int bar() {
+    return (4);
+}
+
+template <typename T>
+struct remove_pointer {
+    typedef T type;
+};
+
+template <typename T>
+struct remove_pointer<T *> {
+    typedef T type;
+};
+
+void doesThrow(void) {
+    throw (std::runtime_error("error"));
+}
+
+void test(void) {
+    int x = 5;
+    doesThrow();
+    std::cout << x << std::endl;
+}
+
 int main() {
-    unsigned int i;
-    //std::vector<int> foo (3,100);   // three ints with a value of 100
-    //std::vector<int> bar (100000, 1);   // five ints with a value of 200
-    //ft::vector<int> foo (3,100);   // three ints with a value of 100
-    ft::vector<Test> bar(5, Test(3, 2));   // five ints with a value of 200
-    std::vector<Test> foo;
-
-     std::cout << std::endl;
-    std::for_each(bar.begin(), bar.end(), &printTest);
-    std::cout << std::endl;
-
-    //std::fill(bar.begin(), bar.end(), Test(8, 90));
-
-    std::copy(bar.begin(), bar.end(), back_inserter(foo));
-   // std::for_each(foo.begin(), foo.end(), &printTest);
-    //showInfos(foo);
-    //showInfos(bar);
-    //foo.swap(bar);
-    //bar.clear();
-    std::cout << std::endl;
-    std::for_each(foo.begin(), foo.end(), &printTest);
-    std::cout << std::endl;
+    ft::vector<int> v(5, 100);
+    //Test t(1, 2);
+    //printTest(t);
 
     std::cout << std::endl;
-    std::for_each(bar.begin(), bar.end(), &printTest);
-    std::cout << std::endl;
-    //ft::swap(foo, bar);
 
-    //showInfos(foo);
-    //showInfos(bar);
-  return (0);
+    std::cout << v;
+    std::cout << std::endl;
+    v.myRealloc(10);
+    std::cout << v;
+    std::cout << std::endl;
+    system("leaks prog | grep leaked");
 }
 

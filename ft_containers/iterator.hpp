@@ -37,56 +37,6 @@ namespace ft {
 		typedef T const &					reference;
 		typedef random_access_iterator_tag	iterator_category;
 	};
-
-	/*
-	template <typename T>
-	struct random_access_iterator: public std::iterator<ft::random_access_iterator_tag, T> {
-		Iterator(pointer ptr) {
-			_ptr = ptr;
-		}
-
-		reference operator*() {
-			return (*(this->_ptr));
-		}
-
-		pointer operator->() {
-			return (this->_ptr);
-		}
-
-		Iterator & operator++(void) {
-			this->_ptr++;
-			return (*this);
-		}
-
-		Iterator operator++(int) {
-			Iterator tmp(*this);
-			this->_ptr++;
-			return (tmp);
-		}
-
-		Iterator & operator--(void) {
-			this->_ptr--;
-			return (*this);
-		}
-
-		Iterator operator--(int) {
-			Iterator tmp(*this);
-			this->_ptr--;
-			return (tmp);
-		}
-
-		friend bool operator==(Iterator const & a, Iterator const & b) {
-			return a._ptr == b._ptr;
-		}
-
-		friend bool operator!=(Iterator const & a, Iterator const & b) {
-			return a._ptr != b._ptr;
-		}  
-
-		private:
-			pointer _ptr;
-	};
-	*/
 }
 
 #endif
