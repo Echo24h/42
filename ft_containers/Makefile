@@ -17,6 +17,10 @@ $(NAME): $(OBJS)
 run: re
 	./$(NAME)
 
+# leaks -atExit -- ./$(NAME)
+leaks: re
+	valgrind ./$(NAME)
+
 clean:
 	rm -rf $(OBJS)
 

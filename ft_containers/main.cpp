@@ -124,18 +124,34 @@ void test(void) {
     std::cout << x << std::endl;
 }
 
-int main() {
-    ft::vector<int> v(5, 100);
-    //Test t(1, 2);
-    //printTest(t);
+struct Random {
+    int * data;
 
-    std::cout << std::endl;
+    Random(void) { data = new int; };
+    Random(int const & x) { data = new int(x); };
+    Random(Random const & src) { data = new int(*src.data); };
+    ~Random(void) { delete data; };
 
-    std::cout << v;
-    std::cout << std::endl;
-    v.myRealloc(10);
-    std::cout << v;
-    std::cout << std::endl;
-    system("leaks prog | grep leaked");
+    friend std::ostream & operator<<(std::ostream & o, Random const & rhs);
+};
+
+std::ostream & operator<<(std::ostream & o, Random const & rhs) { std::cout << *rhs.data; return (o); };
+
+void printRandom(Random const & r) {
+    std::cout << *r.data << " ";
 }
 
+int main() {
+    std::vector<int> myvector;
+    for (int i=0; i<10; i++) myvector.push_back(i);
+
+    typedef std::vector<int>::iterator iter_type;
+
+    std::reverse_iterator<iter_type> rev_end (myvector.begin());
+    std::reverse_iterator<iter_type> rev_begin (myvector.end());
+
+    std::cout << "myvector:";
+    for (iter_type it = rev_end.base(); it != rev_begin.base(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+}

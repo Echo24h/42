@@ -28,7 +28,7 @@ namespace ft {
 			// typedef											reverse_iterator
 			// typedef											const_reverse_iterator
 
-			// constructor(s)
+			// ---- constructor(s) ----
 			explicit vector(allocator_type const & alloc = allocator_type()) {
 				std::cout << "vector constructor | vector(allocator_type const & alloc) |" << std::endl;
 
@@ -46,17 +46,11 @@ namespace ft {
 				this->_alloc = alloc;
 				this->_data = this->_alloc.allocate(n);
 				this->_construct_at_end(n, val);
-				this->_capacity = n;
 				this->_size = n;
-
-				/*
-				for (int i = 0; i < n; i++) {
-					this->_alloc.construct(this->_data + i, val);
-				}
-				*/
+				this->_capacity = n;
 			}
 
-			// TODO
+			// TO DO
 			template <typename InputIterator>
 			vector(typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type & alloc = allocator_type()) {
 				std::cout << "vector constructor | vector(InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type()) |" << std::endl;
@@ -64,37 +58,39 @@ namespace ft {
 				this->_alloc = alloc;
 			}
 			
-			
-			// TODO
+			// trow
 			vector(vector const & src) {
 				std::cout << "vector constructor | vector(vector const & src) |" << std::endl;
 
-				*this = src;
+				this->_alloc = src._alloc;
+				this->_data = this->_alloc.allocate(src._capacity);
+				for (int i = 0; i < src._size; i++) {
+					this->_alloc.construct(this->_data + i, src._data[i]);
+				}
+				this->_size = src._size;
+				this->_capacity = src._capacity;
 			}
 
-			// destructor
+			// ---- destructor ----
 			~vector(void) {
 				std::cout << "vector destructor" << std::endl;
 
-				for (int i = 0; i < this->_size; i++) {
-					this->_alloc.destroy(this->_data + i);
-				}
-
+				this->clear();
 				this->_alloc.deallocate(this->_data, this->_capacity);
 			}
 
-			// operator(s)
+			// ---- operator(s) ----
 			// throw
 			vector & operator=(vector const & rhs) {
-				this->~vector();
-				this->_alloc = rhs._alloc;
-				this->_size = rhs._size;
-				this->_capacity = rhs._capacity;
-				this->_data = this->_alloc.allocate(rhs._size);
-
+				this->clear();
+				this->_alloc.deallocate(this->_data, this->_capacity);
+				
+				this->_data = this->_alloc.allocate(rhs._capacity);
 				for (int i = 0; i < rhs._size; i++) {
 					this->_alloc.construct(this->_data + i, rhs._data[i]);
 				}
+				this->_size = rhs._size;
+				this->_capacity = rhs._capacity;
 
 				return (*this);
 			}
@@ -107,7 +103,7 @@ namespace ft {
 				return (this->_data + n);
 			}
 
-			// member function(s)
+			// ---- member function(s) ----
 			iterator begin(void) {
 				return (this->_data);
 			}
@@ -137,7 +133,7 @@ namespace ft {
 			}
 
 			bool empty(void) const {
-				return (this->_size == 0 ? true : false);
+				return ((this->_size == 0) ? true : false);
 			}
 
 			reference at(size_type n) {
@@ -172,65 +168,64 @@ namespace ft {
 				return (this->_data + this->_size - 1);
 			}
 
+			// TO DO
 			template <class InputIterator>
   			void assign(InputIterator first, InputIterator last) {
 				
 			}
 
+			// TO DO
 			void assign(size_type n, const value_type& val) {
 				
 			}
 
+			// trow
 			void push_back(const value_type & val) {
 				if (this->_size == this->_capacity) {
-					try {
-						//this->resize(this->capacity + this->capacity / 2)
-					} catch (std::exception & e) {
-						throw (e);
-					}
+					this->_realloc((this->_size > 8) ? this->_size + this->_size / 2 : 4);
 				}
-
-				this->_data[this->size] = val;
-				this->size++;	
+				this->_construct_at_end(1, val);
 			}
 
 			void pop_back(void) {
-				if (this->size != 0) {
-					//this->_alloc.destroy(this->_data + this->_size)	
+				if (this->_size != 0) {
+					this->_destroy_at_end(1);
 				}
 			}
 
+			// TO DO
 			iterator insert(iterator position, const value_type& val) {
 				return (iterator());
 			}
 
+			// TO DO
 			void insert(iterator position, size_type n, const value_type& val) {
 				
-			} 
+			}
 
+			// TO DO
 			template <class InputIterator>
     		void insert(iterator position, InputIterator first, InputIterator last) {
 
 			}
 
+			// TO DO
 			iterator erase(iterator position) {
 				return (iterator());
 			}
 
+			// TO DO
 			iterator erase(iterator first, iterator last) {
 				return (iterator());
 			}
 
+			// TO DO
 			void swap(vector & x) {
 				swap(*this, x);
 			}
 
 			void clear(void) {
-				for (int i = 0; i < this->_size; i++) {
-					this->_alloc.destroy(this->_data + i);
-				}
-
-				this->_size = 0;
+				this->_destroy_at_end(this->_size);
 			}
 
 			allocator_type get_allocator(void) const {
@@ -238,53 +233,42 @@ namespace ft {
 			}
 
 			// TODO
-			//reverse_iterator rbegin(void);
-			//const_reverse_iterator rbegin(void) const;
-			//reverse_iterator rend(void);
-			//const_reverse_iterator rend(void) const;
+			// reverse_iterator rbegin(void);
+			// const_reverse_iterator rbegin(void) const;
+			// reverse_iterator rend(void);
+			// const_reverse_iterator rend(void) const;
 
-			// use insert / erase
+			// throw
 			void resize(size_type n, value_type val = value_type()) {
 				if (n == this->_size) {
 					return ;
-				}
-
-				if (n < this->_size) {
-					// erase last this->size - n els
+				} else if (n < this->_size) {
+					this->_destroy_at_end(this->_size - n);
 				} else {
 					if (n > this->capacity) {
-						// realloc
+						this->_realloc(n);
 					}
-
-					// append n - this->size els
+					this->_construct_at_end(n - this->_size, val);
 				}
 			}
 			
-			/*
-				need explicit throw msg
-			*/
+			// trow
 			void reserve(size_type n) {
-				if (n > this->max_size() - this->_size) {
-					throw (std::length_error(""));
-				} else if (n <= this->capacity) {
+				if (n <= this->capacity) {
 					return ;
+				} else if (n > this->max_size()) {
+					throw (std::length_error("allocator<T>::allocate(size_t n) 'n' exceeds maximum supported size"));
+				} else {
+					this->_realloc(n);
 				}
-
-				ft::vector<value_type, allocator_type> tmp(n);
-				//ft::swap(*this, tmp);
-				*this = tmp;
 			}
 
-			// friend(s)
+			// ---- friend(s) ----
 			template <typename _T, typename _Allocator>
 			friend std::ostream & operator<<(std::ostream &, vector<_T, _Allocator> const &);
 
 			template <typename _T, typename _Allocator>
 			friend void swap(vector<_T, _Allocator> & x, vector<_T, _Allocator> & y);
-
-			void myRealloc(size_type newCapacity) {
-				this->_realloc(newCapacity);
-			}
 
 		private:
 			pointer 		_data;
@@ -292,7 +276,7 @@ namespace ft {
 			allocator_type	_alloc;
 			size_type		_capacity;
 
-			// should i handle reallocation in this function?
+			// not safe
 			void _construct_at_end(size_type n, const_reference val) {
 				std::cout << "in _construct_at_end\n";
 
@@ -300,37 +284,42 @@ namespace ft {
 				for (int i = 0; i < n; i++) {
 					this->_alloc.construct(ptr + i, val);
 				}
+				this->_size += n;
 			}
 
+			// not safe
 			void _destroy_at_end(size_type n) {
 				std::cout << "in _destroy_at_end\n";
 
-				pointer ptr = (n > this->_size) ? this->_data : this->end() - n;
-				for (; ptr != this->end(); ptr++) {
+				pointer ptr = this->end() - n;
+				pointer end = this->end();
+				for (; ptr != end; ptr++) {
 					this->_alloc.destroy(ptr);
 				}
+				this->_size -= n;
 			}
 
+			// throw
 			void _realloc(size_type newCapacity) {
-				vector tmp;
+				std::cout << "in _realloc\n";
 
-				// allocate tmp
-				tmp._data = tmp._alloc.allocate(newCapacity);
+				size_type newSize = (this->_size < newCapacity) ? this->_size : newCapacity;
 
-				// copy *this into tmp ; using insert or assign?
-				for (int i = 0; i < this->_size; i++) {
-					tmp._data[i] = this->_data[i];
+				pointer newData = this->_alloc.allocate(newCapacity);
+				for (int i = 0; i < newSize; i++) {
+					newData[i] = this->_data[i];
 				}
-				tmp._size = this->_size;
-				tmp._capacity = newCapacity;
 
-				// delete *this
-				// *this = tmp
-				*this = tmp;
+				this->clear();
+				this->_alloc.deallocate(this->_data, this->_capacity);
+
+				this->_data = newData;
+				this->_size = newSize;
+				this->_capacity = newCapacity;
 			}
 	};
 
-	// non-member function(s)
+	// ---- non-member function(s) ----
 	template <typename T, typename Allocator>
 	bool operator==(vector<T, Allocator> const & lhs, vector<T, Allocator> const & rhs);
 
@@ -363,8 +352,7 @@ namespace ft {
 		std::cout << "size: " << rhs._size << std::endl;
 		std::cout << "capacity: " << rhs._capacity << std::endl;
 		std::cout << "begin: " << rhs._data << std::endl;
-		//std::cout << "allocator: " << &*(rhs._alloc) << std::endl;
-		std::cout << "tab: ";
+		std::cout << "data: ";
 		for (int i = 0; i < rhs._size; i++) {
 			std::cout << *(rhs._data + i) << " ";
 		}
