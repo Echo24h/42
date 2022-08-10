@@ -7,16 +7,13 @@
 #include "type_traits.hpp"
 #include "iterator.hpp"
 
-/*
-	should i start by implementing iterators to use them in my functions to search through vector?
-*/
-
 namespace ft
 {
 	template <typename T, typename Allocator = std::allocator<T> >
 	class vector
 	{
 		public:
+			// ---- member type(s) ----
 			typedef Allocator									allocator_type;
 			typedef typename allocator_type::value_type			value_type;
 			typedef typename allocator_type::reference			reference;
