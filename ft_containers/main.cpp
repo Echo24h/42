@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <type_traits>
 #include "type_traits.hpp"
+#include "colorfull.hpp"
 
 template <typename T>
 void print(T const val) {
@@ -141,17 +142,20 @@ void printRandom(Random const & r) {
     std::cout << *r.data << " ";
 }
 
+struct A {
+    typedef int myType;
+};
+
+struct B: public A {
+    B(int x) {
+        val = x;
+    }
+
+    B::myType val;
+};
+
 int main() {
-    std::vector<int> myvector;
-    for (int i=0; i<10; i++) myvector.push_back(i);
-
-    typedef std::vector<int>::iterator iter_type;
-
-    std::reverse_iterator<iter_type> rev_end (myvector.begin());
-    std::reverse_iterator<iter_type> rev_begin (myvector.end());
-
-    std::cout << "myvector:";
-    for (iter_type it = rev_end.base(); it != rev_begin.base(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
+    B::myType a = 1;
+    B b(2);
+    std::cout << b.val << std::endl;
 }

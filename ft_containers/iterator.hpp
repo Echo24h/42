@@ -40,81 +40,94 @@ namespace ft {
 		typedef random_access_iterator_tag	iterator_category;
 	};
 
+	template<class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
+	struct iterator
+	{
+		typedef T         value_type;
+		typedef Distance  difference_type;
+		typedef Pointer   pointer;
+		typedef Reference reference;
+		typedef Category  iterator_category;
+	};
+
 	// ---- reverse iterator ----
 	template <class Iterator>
-	class reverse_iterator {
+	class reverse_iterator: public iterator<typename iterator_traits<Iterator>::iterator_category,
+                      						typename iterator_traits<Iterator>::value_type,
+                      						typename iterator_traits<Iterator>::difference_type,
+                      						typename iterator_traits<Iterator>::pointer,
+                     						typename iterator_traits<Iterator>::reference>
+	{
 		public:
 			// ---- member type(s) ----
-			typedef Iterator												iterator_type;
-			typedef typename iterator_traits<Iterator>::iterator_category 	iterator_category;
-			typedef typename iterator_traits<Iterator>::value_type			value_type;
-			typedef typename iterator_traits<Iterator>::difference_type		difference_type;
-			typedef typename iterator_traits<Iterator>::pointer				pointer;
-			typedef typename iterator_traits<Iterator>::reference			reference;
+			typedef Iterator                                            iterator_type;
+			typedef typename iterator_traits<Iterator>::difference_type difference_type;
+			typedef typename iterator_traits<Iterator>::reference       reference;
+			typedef typename iterator_traits<Iterator>::pointer         pointer;
 
 			// ---- constructor(s) ----
 			reverse_iterator(void) {
-				this->_base_it = iterator_type();
+				this->_curr = iterator_type();
 			}
 
-			explicit reverse_iterator (iterator_type it) {
-				this->_base_it = it;
+			explicit reverse_iterator(iterator_type it) {
+				this->_curr = it;
 			}
 
 			template <class Iter>
-  			reverse_iterator (reverse_iterator<Iter> const & rev_it) {
-				this->_base_it = rev_it._base_it;
+  			reverse_iterator(reverse_iterator<Iter> const & src) {
+				this->_curr = src._curr;
 			}
 
 			// ---- operator(s) ----
 			reference operator*(void) const {
-				iterator_type it = this->_base_it;
-				return (*(--it));
+				iterator_type tmp = this->_curr;
+				return (*(--tmp));
 			}
 
 			reverse_iterator operator+(difference_type n) const {
-				this->_base_it = this->_base_it - n;
-				return (*this);
+				return (reverse_iterator(this->_curr - n));
 			}
 
 			reverse_iterator & operator++() {
-				this->_base_it--;
+				this->_curr--;
 				return (*this);
 			}
 
 			reverse_iterator operator++(int) {
-				reverse_iterator tmp = *this;
-				this->_base_it--;
+				reverse_iterator tmp(*this);
+				this->_curr--;
 				return (tmp);
 			}
 
 			reverse_iterator & operator+=(difference_type n) {
-				return (this->_base_it - n);
+				this->_curr -= n;
+				return (*this);
 			}
 
 			reverse_iterator operator-(difference_type n) const {
-				return (this->_base_it + n);
+				return (reverse_iterator(this->_curr + n));
 			}
 
 			reverse_iterator & operator--() {
-				this->_base_it++;
+				this->_curr++;
 				return (*this);
 			}
 
 			reverse_iterator operator--(int) {
-				reverse_iterator tmp = *this;
-				this->_base_it++;
+				reverse_iterator tmp(*this);
+				this->_curr++;
 				return (tmp);
 			}
 
 			reverse_iterator & operator-=(difference_type n) {
-				this->_base_it += n;
-				return (this);
+				this->_curr += n;
+				return (*this);
 			}
 
 			// ---- member function(s) ----
 			iterator_type base(void) const {
-				return (this->_base_it);
+				return (this->_curr);
 			}
 
 			pointer operator->(void) const {
@@ -126,7 +139,7 @@ namespace ft {
 			}
 
 		private:
-			iterator_type _base_it;
+			iterator_type _curr;
 
 	};
 }
