@@ -40,6 +40,7 @@ namespace ft {
 		typedef random_access_iterator_tag	iterator_category;
 	};
 
+	// ---- iterator ----
 	template<class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
 	struct iterator
 	{
