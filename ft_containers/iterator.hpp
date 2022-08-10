@@ -14,7 +14,8 @@ namespace ft {
 
 	// ---- iterator_traits ----
 	template <typename Iterator>
-	struct iterator_traits {
+	struct iterator_traits
+	{
 		typedef typename Iterator::difference_type		difference_type;
 		typedef typename Iterator::value_type			value_type;
 		typedef typename Iterator::pointer				pointer;
@@ -23,7 +24,8 @@ namespace ft {
 	};
 
 	template <typename T>
-	struct iterator_traits<T *> {
+	struct iterator_traits<T *>
+	{
 		typedef ptrdiff_t					difference_type;
 		typedef T							value_type;
 		typedef T *							pointer;
@@ -32,7 +34,8 @@ namespace ft {
 	};
 
 	template <typename T>
-	struct iterator_traits<T const *> {
+	struct iterator_traits<T const *>
+	{
 		typedef ptrdiff_t					difference_type;
 		typedef T							value_type;
 		typedef T const *					pointer;
@@ -136,12 +139,11 @@ namespace ft {
 			}
 
 			reference operator[](difference_type n) const {
-				
+				return (*(*this + n));
 			}
 
 		private:
 			iterator_type _curr;
-
 	};
 }
 

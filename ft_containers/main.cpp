@@ -154,8 +154,16 @@ struct B: public A {
     B::myType val;
 };
 
+struct testa {
+    int x = 50;
+};
+
+std::ostream & operator<<(std::ostream & o, testa const & rhs) {
+    o << rhs.x;
+    return (o);
+}
+
 int main() {
-    B::myType a = 1;
-    B b(2);
-    std::cout << b.val << std::endl;
+    std::allocator<int> alloc;
+    return 0;
 }
