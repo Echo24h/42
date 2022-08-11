@@ -9,7 +9,6 @@
 
 namespace ft
 {
-	salut
 	template <typename T, typename Allocator = std::allocator<T> >
 	class vector
 	{
