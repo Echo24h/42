@@ -1,169 +1,97 @@
 #include <iostream>
 #include <memory>
 #include <exception>
+#include <iomanip>
 #include <vector>
-#include "vector.hpp"
 #include <iterator>
 #include <algorithm>
 #include <type_traits>
-#include "type_traits.hpp"
+#include "ft.hpp"
 #include "colorfull.hpp"
 
-template <typename T>
-void print(T const val) {
-    std::cout << val;
-}
-
-class Test {
+class Test
+{
     public:
-        typedef int type_t;
-
         int         x;
         int         y;
         int         *w;
 
-        Test(void) {
-            std::cout << "constructor\n";
-            this->w = new int(5);
+        Test(void)
+        {
+            ft::colorfull("constructor\n", GREEN);
+            this->x = 0;
+            this->y = 0;
+            this->w = new int(0);
         }
 
-        Test(int const x, int const y) {
-            std::cout << "constructor x y\n";
+        Test(int const x, int const y)
+        {            
+            ft::colorfull("constructor x y\n", GREEN);
             this->x = x;
             this->y = y;
-            this->w = new int(5);
+            this->w = new int(0);
         }
 
-        Test(Test const & src) {
-            this->x = src.x;
-            this->y = src.y;
-            //this->w = src.w;
-            std::cout << "copy constructor\n";
+        Test(int const x, int const y, int const w)
+        {
+            ft::colorfull("constructor x y w\n", GREEN);
+            this->x = x;
+            this->y = y;
+            this->w = new int(w);
         }
 
-        ~Test(void) {
-            std::cout << "destructor\n";
+        Test(Test const & src)
+            : x(src.x), y(src.y), w(nullptr)
+        {
+            ft::colorfull("copy constructor\n", GREEN);
+            //this->x = src.x;
+            //this->y = src.y;
+            w = new int();
+        }
+
+        ~Test(void)
+        {
+            ft::colorfull("destructor\n", RED);
             delete this->w;
         }
+
+        Test &
+        operator=(Test const & src)
+        {
+            ft::colorfull("operator=\n", YELLOW);
+            this->x = src.x;
+            this->y = src.y;
+            *this->w = *src.w;
+            return *this;
+        }
+
+        friend std::ostream & operator<<(std::ostream & o, Test const & rhs);
 };
 
-void printTest(Test const & x) {
-    std::cout << x.x << "," << x.y << "," << *x.w << std::endl;
+std::ostream & operator<<(std::ostream & o, Test const & rhs)
+{
+    std::cout << rhs.x << "," << rhs.y << "," << *rhs.w;
+    return o;
 }
 
 template <typename T>
-void myFunc(T & value) {
-    try {
-        std::allocator<T> alloc;
-        size_t maxSize = alloc.max_size();
-        typename std::allocator<T>::pointer ptr = alloc.allocate(sizeof(value));
-        alloc.construct(ptr, value);
-        //*ptr = value;
-        std::cout << ptr->x << ";" << ptr->y << std::endl;
-        alloc.destroy(ptr);
-        alloc.deallocate(ptr, sizeof(value));
-    } catch (std::bad_alloc & e) {
-        std::cerr << e.what() << std::endl;
-    }
-}
-
-void printInt(int const val) {
-    std::cout << val << " ";
-}
-
-template <typename T>
-void    showInfos(T const & v) {
-    std::cout << "------------" << std::endl;
-    std::cout << "size: " << v.size() << std::endl;
-    std::cout << "capacity: " << v.capacity() << std::endl;
-    std::cout << "begin: " << &*(v.begin()) << std::endl;
-    std::cout << "tab: ";
-    std::for_each(v.begin(), v.end(), &printInt);
-    std::cout << std::endl;
-}
-
-
-/*
-int main(int ac, char *av[]) {
-    (void)ac;
-    (void)av;
-
-    std::vector<int> stdVec(10, 3);
-    ft::vector<int>  ftVec;
-
-    showInfos<std::vector<int> >(stdVec);
-    stdVec.resize(523, 7);
-    showInfos<std::vector<int> >(stdVec);
-    
-    //std::cout << v;
-    //system("leaks prog | grep leaked");
-    return (0);
-}
-*/
-
-int bar() {
-    return (4);
-}
-
-template <typename T>
-struct remove_pointer {
-    typedef T type;
-};
-
-template <typename T>
-struct remove_pointer<T *> {
-    typedef T type;
-};
-
-void doesThrow(void) {
-    throw (std::runtime_error("error"));
-}
-
-void test(void) {
-    int x = 5;
-    doesThrow();
-    std::cout << x << std::endl;
-}
-
-struct Random {
-    int * data;
-
-    Random(void) { data = new int; };
-    Random(int const & x) { data = new int(x); };
-    Random(Random const & src) { data = new int(*src.data); };
-    ~Random(void) { delete data; };
-
-    friend std::ostream & operator<<(std::ostream & o, Random const & rhs);
-};
-
-std::ostream & operator<<(std::ostream & o, Random const & rhs) { std::cout << *rhs.data; return (o); };
-
-void printRandom(Random const & r) {
-    std::cout << *r.data << " ";
-}
-
-struct A {
-    typedef int myType;
-};
-
-struct B: public A {
-    B(int x) {
-        val = x;
-    }
-
-    B::myType val;
-};
-
-struct testa {
-    int x = 50;
-};
-
-std::ostream & operator<<(std::ostream & o, testa const & rhs) {
-    o << rhs.x;
-    return (o);
+std::ostream &
+operator<<(std::ostream & ostrm, std::vector<T> const & rhs)
+{
+    std::cout << "capacity:\t" << rhs.capacity() << std::endl;
+    std::cout << "size:\t\t" << rhs.size() << std::endl;
+    std::cout << "begin:\t\t" << &(*rhs.cbegin()) << std::endl;
+    std::cout << "end:\t\t" << &(*rhs.cend()) << std::endl;
+    typename std::vector<T>::const_iterator it(rhs.cbegin());
+    typename std::vector<T>::const_iterator end(rhs.cend());
+    for (; it != end; it++)
+        std::cout << *it << std::endl;
+    return ostrm;
 }
 
 int main() {
-    std::allocator<int> alloc;
+    int x = 53;
+    ft::vector<int> v(5, x);
+    std::cout << v;
     return 0;
 }

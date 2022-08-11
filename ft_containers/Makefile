@@ -17,7 +17,7 @@ $(NAME): $(OBJS)
 run: re
 	./$(NAME)
 
-# leaks -atExit -- ./$(NAME)
+# use "leaks -atExit -- ./$(NAME)" or "valgrind ./$(NAME)"
 leaks: re
 	valgrind ./$(NAME)
 
