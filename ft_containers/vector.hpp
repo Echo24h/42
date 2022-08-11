@@ -83,25 +83,25 @@ namespace ft
 			const_reference operator[](size_type n) const 	{ return *(this->_data + n); }
 
 			// ---- member function(s) ----
-			iterator 		begin(void) 		{ return this->_data; }
-			const_iterator 	begin(void) const 	{ return this->_data; };
-			iterator 		end(void) 			{ return this->_data + this->_size; }
-			const_iterator 	end(void) const 	{ return this->_data + this->_size; };
+			iterator		begin(void)			{ return this->_data; }
+			const_iterator	begin(void) const	{ return this->_data; };
+			iterator		end(void)			{ return this->_data + this->_size; }
+			const_iterator	end(void) const		{ return this->_data + this->_size; };
 
-			reverse_iterator 		rbegin(void) 		{ return reverse_iterator(this->end()); }
-			const_reverse_iterator 	rbegin(void) const	{ return const_reverse_iterator(this->end()); };
-			reverse_iterator 		rend(void) 			{ return reverse_iterator(this->begin()); }
-			const_reverse_iterator 	rend(void) const 	{ return const_reverse_iterator(this->begin()); }
+			reverse_iterator		rbegin(void)		{ return reverse_iterator(this->end()); }
+			const_reverse_iterator	rbegin(void) const	{ return const_reverse_iterator(this->end()); };
+			reverse_iterator		rend(void)			{ return reverse_iterator(this->begin()); }
+			const_reverse_iterator	rend(void) const	{ return const_reverse_iterator(this->begin()); }
 
-			size_type 		size(void) const 			{ return this->_size; }
-			size_type 		max_size(void) const 		{ return this->_alloc.max_size(); }
-			size_type 		capacity(void) const 		{ return this->_capacity; }
-			allocator_type 	get_allocator(void) const 	{ return this->_alloc; }
+			size_type		size(void) const			{ return this->_size; }
+			size_type		max_size(void) const		{ return this->_alloc.max_size(); }
+			size_type		capacity(void) const		{ return this->_capacity; }
+			allocator_type	get_allocator(void) const	{ return this->_alloc; }
 
-			reference 		front(void) 		{ return this->_data; }
-			const_reference	front(void) const 	{ return this->_data; }
-			reference 		back(void) 			{ return this->_data + this->_size - 1; }
-			const_reference back(void) const 	{ return this->_data + this->_size - 1; }
+			reference		front(void)			{ return this->_data; }
+			const_reference	front(void) const	{ return this->_data; }
+			reference		back(void)			{ return this->_data + this->_size - 1; }
+			const_reference	back(void) const	{ return this->_data + this->_size - 1; }
 
 			void	clear(void)			{ this->_destroy_at_end(this->_size); }
 			bool	empty(void) const	{ return (this->_size == 0 ? true : false); }
