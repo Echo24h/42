@@ -12,7 +12,6 @@ namespace ft
 	template <typename T, typename Allocator = std::allocator<T> >
 	class vector
 	{
-		salut
 		public:
 			// ---- member type(s) ----
 			typedef Allocator									allocator_type;
@@ -34,7 +33,7 @@ namespace ft
 			{}
 
 			explicit vector(size_type n, value_type const & val = value_type(), allocator_type const & alloc = allocator_type())
-				: vector(alloc)
+				: _alloc(alloc), _data(nullptr), _capacity(0), _size(0)
 			{
 				this->_data = this->_alloc.allocate(n);
 				this->_capacity = n;
@@ -45,16 +44,16 @@ namespace ft
 			vector(typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type first,
 				InputIterator last,
 				const allocator_type & alloc = allocator_type())
-				: vector(alloc)
+				: _alloc(alloc), _data(nullptr), _capacity(0), _size(0)
 			{
 				size_type n = last - first;
-				this->_alloc.allocate(this->_data, n);
+				this->_data = this->_alloc.allocate(n);
 				this->_capacity = n;
 				this->_construct_at_end(first, last);
 			}
 			
 			vector(vector const & src)
-				: vector()
+				: _alloc(src._alloc), _data(nullptr), _capacity(0), _size(0)
 			{
 				this->_data = this->_alloc.allocate(src._capacity);
 				this->_capacity = src._capacity;
@@ -80,8 +79,8 @@ namespace ft
 				return *this;
 			}
 
-			reference 		operator[](size_type n) 		{ return this->_data + n; }
-			const_reference operator[](size_type n) const 	{ return this->_data + n; }
+			reference 		operator[](size_type n) 		{ return *(this->_data + n); }
+			const_reference operator[](size_type n) const 	{ return *(this->_data + n); }
 
 			// ---- member function(s) ----
 			iterator 		begin(void) 		{ return this->_data; }
@@ -275,6 +274,9 @@ namespace ft
 			friend bool operator==(vector<_T, _Allocator> const & lhs, vector<_T, _Allocator> const & rhs);
 
 			template <typename _T, typename _Allocator>
+			friend bool operator!=(vector<_T, _Allocator> const & lhs, vector<_T, _Allocator> const & rhs);
+
+			template <typename _T, typename _Allocator>
 			friend bool operator<(vector<_T, _Allocator> const & lhs, vector<_T, _Allocator> const & rhs);
 
 			template <typename _T, typename _Allocator>
@@ -287,13 +289,13 @@ namespace ft
 			friend bool operator>=(vector<_T, _Allocator> const & lhs, vector<_T, _Allocator> const & rhs);
 
 		private:
-			pointer 		_data;
-			size_type		_size;
 			allocator_type	_alloc;
+			pointer 		_data;
 			size_type		_capacity;
+			size_type		_size;
 
 			template <typename InputIterator>
-			void
+			typename enable_if<!is_integral<InputIterator>::value, void>::type
 			_construct_at_end(InputIterator first, InputIterator last)
 			{
 				pointer ptr = this->end();
@@ -306,7 +308,7 @@ namespace ft
 			_construct_at_end(size_type n, const_reference val)
 			{
 				pointer ptr = this->end();
-				for (int i = 0; i < n; i++)
+				for (size_type i = 0; i < n; i++)
 					this->_alloc.construct(ptr + i, val);
 				this->_size += n;
 			}
@@ -359,6 +361,13 @@ namespace ft
 		if (!equal(lhs.begin(), lhs.end(), rhs.end()))
 			return false;
 		return true;
+	}
+
+	template <typename T, typename Allocator>
+	bool
+	operator!=(vector<T, Allocator> const & lhs, vector<T, Allocator> const & rhs)
+	{
+		return !(lhs == rhs);
 	}
 
 	template <typename T, typename Allocator>

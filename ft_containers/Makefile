@@ -1,5 +1,5 @@
 CC			=	c++ -g
-CFLAGS		=	-std=c++17 #-Wall -Wextra -Werror 
+CFLAGS		=	-std=c++98 -Wall -Wextra -Werror 
 NAME		=	prog
 
 SRCS		=	main.cpp	\
