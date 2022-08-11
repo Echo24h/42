@@ -12,6 +12,7 @@ namespace ft
 	template <typename T, typename Allocator = std::allocator<T> >
 	class vector
 	{
+		salut
 		public:
 			// ---- member type(s) ----
 			typedef Allocator									allocator_type;
