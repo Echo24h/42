@@ -67,7 +67,7 @@ type val5 = 5;
 #ifdef STD
 typedef std::vector<type>	vector;
 #else
-typedef ft::vector<type>	vector;
+typedef ft::vector<int>	vector;
 #endif
 
 void print(char const * str) { std::cout << str << std::endl; }
@@ -159,9 +159,11 @@ bool operator==(A const & x, A const & y) { return x.getX() == y.getX(); }
 // bool operator==(B const & x, B const & y) { return x.x == y.x; }
 
 int main() {
-	std::vector<int> v(3, 55);
-	v.resize(1000);
-	std::cout << v;
+	std::vector<int> v;
+	vector vector;
+    vector.assign(1000, 1);
+	std::cout << vector;
+    vector.insert(vector.end(), 1 , 2);
 }
 
 // #ifdef STD

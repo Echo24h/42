@@ -156,7 +156,7 @@ namespace ft
 			void push_back(const_reference val)
 			{
 				if (_size == _capacity)
-					_grow();
+					_grow(_size + 1);
 				_construct_at_end(1, val);
 			}
 
@@ -169,7 +169,7 @@ namespace ft
 			iterator insert(iterator position, const_reference val)
 			{
 				if (_size + 1 > _capacity)
-					_grow();
+					_grow(_size + 1);
 				reverse_iterator rend(position);
 				reverse_iterator rit(rbegin());
 				for (; rit != rend; rit++)
@@ -182,13 +182,22 @@ namespace ft
 			void insert(iterator position, size_type n, const_reference val)
 			{
 				if (_size + n > _capacity)
-					_realloc(_size + n);
+				{
+					difference_type offset = position - begin();
+					_grow(_size + n);
+					position = begin() + offset;
+				}
+				std::cout << "mdr\n";
 				reverse_iterator rend(position + n);
 				reverse_iterator rit = rbegin();
+				std::cout << "rend: " << &*rend << std::endl;
+				std::cout << "rit: " << &*rit << std::endl;
+				std::cout << *this;
 				for (; rit != rend; rit++)
 					*(rit + 1) = *rit;
 				for (int i = 0; i < n; i++)
 					*(position++) = val;
+
 				_size += n;
 			}
 
@@ -196,9 +205,13 @@ namespace ft
             typename enable_if<!is_integral<InputIterator>::value, void>::type
     		insert(iterator position, InputIterator first, InputIterator last)
 			{
-				size_type n = last - first;
+				difference_type n = last - first;
 				if (_size + n > _capacity)
-					_realloc(_size + n);
+				{
+					difference_type offset = position - begin();
+					_grow(_size + n);
+					position = begin() + offset;
+				}
 				reverse_iterator rend(position + n);
 				reverse_iterator rit(rbegin());
 				for (; rit != rend; rit++)
@@ -333,10 +346,9 @@ namespace ft
 				_capacity = newCapacity;
 			}
 
-			void _grow(void)
+			void _grow(size_type sizeRequired)
 			{
-				size_type newCapacity = _size == 0 ? 1 : _size * 2;
-				_realloc(newCapacity);
+				_realloc(sizeRequired > _capacity * 2 ? sizeRequired : _capacity * 2);
 			}
 	};
 
@@ -385,8 +397,8 @@ namespace ft
 	{
 		std::cout << "capacity:\t" << rhs.capacity() << std::endl;
 		std::cout << "size:\t\t" << rhs.size() << std::endl;
-		// std::cout << "begin:\t\t" << &(*rhs.begin()) << std::endl;
-		// std::cout << "end:\t\t" << &(*rhs.end()) << std::endl;
+		std::cout << "begin:\t\t" << &(*rhs.begin()) << std::endl;
+		std::cout << "end:\t\t" << &(*rhs.end()) << std::endl;
         std::cout << "data: ";
 		typename ft::vector<_T, _Allocator>::const_iterator it(rhs.begin());
 		typename ft::vector<_T, _Allocator>::const_iterator end(rhs.end());
