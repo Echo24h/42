@@ -1,32 +1,34 @@
-CC			=	c++ -g
-CFLAGS		=	-std=c++98 -Wall -Wextra -Werror 
+CC			=	c++
+CFLAGS		=	-std=c++98 #-Wall -Wextra -Werror 
 NAME		=	prog
 
 SRCS		=	main.cpp	\
 
-OBJS		=	$(SRCS:%.cpp=%.o)
-
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	$(CC) -o $(NAME) $(OBJS)
+$(NAME): ft
 
-%.o: %.cpp
-	$(CC) $(CFLAGS) -o $@ -c $<
-
-run: re
+run: ft
 	./$(NAME)
 
+ft:
+	$(CC) -DFT -o $(NAME) $(SRCS)
+
+std:
+	$(CC) -DSTD -o $(NAME) $(SRCS)
+
+test:
+	./test.sh
+
 # use "leaks -atExit -- ./$(NAME)" or "valgrind ./$(NAME)"
-leaks: re
+leaks: ft
 	valgrind ./$(NAME)
 
 clean:
-	rm -rf $(OBJS)
+	rm -rf $(NAME) test_ft.out test_std.out
 
 fclean: clean
-	rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re ft std test run

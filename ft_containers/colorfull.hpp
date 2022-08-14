@@ -12,8 +12,10 @@
 
 namespace ft {
 	template <typename T>
-	void colorfull(T const & val, int color = WHITE) {
-		switch (color) {
+	void colorfull(T const & val, int color = WHITE)
+	{
+		switch (color)
+		{
 			case RED:
 				std::cout << "\x1B[31m" << val << "\033[0m";
 				break;

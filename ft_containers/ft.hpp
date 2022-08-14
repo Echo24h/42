@@ -6,5 +6,6 @@
 #include "type_traits.hpp"
 #include "algorithm.hpp"
 #include "colorfull.hpp"
+#include "utility.hpp"
 
 #endif
