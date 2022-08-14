@@ -169,10 +169,14 @@ namespace ft
 			iterator insert(iterator position, const_reference val)
 			{
 				if (_size + 1 > _capacity)
+				{
+					difference_type offset = position - begin(); 
 					_grow(_size + 1);
-				reverse_iterator rend(position);
+					position = begin() + offset;
+				}
+				reverse_iterator rposition(position);
 				reverse_iterator rit(rbegin());
-				for (; rit != rend; rit++)
+				for (; rit != rposition; rit++)
 					*(rit + 1) = *rit;
 				*position = val;
 				_size++;
@@ -183,22 +187,16 @@ namespace ft
 			{
 				if (_size + n > _capacity)
 				{
-					difference_type offset = position - begin();
+					difference_type offset = position - begin(); 
 					_grow(_size + n);
 					position = begin() + offset;
 				}
-				std::cout << "mdr\n";
-				reverse_iterator rend(position + n);
-				reverse_iterator rit = rbegin();
-				std::cout << "rend: " << &*rend << std::endl;
-				std::cout << "rit: " << &*rit << std::endl;
-				std::cout << *this;
-				for (; rit != rend; rit++)
-					*(rit + 1) = *rit;
-				for (int i = 0; i < n; i++)
-					*(position++) = val;
-
-				_size += n;
+				vector tmp;
+				tmp.reserve(_capacity);
+				tmp._construct_at_end(begin(), position);
+				tmp._construct_at_end(n, val);
+				tmp._construct_at_end(position, end());
+				*this = tmp;
 			}
 
 			template <class InputIterator>
@@ -208,17 +206,18 @@ namespace ft
 				difference_type n = last - first;
 				if (_size + n > _capacity)
 				{
-					difference_type offset = position - begin();
+					difference_type offset = position - begin(); 
 					_grow(_size + n);
 					position = begin() + offset;
 				}
-				reverse_iterator rend(position + n);
-				reverse_iterator rit(rbegin());
-				for (; rit != rend; rit++)
-					*(rit + 1) = *rit;
-				for (; first != last; first++)
-					*(position++) = *first;
-				_size += n;
+				std::cout << "hh\n";
+				vector tmp;
+				tmp.reserve(_capacity);
+				tmp._construct_at_end(begin(), position);
+				std::cout << "hh2\n";
+				tmp._construct_at_end(first, last);
+				std::cout << "hh3\n";
+				tmp._construct_at_end(position, end());
 			}
 
 			iterator erase(iterator position)
@@ -261,7 +260,7 @@ namespace ft
 				else
 				{
 					if (n > _capacity)
-						_realloc(n);
+						_grow(n);
 					_construct_at_end(n - _size, val);
 				}
 			}
@@ -346,9 +345,9 @@ namespace ft
 				_capacity = newCapacity;
 			}
 
-			void _grow(size_type sizeRequired)
+			void _grow(size_type minCapacityRequired)
 			{
-				_realloc(sizeRequired > _capacity * 2 ? sizeRequired : _capacity * 2);
+				_realloc(minCapacityRequired > _capacity * 2 ? minCapacityRequired : _capacity * 2);
 			}
 	};
 
@@ -397,8 +396,8 @@ namespace ft
 	{
 		std::cout << "capacity:\t" << rhs.capacity() << std::endl;
 		std::cout << "size:\t\t" << rhs.size() << std::endl;
-		std::cout << "begin:\t\t" << &(*rhs.begin()) << std::endl;
-		std::cout << "end:\t\t" << &(*rhs.end()) << std::endl;
+		// std::cout << "begin:\t\t" << &(*rhs.begin()) << std::endl;
+		// std::cout << "end:\t\t" << &(*rhs.end()) << std::endl;
         std::cout << "data: ";
 		typename ft::vector<_T, _Allocator>::const_iterator it(rhs.begin());
 		typename ft::vector<_T, _Allocator>::const_iterator end(rhs.end());
