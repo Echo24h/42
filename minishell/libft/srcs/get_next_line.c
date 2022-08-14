@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-char	*ft_append_char(char *str, char c)
+static char	*ft_append_char(char *str, char c)
 {
 	char	*res;
 	int		i;
@@ -39,13 +39,22 @@ char	*get_next_line(int fd)
 {
 	char	c;
 	char	*line;
+	int		n;
 
 	line = NULL;
-	if (read(fd, &c, 0) == -1)
+	while ((n = read(fd, &c, 1)) > 0 && c != '\n')
+	{
+		line = ft_append_char(line, c);
+		if (!line)
+			return (NULL);
+	}
+	if (n > 0)
+	{
+		line = ft_append_char(line, c);
+		if (!line)
+			return (NULL);
+	}
+	if (n == -1)
 		return (NULL);
-	while (read(fd, &c, 1) > 0 && c != '\n')
-		line = ft_append_char(line, c);
-	if (c == '\n')
-		line = ft_append_char(line, c);
 	return (line);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/07 01:17:18 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/08/14 13:32:47 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <limits.h>
+
+/*
+	echo test f2 salut
+	> f0 ; > ydanset
+	&1>
+*/
 
 # define PROMPT		"\033[1;32mminishell$> \033[0m"
 

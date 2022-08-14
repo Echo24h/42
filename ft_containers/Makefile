@@ -12,10 +12,10 @@ run: ft
 	./$(NAME)
 
 ft:
-	$(CC) -DFT -o $(NAME) $(SRCS)
+	$(CC) $(CFLAGS) -DFT -o $(NAME) $(SRCS)
 
 std:
-	$(CC) -DSTD -o $(NAME) $(SRCS)
+	$(CC) $(CFLAGS) -DSTD -o $(NAME) $(SRCS)
 
 test:
 	./test.sh

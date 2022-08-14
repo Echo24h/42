@@ -94,8 +94,10 @@ namespace ft
 			const_reference operator[](size_type n) const 	{ return *(_data + n); }
 
 			// ---- member function(s) ----
-            iterator		begin(void)			{ /*std::cout << "begin\n";*/ return iterator(_data); }
-			const_iterator	begin(void) const	{ /*std::cout << "begin const\n";*/ return const_iterator(_data); }
+			const_iterator		cbegin(void) const			{ return const_iterator(_data); }
+
+            iterator		begin(void)			{ return iterator(_data); }
+			const_iterator	begin(void) const	{ return const_iterator(_data); }
 			iterator		end(void)			{ return iterator(_data + _size); }
 			const_iterator	end(void) const		{ return const_iterator(_data + _size); }
 
@@ -210,23 +212,22 @@ namespace ft
 					_grow(_size + n);
 					position = begin() + offset;
 				}
-				std::cout << "hh\n";
 				vector tmp;
 				tmp.reserve(_capacity);
 				tmp._construct_at_end(begin(), position);
-				std::cout << "hh2\n";
-				tmp._construct_at_end(first, last);
-				std::cout << "hh3\n";
+				tmp._construct_at_end(first, last); // ! i should check if InputIterator is constructible on value_type 
 				tmp._construct_at_end(position, end());
+				*this = tmp;
 			}
 
 			iterator erase(iterator position)
 			{
 				if (position != end())
 				{
-					iterator last(&back());
-					for (; position != last; position++)
-						*position = *(position + 1);
+					iterator last = &back();
+					iterator it = position;
+					for (; it != last; it++)
+						*it = *(it + 1);
 					_destroy_at_end(1);
 				}
 				return position;
@@ -234,14 +235,13 @@ namespace ft
 
 			iterator erase(iterator first, iterator last)
 			{
-				if (last - first != 0)
-				{
-					iterator end = this->end();
-					for (; last != end; last++)
-						*(first++) = *last;
-					_destroy_at_end(last - first);
-				}
-				return first;
+				difference_type offset = first - begin();
+				vector tmp;
+				tmp.reserve(_capacity);
+				tmp._construct_at_end(begin(), first);
+				tmp._construct_at_end(last, end());
+				*this = tmp;
+				return iterator(begin() + offset);
 			}
 
 			void swap(vector & x)
@@ -249,6 +249,7 @@ namespace ft
 				std::swap(_data, x._data);
 				std::swap(_capacity, x._capacity);
 				std::swap(_size, x._size);
+				std::swap(_alloc, x._alloc);
 			}
 
 			void resize(size_type n, value_type val = value_type())
