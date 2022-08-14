@@ -109,30 +109,3 @@ char	**strs_join(char **strs1, char **strs2)
 	free_strs(strs2);
 	return (new);
 }
-
-char	**strs_del_index(char **strs, int index)
-{
-	int		i;
-	int		j;
-	char	**new;
-
-	if (!strs)
-		return (NULL);
-	if (index < 0 || index >= strs_len(strs))
-		return (strs);
-	new = malloc(sizeof(char *) * strs_len(strs));
-	if (!new)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (strs[i])
-	{
-		if (i == index)
-			i++;
-		else
-			new[j++] = ft_strdup(strs[i++]);
-	}
-	new[j] = NULL;
-	free_strs(strs);
-	return (new);
-}

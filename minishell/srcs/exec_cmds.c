@@ -1,190 +1,76 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_cmds.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
+/*   Updated: 2022/05/17 12:59:34 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char	**get_paths(char **env)
+void	set_path(t_var *var, char **args, int mode)
 {
-	char	**paths;
-	char	*tmp;
-
-	tmp = get_ev_value("PATH", env);
-	paths = ft_split(tmp, ':');
-	free(tmp);
-	return (paths);
-}
-
-int	has_access(char *cmd_name)
-{
-	if (!access(cmd_name, F_OK | X_OK))
-		return (1);
-	return (0);
-}
-
-char	*get_cmd_path(char *cmd_name, char **env)
-{
-	char	*cmd_path;
-	char	*cmd_pfx;
-	char	**paths;
-	int		i;
-
-	if (ft_strchr(cmd_name, '/') && has_access(cmd_name))
-		return (ft_strdup(cmd_name));
-	if (ft_strchr(cmd_name, '/') && !has_access(cmd_name))
-		return (NULL);
-	cmd_path = NULL;
-	paths = get_paths(env);
-	cmd_pfx = ft_strjoin("/", cmd_name);
-	i = 0;
-	while (paths[i])
+	if (mode != DESTROY_SET && args)
 	{
-		cmd_path = ft_strjoin(paths[i], cmd_pfx);
-		if (!access(cmd_path, F_OK | X_OK))
+		if (ft_strchr(args[0], '/'))
+		{	
+			if (access(args[0], F_OK | X_OK) != 0)
+				var->cmd_path = 0;
+			else
+				var->cmd_path = ft_strdup(args[0]);
+		}
+		else
+			var->cmd_path = parse_cmd(var->path, args);
+		return ;
+	}
+	if (var->cmd_path && mode == DESTROY_SET)
+	{
+		free(var->cmd_path);
+		var->cmd_path = NULL;
+	}
+}
+
+void	update_path(t_var *var)
+{
+	t_list	*tmp;
+
+	tmp = var->local_env;
+	if (var->path)
+		ft_free_split(var->path);
+	var->path = NULL;
+	while (tmp)
+	{
+		if (ft_strnequ(tmp->content, "PATH=", 5))
+		{
+			var->path = ft_split((tmp->content) + 5, ':');
 			break ;
-		free(cmd_path);
-		cmd_path = NULL;
-		i++;
-	}
-	free_strs(paths);
-	free(cmd_pfx);
-	return (cmd_path);
-}
-
-int	set_cmd_path(char **cmd_path, char *cmd_name, char **env)
-{
-	*cmd_path = get_cmd_path(cmd_name, env);
-	if (!*cmd_path)
-	{
-		print_error(ft_strdup(cmd_name), "command not found");
-		return (1);
-	}
-	return (0);
-}
-
-int	is_builtin(char *cmd_name)
-{
-	if (!my_strcmp(cmd_name, "cd") || !my_strcmp(cmd_name, "echo")
-		|| !my_strcmp(cmd_name, "pwd") || !my_strcmp(cmd_name, "export")
-		|| !my_strcmp(cmd_name, "unset") || !my_strcmp(cmd_name, "env")
-		|| !my_strcmp(cmd_name, "exit"))
-		return (1);
-	return (0);
-}
-
-int	exec_builtin(char **args, t_var *var)
-{
-	if (!my_strcmp(args[0], "cd"))
-		return (builtin_cd(args, var));
-	else if (!my_strcmp(args[0], "echo"))
-		return (builtin_echo(args));
-	else if (!my_strcmp(args[0], "pwd"))
-		return (builtin_pwd());
-	else if (!my_strcmp(args[0], "export"))
-		return (builtin_export(args, var));
-	else if (!my_strcmp(args[0], "unset"))
-		return (builtin_unset(args, var));
-	else if (!my_strcmp(args[0], "env"))
-		return (builtin_env(var));
-	else if (!my_strcmp(args[0], "exit"))
-		return (builtin_exit(args, var));
-	return (0);
-}
-
-void	exec_in_chld(t_cmd *cmd, t_var *var, int pipe_fd[2])
-{
-	char	*cmd_path;
-	pid_t	pid;
-
-	var->nb_chld++;
-	pid = fork();
-	if (pid == -1)
-	{
-		var->nb_chld--;
-		print_error(ft_strdup("fork"), strerror(errno));
-	}
-	if (!pid)
-	{
-		set_sig(SIGINT, SIG_DFL);
-		set_sig(SIGQUIT, SIG_DFL);
-		if (pipe_fd)
-		{
-			close(pipe_fd[0]);
-			dup2(pipe_fd[1], STDOUT_FILENO);
-			close(pipe_fd[1]);
 		}
-		if (redirect(cmd->redirs, var))
-			exit(EXIT_FAILURE);
-		if (!cmd->args)
-			exit(EXIT_SUCCESS);
-		cmd->args = expand_args(cmd->args, var);
-		if (is_builtin(cmd->args[0]))
-			exit(exec_builtin(cmd->args, var));
-		if (set_cmd_path(&cmd_path, cmd->args[0], var->local_env))
-			exit(CMD_NOT_FOUND);
-		if (execve(cmd_path, cmd->args, var->local_env) == -1)
-			print_error(ft_strdup("execve"), strerror(errno));
-		exit(EXIT_FAILURE);
+		tmp = tmp->next;
 	}
-	if (!pipe_fd)
-		var->last_chld_pid = pid;
+	ft_free_split(var->envp);
+	var->envp = ft_lst_to_dpt(var->local_env);
 }
 
-void	exec_simple_cmd(t_cmd *cmd, t_var *var)
+int	exec_cmds(t_list *cmds, t_var *var)
 {
-	char	**args_tmp;
+	int	ret;
 
-	args_tmp = copy_strs(cmd->args);
-	if (args_tmp)
-		args_tmp = expand_args(args_tmp, var);
-	if (cmd->args && is_builtin(args_tmp[0]))
-	{
-		free_strs(args_tmp);
-		var->is_simple_builtin_cmd = 1;
-		if (redirect(cmd->redirs, var))
-		{
-			var->exit_status = EXIT_FAILURE;
-			return ;
-		}
-		cmd->args = expand_args(cmd->args, var);
-		var->exit_status = exec_builtin(cmd->args, var);
-	}
-	else
-	{
-		free_strs(args_tmp);
-		exec_in_chld(cmd, var, NULL);
-	}
-}
-
-void	exec_multiple_cmds(t_list *cmds, t_var *var)
-{
-	int		pipe_fd[2];
-
-	if (cmds->next)
-	{
-		if (pipe(pipe_fd) == -1)
-		{
-			print_error(ft_strdup("pipe"), strerror(errno));
-			return ;
-		}
-		exec_in_chld(cmds->content, var, pipe_fd);
-		close(pipe_fd[1]);
-		dup2(pipe_fd[0], STDIN_FILENO);
-		close(pipe_fd[0]);
-		exec_multiple_cmds(cmds->next, var);
-	}
-	else
-		exec_in_chld(cmds->content, var, NULL);
-}
-
-void	exec_cmds(t_list *cmds, t_var *var)
-{
+	ret = 0;
 	tty_show_ctrl();
-	var->nb_chld = 0;
-	if (!cmds)
-		return ;
-	if (handle_hd(cmds))
-		return ;
-	set_sig(SIGINT, SIG_IGN);
-	var->is_simple_builtin_cmd = 0;
+	if (hd_to_infile(cmds, var) == CTRL_C)
+	{
+		set_path(var, NULL, DESTROY_SET);
+		reset_routine_mc(var, CTRL_C);
+		return (CTRL_C);
+	}
 	if (cmds->next)
-		exec_multiple_cmds(cmds, var);
+		ret = exec_pipe(cmds, var);
 	else
-		exec_simple_cmd(cmds->content, var);
+		ret = exec_simple_cmd((t_cmd *)(cmds->content), var);
+	update_path(var);
+	return (ret);
 }

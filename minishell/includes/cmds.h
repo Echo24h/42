@@ -16,7 +16,7 @@
 typedef struct s_redir
 {
 	int		type;
-	char	*hd_keyword;
+	char	*keyword;
 	char	*filename;
 }	t_redir;
 

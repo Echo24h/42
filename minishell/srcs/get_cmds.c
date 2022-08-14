@@ -16,8 +16,8 @@ static void	init_redir(t_redir **redir, int type)
 {
 	*redir = malloc(sizeof(t_redir) * 1);
 	(*redir)->type = type;
+	(*redir)->keyword = NULL;
 	(*redir)->filename = NULL;
-	(*redir)->hd_keyword = NULL;
 }
 
 static int	add_redir(t_cmd *cmd, t_list **tokens)
@@ -36,7 +36,7 @@ static int	add_redir(t_cmd *cmd, t_list **tokens)
 			return (error(NULL, "syntax error near unexpected token '>'", 0));
 	}
 	if (redir->type == REDIR_LL)
-		redir->hd_keyword = ft_strdup(get_token_value((*tokens)->content));
+		redir->keyword = ft_strdup(get_token_value((*tokens)->content));
 	else
 		redir->filename = ft_strdup(get_token_value((*tokens)->content));
 	new = ft_lstnew(redir);

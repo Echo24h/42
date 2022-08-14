@@ -3,29 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 18:55:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/04/03 19:48:44 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/05 17:13:30 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 void	sigint_handler(int signum)
-{
+{	
 	(void)signum;
-	write(STDOUT_FILENO, "\n", 1);
-	if (!g.in_hd)
+	if (!g_glb.in_hd)
 	{
+		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}
 	else
 	{
-		g.sigint_in_hd = 1;
-		close(STDIN_FILENO);
+		close(0);
+		g_glb.sigint_in_hd = 1;
 	}
 }
 

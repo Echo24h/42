@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+// #include "cmds.h"
 
 void	free_token(void *ptr)
 {
@@ -26,9 +27,7 @@ void	free_redir(void *ptr)
 	t_redir	*redir;
 
 	redir = ptr;
-	free(redir->hd_keyword);
-	if (redir->type == REDIR_LL && redir->filename)
-		unlink(redir->filename);
+	free(redir->keyword);
 	free(redir->filename);
 	free(redir);
 }

@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:10 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/07 01:23:12 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/26 12:02:41 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,21 @@ void	*error_null(char *cmd, const char *msg)
 {
 	print_error(cmd, msg);
 	return (NULL);
+}
+
+int	all_error(int ret, char *error)
+{
+	if (ret == BF_ERROR)
+		print_error(ft_strdup(error), "file not found");
+	else if (ret == OP_ERROR)
+		print_error(ft_strdup(error), "open() failed");
+	else if (ret == DUP_ERROR)
+		print_error(ft_strdup(error), "dup2() failed");
+	else if (ret == OUT_ERROR)
+		print_error(ft_strdup(error), "parse error");
+	else if (ret == CMD_ERROR)
+		print_error(ft_strdup(error), "command not found");
+	else if (ret == PERM_ERROR)
+		print_error(ft_strdup(error), "Permission denied");
+	return (1);
 }

@@ -89,14 +89,10 @@ t_list	*get_tokens(char *line)
 	t_list	*new;
 	t_token	*tok;
 
-	if (!line)
-		return (NULL);
 	tokens = NULL;
+	skip_whitespace(&line);
 	while (*line)
 	{
-		skip_whitespace(&line);
-		if (!*line)
-			break ;
 		tok = get_next_token(&line);
 		if (!tok)
 		{
@@ -105,6 +101,7 @@ t_list	*get_tokens(char *line)
 		}
 		new = ft_lstnew(tok);
 		ft_lstadd_back(&tokens, new);
+		skip_whitespace(&line);
 	}
 	return (tokens);
 }
