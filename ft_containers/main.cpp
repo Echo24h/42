@@ -8,6 +8,7 @@
 #include <type_traits>
 #include <list>
 #include <stack>
+#include <map>
 #include "vector.hpp"
 #include "type_traits.hpp"
 #include "iterator.hpp"

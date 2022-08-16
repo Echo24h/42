@@ -1,6 +1,7 @@
 #ifndef _map_hpp_
 #define _map_hpp_
 
+#include <functional> // * for std::binary_function
 #include "utility.hpp"
 
 namespace ft
@@ -32,10 +33,38 @@ namespace ft
 			// typedef difference_type				a signed integral type, identical to: iterator_traits<iterator>::difference_type	usually the same as ptrdiff_t
 
 		private:
+			struct _node
+			{
+				value_type	v;
+				_node * 	l;
+				_node * 	r;
+			}
 
 		public:
+			map(void);
 
-		private:
+			explicit map(const Compare & comp, const Allocator & alloc = Allocator());
+
+			map(const map & other);
+
+			template <typename InputIt>
+			map(InputIt first, InputIt last,
+				const Compare & comp = Compare(),
+				const Allocator & alloc = Allocator() );
+
+			~map(void) {}
+
+			class value_compare : public std::binary_function<value_type, value_type, bool>
+			{
+				friend class map;
+				protected:
+					key_compare comp;
+
+					value_compare(key_compare c);
+					
+				public:
+					bool operator()(const value_type & x, const value_type & y) const;
+			};
 
 	};
 }

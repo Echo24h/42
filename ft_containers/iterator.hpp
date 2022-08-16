@@ -76,7 +76,7 @@ namespace ft {
 			// ---- constructor(s) ----
 			reverse_iterator(void) 														: _curr(iterator_type()) 	{}
 			explicit reverse_iterator(iterator_type it) 								: _curr(it) 				{}
-			template <class Iter> reverse_iterator(reverse_iterator<Iter> const & src) 	: _curr(src.base()) 			{}
+			template <class Iter> reverse_iterator(reverse_iterator<Iter> const & src) 	: _curr(src.base()) 		{}
 
 			// ---- operator(s) ----
 			reference			operator*(void) const 				{ iterator_type tmp = _curr; return *(--tmp); }				
