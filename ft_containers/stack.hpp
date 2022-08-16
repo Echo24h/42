@@ -13,35 +13,35 @@ namespace ft
 			typedef Container	container_type;
 			typedef size_t		size_type;
 
-		private:
-			container_type _ctnr;
+		protected:
+			container_type c;
 
 		public:
 			explicit stack(const container_type & ctnr = container_type())
-				: _ctnr(ctnr)
+				: c(ctnr)
 			{}
 
 			~stack() {}
 
-			bool				empty(void) const 				{ return _ctnr.empty(); }
-			size_type 			size(void) const 				{ return _ctnr.size(); }
-			value_type & 		top(void)						{ return _ctnr.back(); }
-			value_type const & 	top(void) const 				{ return _ctnr.back(); }
-			void 				push(const value_type & val) 	{ _ctnr.push_back(val); }
-			void 				pop(void) 						{ _ctnr.pop_back(); }
+			bool				empty(void) const 				{ return c.empty(); }
+			size_type 			size(void) const 				{ return c.size(); }
+			value_type & 		top(void)						{ return c.back(); }
+			value_type const & 	top(void) const 				{ return c.back(); }
+			void 				push(const value_type & val) 	{ c.push_back(val); }
+			void 				pop(void) 						{ c.pop_back(); }
 
 		private:
-			template <typename T1, typename _C1>
-    		friend bool operator==(const stack<T1, _C1>& __x, const stack<T1, _C1>& __y);
+			template <typename T, typename C>
+    		friend bool operator==(const stack<T, C> & x, const stack<T, C> & y);
 
-			template <typename T1, typename _C1>
-			friend bool operator<(const stack<T1, _C1>& __x, const stack<T1, _C1>& __y);
+			template <typename T, typename C>
+			friend bool operator<(const stack<T, C> & x, const stack<T, C> & y);
 	};
 
 	template <typename T, typename Container>
 	bool operator==(const ft::stack<T,Container> & lhs, const ft::stack<T,Container> & rhs )
 	{
-		return lhs._ctnr == rhs._ctnr;
+		return lhs.c == rhs.c;
 	}
  	
 	template <typename T, typename Container>
@@ -53,7 +53,7 @@ namespace ft
 	template <typename T, typename Container>
 	bool operator<( const ft::stack<T,Container> & lhs, const ft::stack<T,Container> & rhs )
 	{
-		return (lhs._ctnr < rhs._ctnr);
+		return (lhs.c < rhs.c);
 	}
 
 	template <typename T, typename Container>
