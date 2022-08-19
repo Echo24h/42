@@ -56,7 +56,7 @@ namespace ft {
 
 	// ---- reverse iterator ----
 	template <class Iterator>
-	class reverse_iterator: public iterator<typename iterator_traits<Iterator>::iterator_category,
+	class reverse_iterator: public ft::iterator<typename iterator_traits<Iterator>::iterator_category,
                       						typename iterator_traits<Iterator>::value_type,
                       						typename iterator_traits<Iterator>::difference_type,
                       						typename iterator_traits<Iterator>::pointer,
@@ -145,7 +145,7 @@ namespace ft {
 
 	// ---- random_access_iterator ----
 	template <typename T>
-	class random_access_iterator : public iterator<random_access_iterator_tag, T>
+	class random_access_iterator : public ft::iterator<random_access_iterator_tag, T>
 	{
 		public:
 			// ---- member type(s) ----
