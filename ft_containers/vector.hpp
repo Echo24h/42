@@ -73,6 +73,7 @@ namespace ft
 			{
 				clear();
 				_deallocate(_data, _capacity);
+				_data = nullptr;
 				_capacity = 0;
 			}
 
@@ -90,8 +91,6 @@ namespace ft
 			const_reference operator[](size_type n) const 	{ return *(_data + n); }
 
 			// ---- member function(s) ----
-			const_iterator		cbegin(void) const			{ return const_iterator(_data); }
-
             iterator		begin(void)			{ return iterator(_data); }
 			const_iterator	begin(void) const	{ return const_iterator(_data); }
 			iterator		end(void)			{ return iterator(_data + _size); }

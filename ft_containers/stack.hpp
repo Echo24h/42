@@ -31,11 +31,11 @@ namespace ft
 			void 				pop(void) 						{ c.pop_back(); }
 
 		private:
-			template <typename T, typename C>
-    		friend bool operator==(const stack<T, C> & x, const stack<T, C> & y);
+			template <typename _T, typename _C>
+    		friend bool operator==(const stack<_T, _C> & x, const stack<_T, _C> & y);
 
-			template <typename T, typename C>
-			friend bool operator<(const stack<T, C> & x, const stack<T, C> & y);
+			template <typename _T, typename _C>
+			friend bool operator<(const stack<_T, _C> & x, const stack<_T, _C> & y);
 	};
 
 	template <typename T, typename Container>

@@ -6,6 +6,7 @@
 #include <iterator>
 #include <algorithm>
 #include <type_traits>
+#include <functional>
 #include <list>
 #include <stack>
 #include <map>
@@ -15,6 +16,7 @@
 #include "utility.hpp"
 #include "algorithm.hpp"
 #include "stack.hpp"
+#include "tree.hpp"
 
 class Test
 {
@@ -136,26 +138,58 @@ int _ratio = 1;
 #define TESTED_TYPE 		int
 #define	TESTED_NAMESPACE 	ft
 
+struct A
+{
+	A(void) { std::cout << "constructor"; } 
+	~A(void) { std::cout << "destructor"; } 
+};
+
+typedef int																	type;
+typedef ft::BinarySearchTree<type, std::less<type>, std::allocator<type> >	BST;
+
+// int main()
+// {
+// 	const BST bst(1);
+// 	BST::const_node_pointer ptr = bst.searchNode(1);
+// 	BST::const_node_pointer child = ptr->getChild();
+// 	std::cout << "1:" << ptr->data << std::endl;
+// 	// bst.insert(3);
+// 	// bst.insert(7);
+// 	// bst.insert(8);
+// 	// bst.insert(2);
+// 	// bst.insert(4);
+// 	bst.showInOrder();
+// 	std::cout << "---\n";
+// 	//bst.deleteNode(3);
+// 	//bst.showInOrder();
+// 	std::cout << bst.size() << std::endl;
+// 	return (0);
+// }
+
 int main()
 {
-	std::list<TESTED_TYPE> lst;
-	for (int i = 1; i < 5; ++i)
-		lst.push_back(i * 3);
-
-	std::list<TESTED_TYPE>::iterator lst_it = lst.begin();
-	std::list<TESTED_TYPE>::iterator end = lst.end();
-	std::list<TESTED_TYPE>::difference_type n = distance(lst_it, end);
-	std::cout << n << std::endl;
-	//TESTED_NAMESPACE::vector<TESTED_TYPE> vct(lst.begin(), lst.end());
-	// //printSize(vct);
-
-	// lst_it = lst.begin();
-	// for (int i = 1; lst_it != lst.end(); ++i)
-	// 	*lst_it++ = i * 5;
-	// vct.assign(lst.begin(), lst.end());
-	// //printSize(vct);
-
-	// vct.insert(vct.end(), lst.rbegin(), lst.rend());
-	//printSize(vct);
-	return (0);
+	int * i = nullptr;
+	int * & refi = i;
+	return 0;
+	    std::map<std::string, int> mapOfWordCount;
+    // Insert Element in map
+    mapOfWordCount.insert(std::pair<std::string, int>("first", 1));
+    mapOfWordCount.insert(std::pair<std::string, int>("second", 2));
+    mapOfWordCount.insert(std::pair<std::string, int>("third", 3));
+    mapOfWordCount.insert(std::pair<std::string, int>("v", 4));
+    mapOfWordCount.insert(std::pair<std::string, int>("u", 5));
+    // Create a map iterator and point to beginning of map
+    std::map<std::string, int>::iterator it = mapOfWordCount.begin();
+    // Iterate over the map using Iterator till end.
+    while (it != mapOfWordCount.end())
+    {
+        // Accessing KEY from element pointed by it.
+        std::string word = it->first;
+        // Accessing VALUE from element pointed by it.
+        int count = it->second;
+        std::cout << word << " :: " << count << std::endl;
+        // Increment the Iterator to point to next entry
+        it++;
+    }
+    return 0;
 }

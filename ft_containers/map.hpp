@@ -3,6 +3,7 @@
 
 #include <functional> // * for std::binary_function
 #include "utility.hpp"
+#include "tree.hpp"
 
 namespace ft
 {
@@ -10,7 +11,7 @@ namespace ft
 		typename Key,
         typename T,
         typename Compare = less<Key>,
-        typename Alloc = allocator<ft::pair<Key const, T> >
+        typename Alloc = std::allocator<ft::pair<Key const, T> >
     >
 	class map
 	{
@@ -33,12 +34,9 @@ namespace ft
 			// typedef difference_type				a signed integral type, identical to: iterator_traits<iterator>::difference_type	usually the same as ptrdiff_t
 
 		private:
-			struct _node
-			{
-				value_type	v;
-				_node * 	l;
-				_node * 	r;
-			}
+			typedef ft::BinarySearchTree<value_type, key_compare, allocator_type>	_tree;
+
+			_tree base;	
 
 		public:
 			map(void);
@@ -54,7 +52,8 @@ namespace ft
 
 			~map(void) {}
 
-			class value_compare : public std::binary_function<value_type, value_type, bool>
+			class value_compare
+				: public std::binary_function<value_type, value_type, bool>
 			{
 				friend class map;
 				protected:
