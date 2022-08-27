@@ -3,23 +3,28 @@
 
 #include <exception>
 #include <memory>
+#include <csignal>
 #include "iterator.hpp"
 #include "utility.hpp"
+
+static void printPtr(std::string const & pfx, void * ptr)
+{
+	std::cout << pfx << ": ";
+	if (!ptr)
+		std::cout << "null";
+	else
+		std::cout << ptr;
+	std::cout << std::endl;
+}
 
 namespace ft
 {
 	// *****************************************
 	// * BSTNode
 	// *****************************************
-	// ? is it needed to allocate DataType on the heap to inforce the use of DataAllocator
-	template <typename DataType, typename DataAllocator>
+	template <typename DataType>
 	struct BSTNode
 	{
-		typedef BSTNode														value_type;
-		typedef typename DataAllocator::template rebind<value_type>::other	allocator_type;
-		typedef value_type *												pointer;
-		typedef DataType													data_type;
-
 		DataType		data;
 		BSTNode *		left;
 		BSTNode * 		right;
@@ -50,42 +55,31 @@ namespace ft
 		BSTNode * getChild(void)
 		{ return (left != nullptr ? left : right); }
 
-		static pointer newNode(typename BSTNode<DataType, DataAllocator>::data_type const & data,
-								pointer parent,
-								pointer left,
-								pointer right)
+		void debug(std::string const & pfx = "BSTNode")
 		{
-			allocator_type alloc;
-			pointer node;
-			node = alloc.allocate(1);
-			alloc.construct(node, value_type(data, parent, left, right));
-			return node;
-		}
-
-		static void deleteNode(pointer node)
-		{
-			if (node == nullptr)
-				return ;
-			allocator_type alloc;
-			alloc.destroy(node);
-			alloc.deallocate(node, 1);
+			std::cout << pfx << std::endl;
+			std::cout << data << std::endl;
+			printPtr("parent", parent);
+			printPtr("left", left);
+			printPtr("right", right);
 		}
 	};
 
 	// *****************************************
 	// * TreeIterator
 	// *****************************************
-	template <typename NodeType>
+	template <typename DataType>
 	class BSTIterator
-		: public ft::iterator<bidirectional_iterator_tag, NodeType>
 	{
 		public:
-			// * ---- member type(s) ----
-			typedef BSTIterator						value_type;
-			typedef BSTIterator	&					reference;
-			typedef typename NodeType::value_type	node_type;
-			typedef typename NodeType::pointer		node_pointer;
-			typedef typename NodeType::data_type	data_type;
+			typedef DataType 					value_type;
+			typedef ptrdiff_t 					difference_type;
+			typedef value_type *				pointer;
+			typedef value_type &  				reference;
+			typedef bidirectional_iterator_tag	iterator_category;
+
+			typedef BSTNode<value_type>			node_type;
+			typedef node_type *					node_pointer;
 
 		private:
 			node_pointer 	_curr;
@@ -105,78 +99,59 @@ namespace ft
 			{}
 
 			// * ---- operator(s) ----
-			data_type const & operator*(void) const
+			value_type const & operator*(void) const
 			{ return _curr->data; }
 
-			node_pointer operator->(void)
-			{ return _curr; }
+			pointer operator->(void)
+			{ return &_curr->data; }
 
-			// todo : compare my exceptions w. stl ones ; do they even throw ?
-			// reference operator++()
-			// {
-			// 	if (!_curr)
-			// 		throw std::overflow_error("ft::BSTIterator");
-			// 	node_pointer successor = _getSuccessor(_curr);
-			// 	if (!successor)
-			// 		_isEnd = true;
-			// 	else
-			// 		_curr = successor;
-			// 	return *this;
-			// }
+			BSTIterator & operator++()
+			{
+				_curr = _getSuccessor(_curr);
+				if (!_curr)
+					std::raise(SIGSEGV);
+				return *this;
+			}
 
-			// reference operator--()
-			// {
-			// 	if (_isEnd)
-			// 		_isEnd = false;
-			// 	else
-			// 	{
-			// 		node_pointer predecessor = _getPredecessor(_curr);
-			// 		if (!predecessor)
-			// 			throw std::overflow_error("ft::BSTIterator");
-			// 		else
-			// 			_curr = predecessor;
-			// 	}
-			// 	return *this;
-			// }
+			BSTIterator & operator--()
+			{
+				_curr = _getPredecessor(_curr);
+				if (!_curr)
+					std::raise(SIGSEGV);
+				return *this;
+			}
 
-			// value_type operator++(int)
-			// {
-			// 	value_type tmp = *this;
-			// 	node_pointer successor = _getSuccessor(_curr);
-			// 	if (!successor)
-			// 		throw std::overflow_error("ft::BSTIterator");
-			// 	else
-			// 		_curr = successor;
-			// 	return tmp;
-			// }
+			BSTIterator operator++(int)
+			{
+				BSTIterator tmp = *this;
+				*this = operator++();
+				return tmp;
+			}
 
-			// value_type operator--(int)
-			// {
-			// 	value_type tmp = *this;
-			// 	node_pointer predecessor = _getPredecessor(_curr);
-			// 	if (!predecessor)
-			// 		throw std::overflow_error("ft::BSTIterator");
-			// 	else
-			// 		_curr = predecessor;
-			// 	return tmp;
-			// }
+			BSTIterator operator--(int)
+			{
+				BSTIterator tmp = *this;
+				*this = operator--();
+				return tmp;
+			}
 
-			// operator BSTIterator<node_type const *>() const
-			// { return BSTIterator<node_type const *>(_curr); }
+			operator BSTIterator<value_type const>() const
+			{ return BSTIterator<value_type const>(_curr); }
 
 			// ---- member function(s) ----
 			node_pointer base(void) const
 			{ return _curr; }
 
-		private:	
+		private:
 			node_pointer _getSuccessor(node_pointer node)
 			{
 				if (!node)
 					return nullptr;
 				if (node->right)
 				{
-					while (node->right)
-						node = node->right;
+					node = node->right;
+					while (node && node->left)
+						node = node->left;
 					return node;
 				}
 				node_pointer parent = node->parent;
@@ -194,8 +169,9 @@ namespace ft
 					return nullptr;
 				if (node->left)
 				{
-					while (node->left)
-						node = node->left;
+					node = node->left;
+					while (node->right)
+						node = node->right;
 					return node;
 				}
 				node_pointer parent = node->parent;
@@ -219,18 +195,21 @@ namespace ft
 	// *****************************************
 	// * BST (aka BinarySearchTree)
 	// *****************************************
-	template <typename DataType, typename Compare, typename Allocator>
+	template <typename DataType, typename DataCompare, typename DataAllocator>
 	class BST
 	{
 		public:
 			typedef DataType							data_type;
-			typedef Compare								comp;
-			typedef BSTNode<DataType, Allocator>		node_type;
-			typedef typename node_type::allocator_type	node_allocator;
+			typedef DataCompare							data_compare;
+			typedef DataAllocator						data_allocator;
+			typedef BSTNode<data_type>					node_type;
 			typedef node_type *							node_pointer;
+			typedef BSTIterator<data_type>				iterator;
+			// typedef BSTIterator<data_type const>		const_iterator;
 			typedef size_t								size_type;
-			typedef BSTIterator<node_type>				iterator;
 
+			typedef typename data_allocator::template rebind<node_type>::other	node_allocator;
+			
 		private:
 			node_pointer	_root;
 			node_pointer	_end;
@@ -238,14 +217,20 @@ namespace ft
 		public:
 			BST(void)
 			{
-				_root = node_type::newNode(data_type(), nullptr, nullptr, nullptr);
+				_root = _newNode(data_type(), nullptr, nullptr, nullptr);
 				_end = _root;
 			}
 
 			~BST(void)
 			{
 				clear();
-				node_type::deleteNode(_end);
+				_deleteNode(_end);
+			}
+
+			size_type max_size(void)
+			{
+				node_allocator alloc;
+				return alloc.max_size();
 			}
 
 			// * return false if data is duplicate
@@ -253,7 +238,7 @@ namespace ft
 			{
 				if (_root == _end)
 				{
-					_root = node_type::newNode(data, nullptr, nullptr, _end);
+					_root = _newNode(data, nullptr, nullptr, _end);
 					_end->parent = _root;
 					return true;
 				}
@@ -262,30 +247,27 @@ namespace ft
 				while (curr != nullptr && curr != _end)
 				{
 					prev = curr;
-					if (comp()(data, curr->data))
+					if (data_compare()(data, curr->data))
 						curr = curr->left;
-					else if (comp()(curr->data, data))
+					else if (data_compare()(curr->data, data))
 						curr = curr->right;
 					else
 						return false;
 				}
 				if (curr == _end)
 				{
-					prev->right = node_type::newNode(data, prev, nullptr, _end);
+					prev->right = _newNode(data, prev, nullptr, _end);
 					_end->parent = prev->right;
 				}
 				else
 				{
-					if (comp()(prev->data, data))
-						prev->right = node_type::newNode(data, prev, nullptr, nullptr);
+					if (data_compare()(prev->data, data))
+						prev->right = _newNode(data, prev, nullptr, nullptr);
 					else
-						prev->left = node_type::newNode(data, prev, nullptr, nullptr);
+						prev->left = _newNode(data, prev, nullptr, nullptr);
 				}
 				return true;
 			}
-
-			// void insert(data_type const & data)
-			// { _root = _insertNode(_root, data, nullptr); }
 
 			void showInOrder(void) const 
 			{ _showInOrder(_root); }
@@ -322,6 +304,27 @@ namespace ft
 			{ return iterator(_end); }
 
 		private:
+			node_pointer _newNode(data_type const & data,
+									node_pointer parent,
+									node_pointer left,
+									node_pointer right)
+			{
+				node_allocator alloc;
+				node_pointer node;
+				node = alloc.allocate(1);
+				alloc.construct(node, node_type(data, parent, left, right));
+				return node;
+			}
+
+			void _deleteNode(node_pointer node)
+			{
+				if (node == nullptr)
+					return ;
+				node_allocator alloc;
+				alloc.destroy(node);
+				alloc.deallocate(node, 1);
+			}
+
 			node_pointer _getMin(node_pointer root)
 			{
 				if (root == _end)
@@ -340,20 +343,6 @@ namespace ft
 				return root;
 			}
 
-			// // * return nullptr if data is duplicate
-			// node_pointer _insertNode(node_pointer root, data_type const & data, node_pointer parent)
-			// {
-			// 	if (root == nullptr)
-			// 		return _newNode(data, parent);
-			// 	if (comp()(data, root->data))
-			// 		root->left = _insertNode(root->left, data, root);
-			// 	else if (comp()(root->data, data))
-			// 		root->right = _insertNode(root->right, data, root);
-			// 	else
-			// 		return nullptr;
-			// 	return root;
-			// }
-
 			void _showInOrder(node_pointer root) const
 			{
 				if (root == nullptr || root == _end)
@@ -367,9 +356,9 @@ namespace ft
 			{
 				if (root == nullptr || root == _end)
 					return nullptr;
-				if (comp()(data, root->data))
+				if (data_compare()(data, root->data))
 					return _find(root->left, data);
-				else if (comp()(root->data, data))
+				else if (data_compare()(root->data, data))
 					return _find(root->right, data);
 				else
 					return root;
@@ -381,7 +370,7 @@ namespace ft
 					return nullptr;
 				root->left = _clear(root->left);
 				root->right = _clear(root->right);
-				node_type::deleteNode(root);
+				_deleteNode(root);
 				return nullptr;
 			}
 
@@ -389,15 +378,15 @@ namespace ft
 			{
 				if (!root || root == _end)
 					return root;
-				if (comp()(data, root->data))
+				if (data_compare()(data, root->data))
 					root->left = _erase(root->left, data);
-				else if (comp()(root->data, data))
+				else if (data_compare()(root->data, data))
 					root->right = _erase(root->right, data);
 				else
 				{
 					if (root->hasNoChild())
 					{
-						node_type::deleteNode(root);
+						_deleteNode(root);
 						return nullptr;
 					}
 					else if (root->hasOneChild())
@@ -408,7 +397,7 @@ namespace ft
 							child->right = _end;
 							_end->parent = child;
 						}
-						node_type::deleteNode(root);
+						_deleteNode(root);
 						return child;
 					}
 					else
@@ -418,7 +407,7 @@ namespace ft
 							node_pointer predecessor = _getMax(root->left);
 							predecessor->right = _end;
 							_end->parent = predecessor;
-							node_type::deleteNode(root);
+							_deleteNode(root);
 							return predecessor;
 						}
 						else
@@ -443,11 +432,5 @@ namespace ft
 			}
 	};
 }
-
-/*
-    - o
-- o
-    - o
-*/
 
 #endif

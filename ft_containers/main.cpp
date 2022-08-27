@@ -17,6 +17,7 @@
 #include "algorithm.hpp"
 #include "stack.hpp"
 #include "tree.hpp"
+#include <csignal>
 
 class Test
 {
@@ -171,48 +172,64 @@ void print_map(std::string_view comment, const std::map<std::string, int>& m)
 
 int main()
 {
-	std::map<std::string, int> m2;
-	std::map<std::string, int>::iterator it2 = m2.begin();
-	it2++;
-	std::cout << it2->second << std::endl;
-	return 0;
-
-	std::map<std::string, int> m { {"CPU", 10}, {"GPU", 15}, {"RAM", 20}, };
-	std::map<std::string, int>::iterator it = m.begin();
-	// --it;
-	++it;
-	std::cout << it->first << std::endl;
-	return 0;
-    print_map("1) Initial map: ", m);
+	// std::map<std::string, int> m { {"CPU", 10}, {"GPU", 15}, {"RAM", 20}, };
+	// std::map<std::string, int>::iterator it = m.begin();
+	// // --it;
+	// ++it;
+	// std::cout << it->first << std::endl;
+	// return 0;
+    // print_map("1) Initial map: ", m);
  
-    m["CPU"] = 25;  // update an existing value
-    m["SSD"] = 30;  // insert a new value
-    print_map("2) Updated map: ", m);
+    // m["CPU"] = 25;  // update an existing value
+    // m["SSD"] = 30;  // insert a new value
+    // print_map("2) Updated map: ", m);
  
-    // using operator[] with non-existent key always performs an insert
-    std::cout << "3) m[UPS] = " << m["UPS"] << '\n';
-    print_map("4) Updated map: ", m);
+    // // using operator[] with non-existent key always performs an insert
+    // std::cout << "3) m[UPS] = " << m["UPS"] << '\n';
+    // print_map("4) Updated map: ", m);
  
-    m.erase("GPU");
-    print_map("5) After erase: ", m);
+    // m.erase("GPU");
+    // print_map("5) After erase: ", m);
  
-    m.clear();
-    std::cout << std::boolalpha << "8) Map is empty: " << m.empty() << '\n';
+    // m.clear();
+    // std::cout << std::boolalpha << "8) Map is empty: " << m.empty() << '\n';
 
 	BST bst;
 	
     bst.insert(6);
-    bst.insert(15);
-    bst.insert(7);
-    bst.insert(13);
-    bst.insert(9);
-	// BST::node_pointer n = bst.find(13);
-	// std::cout << n->data << std::endl;
-    bst.insert(18);
-	bst.erase(15);
 	bst.insert(15);
-	//bst.erase(15);
-	bst.showInOrder();
+	bst.insert(7);
+	bst.insert(13);
+	bst.insert(9);
+	// // // BST::node_pointer n = bst.find(13);
+	// // // std::cout << n->data << std::endl;
+	bst.insert(18);
+	// bst.erase(15);
+	// bst.insert(15);
+	// bst.showInOrder();
+	BST::iterator it = bst.begin();
+	// it.base()->debug("begin");
+	// it.base()->right->debug("begin->right");
+	BST::iterator ite = bst.end();
+	// std::cout << "_end: " << &*ite << std::endl;
+
+	// ite.base()->debug("ite");
+	
+	// --ite;
+	// ite.base()->debug("ite");
+	// // std::cout << std::endl;
+	// ++it;
+	// it.base()->debug("it");
+	// ++it;
+	// it.base()->debug("it");
+	// --it;
+	// it.base()->debug("it");
+	//std::cout << *it << std::endl;
+	// BST::iterator ite = bst.begin();
+	// ++ite;
+	// std::cout << (it == ite) << std::endl;
+	for (; it != ite; --ite)
+		std::cout << *ite << std::endl;
     // bst.insert(17);
     // bst.insert(20);
 	// BST::iterator it = bst.begin();
