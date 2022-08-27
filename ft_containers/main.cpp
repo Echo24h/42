@@ -146,26 +146,83 @@ struct A
 
 typedef int																	type;
 typedef ft::BST<type, std::less<type>, std::allocator<type> >	            BST;
+typedef ft::vector<type>													vector;
+
+
+void print_map(std::string_view comment, const std::map<std::string, int>& m)
+{
+    std::cout << comment ;
+    // iterate using C++17 facilities
+	std::map<std::string, int>::const_iterator it = m.begin();
+	std::map<std::string, int>::const_iterator ite = m.end();
+		std::cout << "\nite: " << '[' << ite->first << "] = " << ite->second << "\n";
+	for (; it != ite; it++)
+		std::cout << '[' << it->first << "] = " << it->second << "; ";
+// C++11 alternative:
+//  for (const auto& n : m) {
+//      std::cout << n.first << " = " << n.second << "; ";
+//  }
+// C++98 alternative
+//  for (std::map<std::string, int>::const_iterator it = m.begin(); it != m.end(); it++) {
+//      std::cout << it->first << " = " << it->second << "; ";
+//  }
+    std::cout << '\n';
+}
 
 int main()
 {
+	std::map<std::string, int> m2;
+	std::map<std::string, int>::iterator it2 = m2.begin();
+	it2++;
+	std::cout << it2->second << std::endl;
+	return 0;
+
+	std::map<std::string, int> m { {"CPU", 10}, {"GPU", 15}, {"RAM", 20}, };
+	std::map<std::string, int>::iterator it = m.begin();
+	// --it;
+	++it;
+	std::cout << it->first << std::endl;
+	return 0;
+    print_map("1) Initial map: ", m);
+ 
+    m["CPU"] = 25;  // update an existing value
+    m["SSD"] = 30;  // insert a new value
+    print_map("2) Updated map: ", m);
+ 
+    // using operator[] with non-existent key always performs an insert
+    std::cout << "3) m[UPS] = " << m["UPS"] << '\n';
+    print_map("4) Updated map: ", m);
+ 
+    m.erase("GPU");
+    print_map("5) After erase: ", m);
+ 
+    m.clear();
+    std::cout << std::boolalpha << "8) Map is empty: " << m.empty() << '\n';
+
 	BST bst;
-    bst.insert(15);
+	
     bst.insert(6);
-	bst.insert(3);
-	bst.insert(2);
-	bst.insert(4);
+    bst.insert(15);
     bst.insert(7);
     bst.insert(13);
     bst.insert(9);
+	// BST::node_pointer n = bst.find(13);
+	// std::cout << n->data << std::endl;
     bst.insert(18);
-    bst.insert(17);
-    bst.insert(20);
+	bst.erase(15);
+	bst.insert(15);
+	//bst.erase(15);
 	bst.showInOrder();
-	std::cout << "---\n";
-    BST::node_pointer nptr = bst.searchNode(15);
-    BST::node_pointer nptr2 = new BST::node_type;
-    std::cout << "nptr2: " << nptr2->data << std::endl;
-    std::cout << BST::getPredecessor(nptr)->data << std::endl;
+    // bst.insert(17);
+    // bst.insert(20);
+	// BST::iterator it = bst.begin();
+	// BST::iterator ite = bst.end();
+	// for (; it != ite; ++it)
+	// 	std::cout << it->data << std::endl;
+	// std::cout << "---\n";
+    // // BST::node_pointer nptr = bst.searchNode(4);
+	// // BST::iterator it(nptr);
+	// // std::cout << nptr->data << std::endl;
+	// // std::cout << *it << std::endl;
 	return (0);
 }

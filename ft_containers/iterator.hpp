@@ -145,7 +145,8 @@ namespace ft {
 
 	// ---- random_access_iterator ----
 	template <typename T>
-	class random_access_iterator : public ft::iterator<random_access_iterator_tag, T>
+	class random_access_iterator
+		: public ft::iterator<random_access_iterator_tag, T>
 	{
 		public:
 			// ---- member type(s) ----
