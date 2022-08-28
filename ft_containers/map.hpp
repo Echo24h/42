@@ -55,27 +55,128 @@ namespace ft
 			};
 
 		private:
-			
-
 			_tree base;	
 
 		public:
-			map(void);
+			map(void)
+			{}
 
-			explicit map(const Compare & comp, const Allocator & alloc = Allocator());
+			explicit map(const Compare & comp, const Allocator & alloc = Allocator())
+			{}
 
-			map(const map & other);
+			map(const map & other)
+			{}
 
 			template <typename InputIt>
 			map(InputIt first, InputIt last,
 				const Compare & comp = Compare(),
-				const Allocator & alloc = Allocator() );
+				const Allocator & alloc = Allocator())
+			{}
 
-			~map(void) {}
+			~map(void)
+			{}
 
+			size_type size(void) const
+			{
+				return base.size();
+			}
+
+			size_type max_size(void) const
+			{
+				return base.max_size();
+			}
+
+			void clear(void)
+			{
+				base.clear();
+			}
+
+			ft::pair<iterator, bool> insert(value_type const & value)
+			{
+				bool wasInserted;
+				wasInserted = bst.insert(value) ? false : true;
+				return ft::make_pair(bst.find(value), wasInserted);
+			}
+
+			iterator insert(iterator hint, const value_type & value)
+			{
+				(void)hint;
+				insert(value);
+			}
+
+			template <typename Iter>
+			void insert(Iter first, Iter last)
+			{
+				for (; first != last; ++first)
+					insert(*first);
+			}
+
+			void erase(iterator pos)
+			{
+				bst.erase(*pos);
+			}
+
+			void erase(iterator first, iterator last)
+			{
+				for (; first != last; ++first)
+					erase(*first);
+			}
+
+			size_type erase(Key const & key)
+			{
+				iterator pos = bst.find(ft::make_pair(key, mapped_type()));
+				if (pos.base() == _end)
+					return 0;
+				bst.erase(*pos);
+				return 1;
+			}
 			
+			void swap(map & other)
+			{
+				_tree.swap(other._tree);
+			}
 
+			size_type count(key_type const & key) const
+			{
+				ft::pair<key_type, mapped_type> p;
+				p = ft::make_pair(key, mapped_type());
+				return (bst.find(p).base() != _end);
+			}
+
+			iterator find(Key const & key)
+			{
+				return find(ft::make_pair(key, mapped_type()));
+			}
+
+			// todo : constness
+			// const_iterator find(Key const & key) const
+			// {}
+
+			std::pair<iterator, iterator> equal_range(Key const & key)
+			{
+				return ft::make_pair(lower_bound(key), upper_bound(key));
+			}
+
+			// std::pair<const_iterator,const_iterator> equal_range( const Key & key ) const
+			// {}
+
+			iterator lower_bound(Key const & key)
+			{
+				return bst.lower_bound(ft::make_pair(key, mapped_type()));
+			}
+
+			iterator upper_bound(Key const & key)
+			{
+				return bst.upper_bound(ft::make_pair(key, mapped_type()));
+			}
 	};
+}
+
+template <class Key, class T, class Compare, class Alloc>
+void swap(ft::map<Key,T,Compare,Alloc> & lhs,
+			ft::map<Key,T,Compare,Alloc> & rhs)
+{
+	lhs.swap(rhs);
 }
 
 #endif
