@@ -27,8 +27,6 @@ namespace ft
 			typedef typename allocator_type::const_pointer		const_pointer;
 			typedef size_t										size_type;
 
-			typedef ft::BST<value_type, key_compare, allocator_type>	_tree;
-
 			// typedef value_compare				Nested function class to compare elements	see value_comp
 			// typedef iterator						a bidirectional iterator to value_type	convertible to const_iterator
 			// typedef const_iterator				a bidirectional iterator to const value_type	
@@ -40,28 +38,34 @@ namespace ft
 			class value_compare
 				: public std::binary_function<value_type, value_type, bool>
 			{
-				protected:
-					key_compare comp;
+				// protected:
+				// 	key_compare comp;
 
-					value_compare(key_compare c)
-						: comp(c)
-					{}
+				// 	value_compare(key_compare c)
+				// 		: comp(c)
+				// 	{}
 					
 				public:
 					bool operator()(const value_type & x, const value_type & y) const
 					{
-						return comp(x->first, x->second);
+						return key_compare()(x.first, y.first);
 					}
 			};
 
 		private:
-			_tree base;	
+			typedef ft::BST<value_type, value_compare, allocator_type>	_tree;
+
+			_tree _base;
+
+		public:
+			typedef typename _tree::iterator		iterator;
+			typedef typename _tree::const_iterator	const_iterator;
 
 		public:
 			map(void)
 			{}
 
-			explicit map(const Compare & comp, const Allocator & alloc = Allocator())
+			explicit map(const key_compare & comp, const allocator_type & alloc = allocator_type())
 			{}
 
 			map(const map & other)
@@ -69,8 +73,8 @@ namespace ft
 
 			template <typename InputIt>
 			map(InputIt first, InputIt last,
-				const Compare & comp = Compare(),
-				const Allocator & alloc = Allocator())
+				const key_compare & comp = key_compare(),
+				const allocator_type & alloc = allocator_type())
 			{}
 
 			~map(void)
@@ -78,24 +82,49 @@ namespace ft
 
 			size_type size(void) const
 			{
-				return base.size();
+				return _base.size();
 			}
 
 			size_type max_size(void) const
 			{
-				return base.max_size();
+				return _base.max_size();
+			}
+
+			iterator begin(void)
+			{
+				return _base.begin();
+			}
+
+			const_iterator begin(void) const
+			{
+				return _base.begin();
+			}
+
+			iterator end(void)
+			{
+				return _base.end();
+			}
+
+			const_iterator end(void) const
+			{
+				return _base.end();
 			}
 
 			void clear(void)
 			{
-				base.clear();
+				_base.clear();
+			}
+
+			mapped_type & operator[](key_type const & k)
+			{
+				return (*((insert(ft::make_pair(k, mapped_type()))).first)).second;
 			}
 
 			ft::pair<iterator, bool> insert(value_type const & value)
 			{
 				bool wasInserted;
-				wasInserted = bst.insert(value) ? false : true;
-				return ft::make_pair(bst.find(value), wasInserted);
+				wasInserted = _base.insert(value) ? false : true;
+				return ft::make_pair(_base.find(value), wasInserted);
 			}
 
 			iterator insert(iterator hint, const value_type & value)
@@ -113,7 +142,7 @@ namespace ft
 
 			void erase(iterator pos)
 			{
-				bst.erase(*pos);
+				_base.erase(*pos);
 			}
 
 			void erase(iterator first, iterator last)
@@ -124,28 +153,28 @@ namespace ft
 
 			size_type erase(Key const & key)
 			{
-				iterator pos = bst.find(ft::make_pair(key, mapped_type()));
-				if (pos.base() == _end)
+				iterator pos = _base.find(ft::make_pair(key, mapped_type()));
+				if (pos.base() == end())
 					return 0;
-				bst.erase(*pos);
+				_base.erase(*pos);
 				return 1;
 			}
 			
 			void swap(map & other)
 			{
-				_tree.swap(other._tree);
+				_base.swap(other._tree);
 			}
 
 			size_type count(key_type const & key) const
 			{
 				ft::pair<key_type, mapped_type> p;
 				p = ft::make_pair(key, mapped_type());
-				return (bst.find(p).base() != _end);
+				return (_base.find(p).base() != end());
 			}
 
 			iterator find(Key const & key)
 			{
-				return find(ft::make_pair(key, mapped_type()));
+				return _base.find(ft::make_pair(key, mapped_type()));
 			}
 
 			// todo : constness
@@ -162,12 +191,12 @@ namespace ft
 
 			iterator lower_bound(Key const & key)
 			{
-				return bst.lower_bound(ft::make_pair(key, mapped_type()));
+				return _base.lower_bound(ft::make_pair(key, mapped_type()));
 			}
 
 			iterator upper_bound(Key const & key)
 			{
-				return bst.upper_bound(ft::make_pair(key, mapped_type()));
+				return _base.upper_bound(ft::make_pair(key, mapped_type()));
 			}
 	};
 }

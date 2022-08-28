@@ -16,6 +16,7 @@
 #include "utility.hpp"
 #include "algorithm.hpp"
 #include "stack.hpp"
+#include "map.hpp"
 #include "tree.hpp"
 #include <csignal>
 
@@ -46,27 +47,53 @@ void print_map(std::string_view comment, const std::map<std::string, int>& m)
 
 int main()
 {
-	std::map<std::string, int> m;
-	m.insert(std::make_pair("pute", 1));
-	m.insert(std::make_pair("salope", 2));
-	m.insert(std::make_pair("boobs", 3));
+	ft::map<char,int> mymap;
+ 	ft::map<char,int>::iterator it;
 
-	std::map<std::string, int> m2;
-	m2.insert(std::make_pair("pute", 1));
-	m2.insert(std::make_pair("salope", 2));
-	m2.insert(std::make_pair("boobs", 3));
+	mymap.insert(ft::make_pair('s', 12));
+  // insert some values:
+	mymap['a']=10;
+	return 0;
+//   mymap['b']=20;
+//   mymap['c']=30;
+//   mymap['d']=40;
+//   mymap['e']=50;
+//   mymap['f']=60;
 
-	const bst bst1;
-	// bst1.insert(std::make_pair("pute", 1));
-	// bst1.insert(std::make_pair("salope", 2));
-	// bst1.insert(std::make_pair("boobs", 3));
+//   it=mymap.find('b');
+//   mymap.erase (it);                   // erasing by iterator
 
-	bst bst2;
-	bst2.insert(std::make_pair("pute", 1));
-	bst2.insert(std::make_pair("salope", 2));
-	bst2.insert(std::make_pair("boobs", 3));
+//   mymap.erase ('c');                  // erasing by key
 
-	bst::iterator it = bst1.begin();
-	//std::cout << (bst1 == bst2) << std::endl;
+//   it=mymap.find ('e');
+//   mymap.erase ( it, mymap.end() );    // erasing by range
+
+//   // show content:
+//   for (it=mymap.begin(); it!=mymap.end(); ++it)
+//     std::cout << it->first << " => " << it->second << '\n';
+	// std::map<std::string, int> m;
+	// m.insert(std::make_pair("pute", 1));
+	// m.insert(std::make_pair("salope", 2));
+	// m.insert(std::make_pair("boobs", 3));
+
+	// std::map<std::string, int> m2;
+	// m2.insert(std::make_pair("pute", 1));
+	// m2.insert(std::make_pair("salope", 2));
+	// m2.insert(std::make_pair("boobs", 3));
+
+
+	// const bst bst1;
+	// // bst1.insert(std::make_pair("pute", 1));
+	// // bst1.insert(std::make_pair("salope", 2));
+	// // bst1.insert(std::make_pair("boobs", 3));
+
+	// bst bst2;
+	// bst2.insert(std::make_pair("pute", 1));
+	// bst2.insert(std::make_pair("salope", 2));
+	// bst2.insert(std::make_pair("boobs", 3));
+
+	// bst::const_iterator it = bst1.begin();
+	// //bst::const_iterator cit = it
+	// //std::cout << (bst1 == bst2) << std::endl;
 	return (0);
 }
