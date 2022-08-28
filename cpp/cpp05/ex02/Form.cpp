@@ -56,7 +56,9 @@ int		Form::getGradeReqToExec(void) const {
 }
 
 void	Form::beSigned(Bureaucrat const & src) {
-	if (src.getGrade() > this->gradeReqToSign) {
+	if (this->isSigned) {
+		throw (std::runtime_error(this->getName() + " is already signed"));
+	} else if (src.getGrade() > this->gradeReqToSign) {
 		throw (Form::GradeTooLowException());
 	} else {
 		this->isSigned = true;

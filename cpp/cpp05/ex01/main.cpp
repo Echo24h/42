@@ -5,9 +5,10 @@
 int	main(int ac, char *av[]) {
 	try {
 		Form	ff("myForm", 50, 70);
-		Bureaucrat	p1("john", 51);
+		Bureaucrat	p1("john", 50);
 		
 		std::cout << p1 << std::endl;
+		p1.signForm(ff);
 		p1.signForm(ff);
 		std::cout << ff << std::endl;
 	} catch (std::exception & e) {

@@ -11,6 +11,7 @@ int	main(int ac, char *av[]) {
 		Bureaucrat				me("yo", 3);
 		Bureaucrat				bigShit("bigShit", 150);
 
+		xx.beSigned(me);
 		xx.execute(me);
 		me.executeForm(xx);
 		bigShit.signForm(xx);
