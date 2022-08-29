@@ -202,28 +202,48 @@ namespace ft
 	class BST
 	{
 		public:
-			typedef DataType							data_type;
-			typedef DataCompare							data_compare;
-			typedef DataAllocator						data_allocator;
-			typedef BSTNode<data_type>					node_type;
-			typedef node_type *							node_pointer;
-			typedef BSTIterator<data_type>				iterator;
-			typedef BSTIterator<data_type const>		const_iterator;
-			typedef ft::reverse_iterator<iterator>		reverse_iterator;
-			// typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
-			typedef size_t								size_type;
+			typedef DataType								data_type;
+			typedef DataCompare								data_compare;
+			typedef DataAllocator							data_allocator;
+			typedef BSTNode<data_type>						node_type;
+			typedef node_type *								node_pointer;
+			typedef BSTIterator<data_type>					iterator;
+			typedef BSTIterator<data_type const>			const_iterator;
+			typedef ft::reverse_iterator<iterator>			reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+			typedef size_t									size_type;
 
 			typedef typename data_allocator::template rebind<node_type>::other	node_allocator;
 			
 		private:
 			node_pointer	_root;
 			node_pointer	_end;
+			data_compare	_comp;
 
 		public:
 			BST(void)
+				: _comp(data_compare())
 			{
 				_end = _newNode(data_type(), nullptr, nullptr, nullptr);
 				_root = _end;
+			}
+
+			BST(data_compare const & c)
+				: _comp(c)
+			{
+				_end = _newNode(data_type(), nullptr, nullptr, nullptr);
+				_root = _end;
+			}
+
+			BST(BST const & other)
+				: _comp(other._comp)
+			{
+				_end = _newNode(data_type(), nullptr, nullptr, nullptr);
+				_root = _end;
+				iterator it = other.begin();
+				iterator ite = other.end();
+				for (; it != ite; ++it)
+					insert(*it);
 			}
 
 			~BST(void)
@@ -252,9 +272,9 @@ namespace ft
 				while (curr != nullptr && curr != _end)
 				{
 					prev = curr;
-					if (data_compare()(data, curr->data))
+					if (_comp(data, curr->data))
 						curr = curr->left;
-					else if (data_compare()(curr->data, data))
+					else if (_comp(curr->data, data))
 						curr = curr->right;
 					else
 						return false;
@@ -266,7 +286,7 @@ namespace ft
 				}
 				else
 				{
-					if (data_compare()(prev->data, data))
+					if (_comp(prev->data, data))
 						prev->right = _newNode(data, prev, nullptr, nullptr);
 					else
 						prev->left = _newNode(data, prev, nullptr, nullptr);
@@ -346,7 +366,7 @@ namespace ft
 			{
 				iterator it = begin();
 				iterator ite = end();
-				while (it != ite && data_compare()(*it, data))
+				while (it != ite && _comp(*it, data))
 					++it;
 				return it;
 			}
@@ -470,9 +490,9 @@ namespace ft
 			{
 				if (root == nullptr || root == _end)
 					return _end;
-				if (data_compare()(data, root->data))
+				if (_comp(data, root->data))
 					return _find(root->left, data);
-				else if (data_compare()(root->data, data))
+				else if (_comp(root->data, data))
 					return _find(root->right, data);
 				else
 					return root;
@@ -492,9 +512,9 @@ namespace ft
 			{
 				if (!root || root == _end)
 					return root;
-				if (data_compare()(data, root->data))
+				if (_comp(data, root->data))
 					root->left = _erase(root->left, data);
-				else if (data_compare()(root->data, data))
+				else if (_comp(root->data, data))
 					root->right = _erase(root->right, data);
 				else
 				{

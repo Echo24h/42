@@ -21,36 +21,46 @@ namespace ft
 			typedef ft::pair<key_type const, mapped_type> 		value_type;
 			typedef Compare										key_compare;
 			typedef Alloc										allocator_type;
-			typedef typename allocator_type::reference			reference;
+			typedef typename allocator_type::reference			reference; 
 			typedef typename allocator_type::const_reference	const_reference;
 			typedef typename allocator_type::pointer			pointer;
 			typedef typename allocator_type::const_pointer		const_pointer;
 			typedef size_t										size_type;
-
-			// typedef value_compare				Nested function class to compare elements	see value_comp
-			// typedef iterator						a bidirectional iterator to value_type	convertible to const_iterator
-			// typedef const_iterator				a bidirectional iterator to const value_type	
+			typedef ptrdiff_t									difference_type;
 			// typedef reverse_iterator				reverse_iterator<iterator>	
 			// typedef const_reverse_iterator		reverse_iterator<const_iterator>	
-			// typedef difference_type				a signed integral type, identical to: iterator_traits<iterator>::difference_type	usually the same as ptrdiff_t
+
+			// class exists
+			// typedef value_compare				Nested function class to compare elements	see value_comp
 
 		public:
 			class value_compare
 				: public std::binary_function<value_type, value_type, bool>
 			{
-				// protected:
-				// 	key_compare comp;
+				// ? friend class map;
+				protected:
+					key_compare comp;
 
-				// 	value_compare(key_compare c)
-				// 		: comp(c)
-				// 	{}
-					
+					value_compare(key_compare c)
+						: comp(c)
+					{}
+
 				public:
 					bool operator()(const value_type & x, const value_type & y) const
 					{
-						return key_compare()(x.first, y.first);
+						return comp(x.first, y.first);
 					}
 			};
+
+			key_compare key_comp(void) const
+			{
+				return key_compare();
+			}
+
+			value_compare value_comp(void) const
+			{
+				return value_compare(key_comp());
+			}
 
 		private:
 			typedef ft::BST<value_type, value_compare, allocator_type>	_tree;
@@ -58,17 +68,24 @@ namespace ft
 			_tree _base;
 
 		public:
-			typedef typename _tree::iterator		iterator;
-			typedef typename _tree::const_iterator	const_iterator;
+			typedef typename _tree::iterator				iterator;
+			typedef typename _tree::const_iterator			const_iterator;
+			typedef typename _tree::reverse_iterator		reverse_iterator;
+			typedef typename _tree::const_reverse_iterator	const_reverse_iterator;
 
 		public:
 			map(void)
+				: _base()
 			{}
 
-			explicit map(const key_compare & comp, const allocator_type & alloc = allocator_type())
-			{}
+			explicit map(key_compare const & comp, allocator_type const & alloc = allocator_type())
+				: _base(comp)
+			{
+				(void)alloc;
+			}
 
-			map(const map & other)
+			map(map const & other)
+				: _base(other._base)
 			{}
 
 			template <typename InputIt>
@@ -117,7 +134,12 @@ namespace ft
 
 			mapped_type & operator[](key_type const & k)
 			{
-				return (*((insert(ft::make_pair(k, mapped_type()))).first)).second;
+				value_type val = ft::make_pair(k, mapped_type());
+				ft::pair<iterator, bool> p = insert(val);
+				return p.first->second;
+
+				// ? ask one of the dungeon boss why this shit isn't working
+				// return (*((insert(ft::make_pair(k, mapped_type()))).first)).second;
 			}
 
 			ft::pair<iterator, bool> insert(value_type const & value)
@@ -130,7 +152,7 @@ namespace ft
 			iterator insert(iterator hint, const value_type & value)
 			{
 				(void)hint;
-				insert(value);
+				return insert(value).first;
 			}
 
 			template <typename Iter>
@@ -162,7 +184,7 @@ namespace ft
 			
 			void swap(map & other)
 			{
-				_base.swap(other._tree);
+				_base.swap(other._base);
 			}
 
 			size_type count(key_type const & key) const
@@ -186,6 +208,7 @@ namespace ft
 				return ft::make_pair(lower_bound(key), upper_bound(key));
 			}
 
+			// todo : constness
 			// std::pair<const_iterator,const_iterator> equal_range( const Key & key ) const
 			// {}
 

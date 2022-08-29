@@ -20,8 +20,11 @@
 #include "tree.hpp"
 #include <csignal>
 
+typedef std::string															key_type;
+typedef int																	mapped_type;
 typedef std::pair<std::string, int>											type;
 typedef ft::BST<type, std::less<type>, std::allocator<type> >	            bst;
+typedef ft::map<key_type, mapped_type>										map;
 typedef ft::vector<type>													vec;
 
 
@@ -47,12 +50,20 @@ void print_map(std::string_view comment, const std::map<std::string, int>& m)
 
 int main()
 {
-	ft::map<char,int> mymap;
- 	ft::map<char,int>::iterator it;
+	map mymap;
 
-	mymap.insert(ft::make_pair('s', 12));
+	mymap.insert(ft::make_pair("pute", 12));
+	mymap.insert(ft::make_pair("puteeee", 12));
+	mymap["salope"]=10;
+ 	map::iterator it = mymap.begin();
+ 	map::iterator ite = mymap.end();
+	bool res = mymap.value_comp()(*it, *++it);
+	if (res)
+		std::cout << "bzzbzz\n";
+
+	for (; it != ite; ++it)
+		std::cout << it->first << ": " << it->second << std::endl;
   // insert some values:
-	mymap['a']=10;
 	return 0;
 //   mymap['b']=20;
 //   mymap['c']=30;
