@@ -55,72 +55,48 @@ struct Test
 	Test(int x) : x(x) {}
 };
 
+template <typename map>
+void fillMap(map & m)
+{
+	m.insert(ft::make_pair("first", 5));
+	m.insert(ft::make_pair("second", 8));
+	m.insert(ft::make_pair("third", 9));
+	m.insert(ft::make_pair("fourth", 1));
+	m.insert(ft::make_pair("fifth", 2));
+}
+
+typedef map	map;
+
 int main()
 {
-	bst b;
-	b.insert(ft::make_pair("salut", 5));
-	b.insert(ft::make_pair("salut", 6));
-	const bst::iterator it = b.begin();
-	(*it).second = 8;
-	struct Test * i = new Test(5);
-	(*i).x++;
-	std::cout << (*i).x << std::endl;
-	return 0;
-	map mymap;
-
-	// mymap.insert(ft::make_pair("pute", 12));
-	// mymap.insert(ft::make_pair("puteeee", 12));
-	// mymap["salope"]=10;
- 	// map::iterator it = mymap.begin();
- 	// map::iterator ite = mymap.end();
-	// bool res = mymap.value_comp()(*it, *++it);
-	// if (res)
-	// 	std::cout << "bzzbzz\n";
-
-// 	for (; it != ite; ++it)
-// 		std::cout << it->first << ": " << it->second << std::endl;
-//   // insert some values:
-// 	return 0;
-//   mymap['b']=20;
-//   mymap['c']=30;
-//   mymap['d']=40;
-//   mymap['e']=50;
-//   mymap['f']=60;
-
-//   it=mymap.find('b');
-//   mymap.erase (it);                   // erasing by iterator
-
-//   mymap.erase ('c');                  // erasing by key
-
-//   it=mymap.find ('e');
-//   mymap.erase ( it, mymap.end() );    // erasing by range
-
-//   // show content:
-//   for (it=mymap.begin(); it!=mymap.end(); ++it)
-//     std::cout << it->first << " => " << it->second << '\n';
-	// std::map<std::string, int> m;
-	// m.insert(std::make_pair("pute", 1));
-	// m.insert(std::make_pair("salope", 2));
-	// m.insert(std::make_pair("boobs", 3));
-
-	// std::map<std::string, int> m2;
-	// m2.insert(std::make_pair("pute", 1));
-	// m2.insert(std::make_pair("salope", 2));
-	// m2.insert(std::make_pair("boobs", 3));
-
-
-	// const bst bst1;
-	// // bst1.insert(std::make_pair("pute", 1));
-	// // bst1.insert(std::make_pair("salope", 2));
-	// // bst1.insert(std::make_pair("boobs", 3));
-
-	// bst bst2;
-	// bst2.insert(std::make_pair("pute", 1));
-	// bst2.insert(std::make_pair("salope", 2));
-	// bst2.insert(std::make_pair("boobs", 3));
-
-	// bst::const_iterator it = bst1.begin();
-	// //bst::const_iterator cit = it
-	// //std::cout << (bst1 == bst2) << std::endl;
+	std::vector<int> v;
+    map mpp;
+    fillMap(mpp);
+    for (map::iterator it = mpp.begin(); it != mpp.end(); it++) { v.push_back(it->first); }
+    for (map::iterator it = --mpp.end(); it != mpp.begin(); it--) { v.push_back(it->first); }
+    std::map<int, int> mp0;
+    std::map<int, int>::iterator ii = mp0.insert(std::make_pair(3, 3)).first;
+    ii++;
+    v.push_back((--ii)->first);
+    for (int i = 0, j = 10; i < 5; ++i, ++j)
+        mp.insert(std::make_pair(i, j));
+    map::iterator it = mp.begin();
+    map::iterator it2 = mp.end();
+    v.push_back(it->first);
+    it++;
+    it++;
+    it++;
+    it++;
+    v.push_back(it->first);
+    it++;
+    it--;
+    v.push_back(it->first);
+    it2--;
+    v.push_back(it2->first);
+    v.push_back(it2 == it);
+    v.push_back((--it2)->first);
+    v.push_back((it2--)->first);
+    v.push_back((it2++)->first);
+    v.push_back((++it2)->first);
 	return (0);
 }

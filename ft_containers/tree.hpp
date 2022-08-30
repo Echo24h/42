@@ -250,8 +250,8 @@ namespace ft
 			{
 				_end = _newNode(data_type(), nullptr, nullptr, nullptr);
 				_root = _end;
-				iterator it = other.begin();
-				iterator ite = other.end();
+				const_iterator it = other.begin();
+				const_iterator ite = other.end();
 				for (; it != ite; ++it)
 					insert(*it);
 			}
@@ -355,10 +355,11 @@ namespace ft
 			const_iterator begin(void) const
 			{
 				node_pointer minNode = _getMin(_root);
+				const_iterator res = minNode;
 				if (!minNode)
 					return end();
 				else
-					return const_iterator(minNode);
+					return res;
 			}
 
 			iterator end(void)
