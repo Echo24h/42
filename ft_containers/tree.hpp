@@ -99,11 +99,15 @@ namespace ft
 			{}
 
 			// * ---- operator(s) ----
-			value_type const & operator*(void) const
-			{ return _curr->data; }
+			value_type & operator*(void) const
+			{
+				return _curr->data;
+			}
 
 			pointer operator->(void)
-			{ return &_curr->data; }
+			{
+				return &_curr->data;
+			}
 
 			BSTIterator & operator++()
 			{
@@ -143,7 +147,9 @@ namespace ft
 
 			// ---- member function(s) ----
 			node_pointer base(void) const
-			{ return _curr; }
+			{
+				return _curr;
+			}
 
 		private:
 			node_pointer _getSuccessor(node_pointer node)
@@ -189,11 +195,15 @@ namespace ft
 
 	template <typename Iter1, typename Iter2>
 	bool operator==(BSTIterator<Iter1> const & lhs, BSTIterator<Iter2> const & rhs)
-	{ return lhs.base() == rhs.base(); }
+	{
+		return lhs.base() == rhs.base();
+	}
 	
 	template <typename Iter1, typename Iter2>
 	bool operator!=(BSTIterator<Iter1> const & lhs, BSTIterator<Iter2> const & rhs)
-	{ return !(lhs == rhs); }
+	{
+		return !(lhs == rhs);
+	}
 
 	// *****************************************
 	// * BST (aka BinarySearchTree)
@@ -252,7 +262,14 @@ namespace ft
 				_deleteNode(_end);
 			}
 
-			size_type max_size(void)
+			BST & operator=(BST const & other)
+			{
+				clear();
+				insert(other.begin(), other.end());
+				return *this;
+			}
+
+			size_type max_size(void) const
 			{
 				node_allocator alloc;
 				return alloc.max_size();
@@ -295,10 +312,14 @@ namespace ft
 			}
 
 			void showInOrder(void) const 
-			{ _showInOrder(_root); }
+			{
+				_showInOrder(_root);
+			}
 
 			bool empty(void) const
-			{ return _root == _end; }
+			{
+				return _root == _end;
+			}
 
 			void clear(void)
 			{
@@ -308,17 +329,22 @@ namespace ft
 			}
 
 			iterator find(data_type const & data)
-			{ return iterator(_find(_root, data)); }
+			{
+				return iterator(_find(_root, data));
+			}
 
 			void erase(data_type const & data)
-			{ _root = _erase(_root, data); }
+			{
+				_root = _erase(_root, data);
+			}
 
 			size_type size(void) const
-			{ return _size(_root); }
+			{
+				return _size(_root);
+			}
 
 			iterator begin(void)
 			{
-				std::cout << "begin\n";
 				node_pointer minNode = _getMin(_root);
 				if (!minNode)
 					return end();
@@ -328,7 +354,6 @@ namespace ft
 
 			const_iterator begin(void) const
 			{
-				std::cout << "const_begin\n";
 				node_pointer minNode = _getMin(_root);
 				if (!minNode)
 					return end();
@@ -351,9 +376,19 @@ namespace ft
 				return reverse_iterator(end());
 			}
 
+			const_reverse_iterator rbegin(void) const
+			{
+				return reverse_iterator(end());
+			}
+
 			reverse_iterator rend(void)
 			{
 				return reverse_iterator(begin());
+			}
+
+			const_reverse_iterator rend(void) const
+			{
+				return const_reverse_iterator(begin());
 			}
 
 			void swap(BST const & other)
@@ -371,7 +406,14 @@ namespace ft
 				return it;
 			}
 
-			// const_iterator lower_bound(Key const & key) const;
+			const_iterator lower_bound(data_type const & data) const
+			{
+				const_iterator it = begin();
+				const_iterator ite = end();
+				while (it != ite && _comp(*it, data))
+					++it;
+				return it;
+			}
 
 			iterator upper_bound(data_type const & data)
 			{
@@ -381,60 +423,12 @@ namespace ft
 				return it;
 			}
 
-			// const_iterator upper_bound(Key const & key ) const;
-
-			bool operator==(BST const & rhs) const
+			const_iterator upper_bound(data_type const & data) const
 			{
-				if (size() != rhs.size())
-					return false;
-				iterator it = begin();
-				iterator ite = end();
-				iterator it_rhs = rhs.begin();
-				while (it != ite)
-				{
-					if (*it != *it_rhs)
-						return false;
-					++it;
-					++it_rhs;
-				}
-				return true;
-			}
-
-			bool operator!=(BST const & rhs)
-			{
-				return !(*this == rhs);
-			}
-
-			bool operator<(BST const & rhs)
-			{
-				if (size() > rhs.size)
-					return false;
-				iterator it = begin();
-				iterator ite = end();
-				iterator it_rhs = rhs.begin();
-				while (it != ite)
-				{
-					if (*it >= *it_rhs)
-						return false;
-					++it;
-					++it_rhs;
-				}
-				return true;
-			}
-
-			bool operator<=(BST const & rhs)
-			{
-				return (*this == rhs || *this < rhs);
-			}
-
-			bool operator>(BST const & rhs)
-			{
-				return !(*this <= rhs);
-			}
-
-			bool operator>=(BST const & rhs)
-			{
-				return !(*this < rhs);
+				const_iterator it = lower_bound(data);
+				if (it.base() != _end && *it == data)
+					it++;
+				return it;
 			}
 
 		private:
@@ -566,66 +560,68 @@ namespace ft
 			}
 	};
 
-// 	template <typename DataType, typename DataCompare, typename DataAlloc>
-// 	bool operator==(const BST<DataType, DataCompare, DataAlloc>& lhs, const BST<DataType, DataCompare, DataAlloc>& rhs)
-// 	{
-// 		if (lhs.size() != rhs.size())
-// 			return false;
-// 		iterator it1 = lhs.begin();
-// 		iterator ite = lhs.end();
-// 		iterator it_rhs = rhs.begin();
-// 		while (it1 != ite)
-// 		{
-// 			if (*it1 != *it_rhs)
-// 				return false;
-// 			++it1;
-// 			++it_rhs;
-// 		}
-// 		return true;
-// 	}
+	template <typename DataType, typename DataCompare, typename DataAlloc>
+	bool operator==(const BST<DataType, DataCompare, DataAlloc> & lhs, const BST<DataType, DataCompare, DataAlloc> & rhs)
+	{
+		typedef typename BST<DataType, DataCompare, DataAlloc>::const_iterator const_iterator;
+		if (lhs.size() != rhs.size())
+			return false;
+		const_iterator it1 = lhs.begin();
+		const_iterator ite = lhs.end();
+		const_iterator it_rhs = rhs.begin();
+		while (it1 != ite)
+		{
+			if (*it1 != *it_rhs)
+				return false;
+			++it1;
+			++it_rhs;
+		}
+		return true;
+	}
 
-// 	template <typename DataType, typename DataCompare, typename DataAlloc>
-// 	bool operator!=(const BST<DataType, DataCompare, DataAlloc>& lhs, const BST<DataType, DataCompare, DataAlloc>& rhs)
-// 	{
-// 		return !(lhs == rhs);
-// 	}
+	template <typename DataType, typename DataCompare, typename DataAlloc>
+	bool operator!=(const BST<DataType, DataCompare, DataAlloc> & lhs, const BST<DataType, DataCompare, DataAlloc> & rhs)
+	{
+		return !(lhs == rhs);
+	}
 
-// 	template <typename DataType, typename DataCompare, typename DataAlloc>
-// 	bool operator<(const BST<DataType, DataCompare, DataAlloc>& lhs, const BST<DataType, DataCompare, DataAlloc>& rhs)
-// 	{
-// 		if (lhs.size > rhs.size)
-// 			return false;
-// 		iterator it1 = lhs.begin();
-// 		iterator ite = lhs.end();
-// 		iterator it2 = rhs.begin();
-// 		while (it1 != ite)
-// 		{
-// 			if (*it1 >= *it2)
-// 				return false;
-// 			++it1;
-// 			++it2;
-// 		}
-// 		return true;
-// 		return (lhs < rhs);
-// 	}
+	template <typename DataType, typename DataCompare, typename DataAlloc>
+	bool operator<(const BST<DataType, DataCompare, DataAlloc> & lhs, const BST<DataType, DataCompare, DataAlloc> & rhs)
+	{
+		typedef typename BST<DataType, DataCompare, DataAlloc>::const_iterator const_iterator;
+		if (lhs.size() > rhs.size())
+			return false;
+		const_iterator it1 = lhs.begin();
+		const_iterator ite = lhs.end();
+		const_iterator it2 = rhs.begin();
+		while (it1 != ite)
+		{
+			if (*it1 >= *it2)
+				return false;
+			++it1;
+			++it2;
+		}
+		return true;
+		return (lhs < rhs);
+	}
 
-// 	template <typename DataType, typename DataCompare, typename DataAlloc>
-// 	bool operator<=(const BST<DataType, DataCompare, DataAlloc>& lhs, const BST<DataType, DataCompare, DataAlloc>& rhs)
-// 	{
-// 		return (lhs == rhs || lhs < rhs);
-// 	}
+	template <typename DataType, typename DataCompare, typename DataAlloc>
+	bool operator<=(const BST<DataType, DataCompare, DataAlloc> & lhs, const BST<DataType, DataCompare, DataAlloc> & rhs)
+	{
+		return (lhs == rhs || lhs < rhs);
+	}
 
-// 	template <typename DataType, typename DataCompare, typename DataAlloc>
-// 	bool operator>(const BST<DataType, DataCompare, DataAlloc>& lhs, const BST<DataType, DataCompare, DataAlloc>& rhs)
-// 	{
-// 		return !(lhs <= rhs);
-// 	}
+	template <typename DataType, typename DataCompare, typename DataAlloc>
+	bool operator>(const BST<DataType, DataCompare, DataAlloc> & lhs, const BST<DataType, DataCompare, DataAlloc> & rhs)
+	{
+		return !(lhs <= rhs);
+	}
 
-// 	template <typename DataType, typename DataCompare, typename DataAlloc>
-// 	bool operator>=(const BST<DataType, DataCompare, DataAlloc>& lhs, const BST<DataType, DataCompare, DataAlloc>& rhs)
-// 	{
-// 		return !(lhs < rhs);
-// 	}
+	template <typename DataType, typename DataCompare, typename DataAlloc>
+	bool operator>=(const BST<DataType, DataCompare, DataAlloc> & lhs, const BST<DataType, DataCompare, DataAlloc> & rhs)
+	{
+		return !(lhs < rhs);
+	}
 }
 
 #endif

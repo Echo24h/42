@@ -22,7 +22,7 @@
 
 typedef std::string															key_type;
 typedef int																	mapped_type;
-typedef std::pair<std::string, int>											type;
+typedef ft::pair<const std::string, int>									type;
 typedef ft::BST<type, std::less<type>, std::allocator<type> >	            bst;
 typedef ft::map<key_type, mapped_type>										map;
 typedef ft::vector<type>													vec;
@@ -48,23 +48,39 @@ void print_map(std::string_view comment, const std::map<std::string, int>& m)
     std::cout << '\n';
 }
 
+struct Test
+{
+	int x;
+
+	Test(int x) : x(x) {}
+};
+
 int main()
 {
+	bst b;
+	b.insert(ft::make_pair("salut", 5));
+	b.insert(ft::make_pair("salut", 6));
+	const bst::iterator it = b.begin();
+	(*it).second = 8;
+	struct Test * i = new Test(5);
+	(*i).x++;
+	std::cout << (*i).x << std::endl;
+	return 0;
 	map mymap;
 
-	mymap.insert(ft::make_pair("pute", 12));
-	mymap.insert(ft::make_pair("puteeee", 12));
-	mymap["salope"]=10;
- 	map::iterator it = mymap.begin();
- 	map::iterator ite = mymap.end();
-	bool res = mymap.value_comp()(*it, *++it);
-	if (res)
-		std::cout << "bzzbzz\n";
+	// mymap.insert(ft::make_pair("pute", 12));
+	// mymap.insert(ft::make_pair("puteeee", 12));
+	// mymap["salope"]=10;
+ 	// map::iterator it = mymap.begin();
+ 	// map::iterator ite = mymap.end();
+	// bool res = mymap.value_comp()(*it, *++it);
+	// if (res)
+	// 	std::cout << "bzzbzz\n";
 
-	for (; it != ite; ++it)
-		std::cout << it->first << ": " << it->second << std::endl;
-  // insert some values:
-	return 0;
+// 	for (; it != ite; ++it)
+// 		std::cout << it->first << ": " << it->second << std::endl;
+//   // insert some values:
+// 	return 0;
 //   mymap['b']=20;
 //   mymap['c']=30;
 //   mymap['d']=40;

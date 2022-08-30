@@ -27,17 +27,12 @@ namespace ft
 			typedef typename allocator_type::const_pointer		const_pointer;
 			typedef size_t										size_type;
 			typedef ptrdiff_t									difference_type;
-			// typedef reverse_iterator				reverse_iterator<iterator>	
-			// typedef const_reverse_iterator		reverse_iterator<const_iterator>	
-
-			// class exists
-			// typedef value_compare				Nested function class to compare elements	see value_comp
 
 		public:
 			class value_compare
 				: public std::binary_function<value_type, value_type, bool>
 			{
-				// ? friend class map;
+				friend class map;
 				protected:
 					key_compare comp;
 
@@ -52,16 +47,6 @@ namespace ft
 					}
 			};
 
-			key_compare key_comp(void) const
-			{
-				return key_compare();
-			}
-
-			value_compare value_comp(void) const
-			{
-				return value_compare(key_comp());
-			}
-
 		private:
 			typedef ft::BST<value_type, value_compare, allocator_type>	_tree;
 
@@ -75,11 +60,11 @@ namespace ft
 
 		public:
 			map(void)
-				: _base()
+				: _base(value_compare(key_compare()))
 			{}
 
 			explicit map(key_compare const & comp, allocator_type const & alloc = allocator_type())
-				: _base(comp)
+				: _base(value_compare(comp))
 			{
 				(void)alloc;
 			}
@@ -96,6 +81,12 @@ namespace ft
 
 			~map(void)
 			{}
+
+			map & operator=(map const & other)
+			{
+				_base = other._base;
+				return *this;
+			}
 
 			size_type size(void) const
 			{
@@ -132,14 +123,21 @@ namespace ft
 				_base.clear();
 			}
 
+			value_compare value_comp(void) const
+			{
+				return value_compare(key_compare());
+			}
+
+			key_compare key_comp(void) const
+			{
+				return key_compare();
+			}
+
 			mapped_type & operator[](key_type const & k)
 			{
 				value_type val = ft::make_pair(k, mapped_type());
 				ft::pair<iterator, bool> p = insert(val);
 				return p.first->second;
-
-				// ? ask one of the dungeon boss why this shit isn't working
-				// return (*((insert(ft::make_pair(k, mapped_type()))).first)).second;
 			}
 
 			ft::pair<iterator, bool> insert(value_type const & value)
@@ -194,23 +192,25 @@ namespace ft
 				return (_base.find(p).base() != end());
 			}
 
-			iterator find(Key const & key)
+			iterator find(key_type const & key)
 			{
 				return _base.find(ft::make_pair(key, mapped_type()));
 			}
 
-			// todo : constness
-			// const_iterator find(Key const & key) const
-			// {}
+			const_iterator find(key_type const & key) const
+			{
+				return _base.find(ft::make_pair(key, mapped_type()));
+			}
 
-			std::pair<iterator, iterator> equal_range(Key const & key)
+			std::pair<iterator, iterator> equal_range(key_type const & key)
 			{
 				return ft::make_pair(lower_bound(key), upper_bound(key));
 			}
 
-			// todo : constness
-			// std::pair<const_iterator,const_iterator> equal_range( const Key & key ) const
-			// {}
+			std::pair<const_iterator, const_iterator> equal_range(key_type const & key) const
+			{
+				return ft::make_pair(lower_bound(key), upper_bound(key));
+			}
 
 			iterator lower_bound(Key const & key)
 			{
@@ -220,6 +220,11 @@ namespace ft
 			iterator upper_bound(Key const & key)
 			{
 				return _base.upper_bound(ft::make_pair(key, mapped_type()));
+			}
+
+			allocator_type get_allocator() const
+			{
+				return allocator_type();
 			}
 	};
 }
