@@ -6,6 +6,7 @@
 #include <csignal>
 #include "iterator.hpp"
 #include "utility.hpp"
+#include "type_traits.hpp"
 
 static void printPtr(std::string const & pfx, void * ptr)
 {
@@ -94,7 +95,7 @@ namespace ft
 				: _curr(ptr)
 			{}
 
-			BSTIterator(BSTIterator const & src)
+			BSTIterator(BSTIterator<DataType> const & src)
 				: _curr(src.base())
 			{}
 
@@ -139,11 +140,11 @@ namespace ft
 				return tmp;
 			}
 
-			operator BSTIterator<value_type const>() const
-			{
-				std::cout << "it to cit\n";
-				return BSTIterator<value_type const>(_curr); 
-			}
+			// operator BSTIterator<value_type const>() const
+			// {
+			// 	std::cout << "WUUUUUUUT\n";
+			// 	return BSTIterator<value_type const>(_curr); 
+			// }
 
 			// ---- member function(s) ----
 			node_pointer base(void) const
@@ -218,7 +219,7 @@ namespace ft
 			typedef BSTNode<data_type>						node_type;
 			typedef node_type *								node_pointer;
 			typedef BSTIterator<data_type>					iterator;
-			typedef BSTIterator<data_type const>			const_iterator;
+			typedef BSTIterator<data_type>					const_iterator;
 			typedef ft::reverse_iterator<iterator>			reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 			typedef size_t									size_type;
@@ -454,7 +455,7 @@ namespace ft
 				alloc.deallocate(node, 1);
 			}
 
-			node_pointer _getMin(node_pointer root)
+			node_pointer _getMin(node_pointer root) const
 			{
 				if (root == _end)
 					return nullptr;
@@ -463,7 +464,7 @@ namespace ft
 				return root;
 			}
 
-			node_pointer _getMax(node_pointer root)
+			node_pointer _getMax(node_pointer root) const
 			{
 				if (root == _end)
 					return nullptr;
