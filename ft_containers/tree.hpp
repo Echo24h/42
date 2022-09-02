@@ -368,6 +368,7 @@ namespace ft
 			{
 				if (_root == _end)
 				{
+					std::cout << "kseskek\n";
 					_root = _newNode(data, nullptr, nullptr, _end);
 					_end->parent = _root;
 					return true;
