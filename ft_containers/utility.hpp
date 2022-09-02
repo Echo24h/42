@@ -3,6 +3,19 @@
 
 namespace ft
 {
+	template <class T>
+	struct remove_const
+	{
+		typedef T type;
+	};
+
+	template <class T>
+	struct remove_const<T const>
+	{
+		typedef T type;
+	};
+
+
 	template <class T1, class T2>
 	struct pair
 	{

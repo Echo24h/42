@@ -66,6 +66,48 @@ namespace ft
 		}
 	};
 
+	template <class DataType>
+	BSTNode<DataType> * _getSuccessor(BSTNode<DataType> * node)
+	{
+		if (!node)
+			return nullptr;
+		if (node->right)
+		{
+			node = node->right;
+			while (node && node->left)
+				node = node->left;
+			return node;
+		}
+		BSTNode<DataType> * parent = node->parent;
+		while (parent && parent->left != node)
+		{
+			node = node->parent;
+			parent = node->parent;
+		}
+		return parent;
+	}
+
+	template <class DataType>
+	BSTNode<DataType> * _getPredecessor(BSTNode<DataType> * node)
+	{
+		if (!node)
+			return nullptr;
+		if (node->left)
+		{
+			node = node->left;
+			while (node->right)
+				node = node->right;
+			return node;
+		}
+		BSTNode<DataType> * parent = node->parent;
+		while (parent && parent->right != node)
+		{
+			node = node->parent;
+			parent = node->parent;
+		}
+		return parent;
+	}
+
 	// *****************************************
 	// * TreeIterator
 	// *****************************************
@@ -95,7 +137,7 @@ namespace ft
 				: _curr(ptr)
 			{}
 
-			BSTIterator(BSTIterator<DataType> const & src)
+			BSTIterator(BSTIterator const & src)
 				: _curr(src.base())
 			{}
 
@@ -140,11 +182,103 @@ namespace ft
 				return tmp;
 			}
 
-			// operator BSTIterator<value_type const>() const
-			// {
-			// 	std::cout << "WUUUUUUUT\n";
-			// 	return BSTIterator<value_type const>(_curr); 
-			// }
+			// ---- member function(s) ----
+			node_pointer base(void) const
+			{
+				return _curr;
+			}
+
+			friend bool operator==(BSTIterator<DataType> const & lhs, BSTIterator<DataType> const & rhs)
+			{
+				return lhs.base() == rhs.base();
+			}
+
+			friend bool operator!=(BSTIterator<DataType> const & lhs, BSTIterator<DataType> const & rhs)
+			{
+				return !(lhs == rhs);
+			}
+	};
+
+	template <typename DataType>
+	bool operator!=(BSTIterator<DataType> const & lhs, BSTIterator<DataType> const & rhs)
+	{
+		return !(lhs == rhs);
+	}
+
+	template <typename DataType>
+	class BSTConstIterator
+	{
+		public:
+			typedef DataType 					value_type;
+			typedef ptrdiff_t 					difference_type;
+			typedef value_type const *			pointer;
+			typedef value_type const &  		reference;
+			typedef bidirectional_iterator_tag	iterator_category;
+
+			typedef BSTNode<DataType>			node_type;
+			typedef node_type *					node_pointer;
+
+		private:
+			node_pointer 	_curr;
+
+		public:
+			// * ---- constructor(s) ----
+			BSTConstIterator(void)
+				: _curr(nullptr)
+			{}
+
+			BSTConstIterator(node_pointer ptr)
+				: _curr(ptr)
+			{}
+
+			BSTConstIterator(BSTConstIterator const & src)
+				: _curr(src.base())
+			{}
+
+			BSTConstIterator(BSTIterator<DataType> const & src)
+				: _curr(src.base())
+			{}
+
+			// * ---- operator(s) ----
+			value_type const & operator*(void) const
+			{
+				return _curr->data;
+			}
+
+			pointer operator->(void) const
+			{
+				return &_curr->data;
+			}
+
+			BSTConstIterator & operator++()
+			{
+				_curr = _getSuccessor(_curr);
+				if (!_curr)
+					std::raise(SIGSEGV);
+				return *this;
+			}
+
+			BSTConstIterator & operator--()
+			{
+				_curr = _getPredecessor(_curr);
+				if (!_curr)
+					std::raise(SIGSEGV);
+				return *this;
+			}
+
+			BSTConstIterator operator++(int)
+			{
+				BSTConstIterator tmp = *this;
+				*this = operator++();
+				return tmp;
+			}
+
+			BSTConstIterator operator--(int)
+			{
+				BSTConstIterator tmp = *this;
+				*this = operator--();
+				return tmp;
+			}
 
 			// ---- member function(s) ----
 			node_pointer base(void) const
@@ -152,59 +286,16 @@ namespace ft
 				return _curr;
 			}
 
-		private:
-			node_pointer _getSuccessor(node_pointer node)
+			friend bool operator==(BSTConstIterator<DataType> const & lhs, BSTConstIterator<DataType> const & rhs)
 			{
-				if (!node)
-					return nullptr;
-				if (node->right)
-				{
-					node = node->right;
-					while (node && node->left)
-						node = node->left;
-					return node;
-				}
-				node_pointer parent = node->parent;
-				while (parent && parent->left != node)
-				{
-					node = node->parent;
-					parent = node->parent;
-				}
-				return parent;
+				return lhs.base() == rhs.base();
 			}
 
-			node_pointer _getPredecessor(node_pointer node)
+			friend bool operator!=(BSTConstIterator<DataType> const & lhs, BSTConstIterator<DataType> const & rhs)
 			{
-				if (!node)
-					return nullptr;
-				if (node->left)
-				{
-					node = node->left;
-					while (node->right)
-						node = node->right;
-					return node;
-				}
-				node_pointer parent = node->parent;
-				while (parent && parent->right != node)
-				{
-					node = node->parent;
-					parent = node->parent;
-				}
-				return parent;
+				return !(lhs == rhs);
 			}
 	};
-
-	template <typename Iter1, typename Iter2>
-	bool operator==(BSTIterator<Iter1> const & lhs, BSTIterator<Iter2> const & rhs)
-	{
-		return lhs.base() == rhs.base();
-	}
-	
-	template <typename Iter1, typename Iter2>
-	bool operator!=(BSTIterator<Iter1> const & lhs, BSTIterator<Iter2> const & rhs)
-	{
-		return !(lhs == rhs);
-	}
 
 	// *****************************************
 	// * BST (aka BinarySearchTree)
@@ -219,7 +310,7 @@ namespace ft
 			typedef BSTNode<data_type>						node_type;
 			typedef node_type *								node_pointer;
 			typedef BSTIterator<data_type>					iterator;
-			typedef BSTIterator<data_type>					const_iterator;
+			typedef BSTConstIterator<data_type>				const_iterator;
 			typedef ft::reverse_iterator<iterator>			reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 			typedef size_t									size_type;
@@ -232,13 +323,6 @@ namespace ft
 			data_compare	_comp;
 
 		public:
-			BST(void)
-				: _comp(data_compare())
-			{
-				_end = _newNode(data_type(), nullptr, nullptr, nullptr);
-				_root = _end;
-			}
-
 			BST(data_compare const & c)
 				: _comp(c)
 			{
@@ -266,7 +350,10 @@ namespace ft
 			BST & operator=(BST const & other)
 			{
 				clear();
-				insert(other.begin(), other.end());
+				const_iterator cit = other.begin();
+				const_iterator cite = other.end();
+				for (; cit != cite; ++cit)
+					insert(*cit);
 				return *this;
 			}
 
@@ -478,7 +565,7 @@ namespace ft
 				if (root == nullptr || root == _end)
 					return ;
 				_showInOrder(root->left);
-				std::cout << root->data << std::endl;
+				std::cout << root->data.first << ": " << root->data.second << std::endl;
 				_showInOrder(root->right);
 			}
 
@@ -543,7 +630,9 @@ namespace ft
 						else
 						{
 							node_pointer successor = _getMin(root->right);
-							root->data = successor->data;
+							node_pointer tmp = root;
+							root = _newNode(successor->data, root->parent, root->left, root->right);
+							_deleteNode(tmp);
 							root->right = _erase(root->right, successor->data);
 						}
 					}	

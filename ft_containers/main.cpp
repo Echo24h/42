@@ -100,6 +100,16 @@ void fillMap(Map & m)
 	m.insert(ft::make_pair(5, 2));
 }
 
+template <typename Map>
+void fillStdMap(Map & m)
+{
+	m.insert(std::make_pair(1, 5));
+	m.insert(std::make_pair(2, 8));
+	m.insert(std::make_pair(3, 9));
+	m.insert(std::make_pair(4, 1));
+	m.insert(std::make_pair(5, 2));
+}
+
 template <typename Vector>
 void printVec(std::string const & pfx, Vector const & v)
 {
@@ -110,111 +120,76 @@ void printVec(std::string const & pfx, Vector const & v)
     std::cout << std::endl;
 }
 
+#define NAMESPACE ft
+#define _map NAMESPACE::map
+#define _make_pair NAMESPACE::make_pair
+#define _pair NAMESPACE::pair
 
-
-typedef ft::map<int, int>   map_type;
-
-template <typename T>
-class MyType
-{       
-    public:
-        T i;
-        MyType(T i1): i(i1) {}
-        MyType(MyType const & other) : i(other.i) {}
-        // operator MyTypeConst<T>(void) const { return MyTypeConst<T>(i); }
-};
-
-template <typename T>
-class MyTypeConst
-{ 
-    public:
-        T i;
-        MyTypeConst(T i1): i(i1) {}
-        MyTypeConst(MyTypeConst & other) : i(other.i) {}
-        MyTypeConst(MyType<T> const & other) : i(other.i) {}
-};
-
-template <typename T>
-struct myptr
-{
-    T * ptr;
-
-    myptr(T const & val) { ptr = new T(val); }
-    myptr(myptr const & other) { ptr = new T(*other.ptr); }
-    ~myptr() { delete ptr; }
-};
-
-template <typename T>
-class MyTypeUnique
-{
-    public:
-        typedef T   data;
-        myptr<T> ptr;
-        MyTypeUnique(T i1): ptr(i1) {}
-        MyTypeUnique(MyTypeUnique const & other) : ptr(other.ptr) {}
-        MyTypeUnique operator=(MyTypeUnique const & other) { ptr = other.ptr; return *this; }
-        operator MyTypeUnique<T const>(void) const { return MyTypeUnique<T const>(*ptr.ptr); }
-};
+typedef int T;
+typedef int V; 
 
 int main()
 {   
-    MyTypeUnique<int> n(5);
-    MyTypeUnique<int const> cn(2);
-
-    std::cout << "n: " << *(n.ptr.ptr) << std::endl;
-    std::cout << "cn: " << *(cn.ptr.ptr) << std::endl;
-
-    cn = n;
-
-    std::cout << "--------\n";
-    std::cout << "n: " << *(n.ptr.ptr) << std::endl;
-    std::cout << "cn: " << *(cn.ptr.ptr) << std::endl;
-
-    // map_type mm;
-    // fillMap(mm);
-    // map_type::iterator it;
-    // map_type::const_iterator cit;
-    // // cit = it;
-
-    // std::cout << type_name<decltype(it)>() << std::endl;
-    // std::cout << type_name<decltype(cit)>() << std::endl;
-    
-    // std::map<int, int>::iterator stdit;
-    // std::map<int, int>::const_iterator stdcit;
-    // stdcit = stdit;
-    
-    // for (; it != mm.end(); ++it)
+    _map<T, V, std::plus<int> > mmm;
+    mmm.insert(ft::make_pair(5, 1));
+    mmm.insert(ft::make_pair(4, 1));
+    mmm.insert(ft::make_pair(3, 1));
+    mmm.insert(ft::make_pair(2, 1));
+    mmm.insert(ft::make_pair(1, 1));
+    mmm.show();
+    // for (_map<T, V, std::plus<int> >::iterator it = mmm.begin(); it != mmm.end(); ++it)
     //     std::cout << it->first << ": " << it->second << std::endl;
+    return 0;
 
-    // map_type mp;
-	// std::vector<int> v;
-    // map_type mpp;
-    // fillMap(mpp);
-    // for (map_type::iterator it = mpp.begin(); it != mpp.end(); it++) { v.push_back(it->first); }
-    // for (map_type::iterator it = --mpp.end(); it != mpp.begin(); it--) { v.push_back(it->first); }
-    // std::map<int, int> mp0;
-    // std::map<int, int>::iterator ii = mp0.insert(std::make_pair(3, 3)).first;
-    // ii++;
-    // v.push_back((--ii)->first);
-    // for (int i = 0, j = 10; i < 5; ++i, ++j)
-    //     mp.insert(ft::make_pair(i, j));
-    // map_type::iterator it = mp.begin();
-    // map_type::iterator it2 = mp.end();
-    // v.push_back(it->first);
-    // it++;
-    // it++;
-    // it++;
-    // it++;
-    // v.push_back(it->first);
-    // it++;
-    // it--;
-    // v.push_back(it->first);
-    // it2--;
-    // v.push_back(it2->first);
-    // v.push_back(it2 == it);
-    // v.push_back((--it2)->first);
-    // v.push_back((it2--)->first);
-    // v.push_back((it2++)->first);
-    // v.push_back((++it2)->first);
-    // printVec("v:", v);
+    _map<T, V> mp;
+    std::vector<int> v;
+    fillMap(mp);
+    for (_map<T, V>::iterator it = mp.begin(); it != mp.end(); it++) { v.push_back(it->first); }
+    for (_map<T, V>::iterator it = --mp.end(); it != mp.begin(); it--) { v.push_back(it->first); }
+    _map<int, int, std::greater<int> > mp1;
+    fillMap(mp1);
+    v.push_back(mp1.begin()->first);
+    mp1.erase(41);
+    v.push_back(mp1.begin()->first);
+    mp1.erase(29);
+    v.push_back(mp1.begin()->first);
+    _map<int, int, std::greater<int> > mp2;
+    mp2.insert(_make_pair(3, 3));
+    v.push_back(mp2.begin()->first);
+    mp2.erase(3);
+    if (mp2.begin() == mp2.end())
+        v.push_back(1);
+    std::cout << "prout\n";
+    _map<int, int, std::plus<int> > mp3;
+    fillMap(mp3);
+    for (_map<T, V>::iterator it = mp3.begin(); it != mp3.end(); ++it)
+        std::cout << it->first << ": " << it->second << std::endl;
+    std::cout << "prout\n";
+    for (_map<T, V>::iterator it = mp3.begin(); it != mp3.end(); it++) { std::cout << "zz\n"; v.push_back(it->first); }
+    std::cout << "prout\n";
+    for (_map<T, V>::iterator it = --mp3.end(); it != mp3.begin(); it--) { v.push_back(it->first); }
+    _map<int, int, std::minus<int> > mp4;
+    fillMap(mp4);
+    for (_map<T, V>::iterator it = mp4.begin(); it != mp4.end(); it++) { v.push_back(it->first); }
+    for (_map<T, V>::iterator it = --mp4.end(); it != mp4.begin(); it--) { v.push_back(it->first); }
+    _map<int, int, std::greater_equal<int> > mp5;
+    fillMap(mp5);
+    for (_map<T, V>::iterator it = mp5.begin(); it != mp5.end(); it++) { v.push_back(it->first); }
+    for (_map<T, V>::iterator it = --mp5.end(); it != mp5.begin(); it--) { v.push_back(it->first); }
+    _map<int, int, std::multiplies<int> > mp6;
+    fillMap(mp6);
+    for (_map<T, V>::iterator it = mp6.begin(); it != mp6.end(); it++) { v.push_back(it->first); }
+    for (_map<T, V>::iterator it = --mp6.end(); it != mp6.begin(); it--) { v.push_back(it->first); }
+    _map<int, int, std::bit_xor<int> > mp7;
+    fillMap(mp7);
+    for (_map<T, V>::iterator it = mp7.begin(); it != mp7.end(); it++) { v.push_back(it->first); }
+    for (_map<T, V>::iterator it = --mp7.end(); it != mp7.begin(); it--) { v.push_back(it->first); }
+    std::map<T, V, std::logical_and<int> > mp8;
+    fillStdMap(mp8);
+    for (std::map<T, V>::iterator it = mp8.begin(); it != mp8.end(); it++) { v.push_back(it->first); }
+    for (std::map<T, V>::iterator it = --mp8.end(); it != mp8.begin(); it--) { v.push_back(it->first); }
+    v.push_back(mp1.size());
+
+    printVec("v:", v);
+    return 0;
 }

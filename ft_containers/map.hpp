@@ -69,6 +69,11 @@ namespace ft
 				(void)alloc;
 			}
 
+			void show(void)
+			{
+				_base.showInOrder();
+			}
+
 			map(map const & other)
 				: _base(other._base)
 			{}
@@ -77,7 +82,11 @@ namespace ft
 			map(InputIt first, InputIt last,
 				const key_compare & comp = key_compare(),
 				const allocator_type & alloc = allocator_type())
-			{}
+				: _base(value_compare(comp))
+			{
+				(void)alloc;
+				insert(first, last);
+			}
 
 			~map(void)
 			{}
@@ -116,6 +125,26 @@ namespace ft
 			const_iterator end(void) const
 			{
 				return _base.end();
+			}
+
+			reverse_iterator rbegin(void)
+			{
+				return _base.rbegin();
+			}
+
+			const_reverse_iterator rbegin(void) const
+			{
+				return _base.rbegin();
+			}
+
+			reverse_iterator rend(void)
+			{
+				return _base.rend();
+			}
+
+			const_reverse_iterator rend(void) const
+			{
+				return _base.rend();
 			}
 
 			void clear(void)
