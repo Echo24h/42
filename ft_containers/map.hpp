@@ -172,7 +172,7 @@ namespace ft
 			ft::pair<iterator, bool> insert(value_type const & value)
 			{
 				bool wasInserted;
-				wasInserted = _base.insert(value) ? false : true;
+				wasInserted = _base.insert(value);
 				return ft::make_pair(_base.find(value), wasInserted);
 			}
 

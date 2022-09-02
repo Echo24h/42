@@ -130,18 +130,22 @@ typedef int V;
 
 int main()
 {   
-    _map<int, int, std::plus<int> > mx;
-    _map<int, int, std::plus<int> >::value_compare vc = mx.value_comp();
-    ft::pair<int, int> px1 = ft::make_pair(-1, 5);
-    ft::pair<int, int> px2 = ft::make_pair(0, 5);
-    std::cout << "comp: " << vc(px1, px2) << std::endl;
+    // _map<int, int, std::plus<int> > mx;
+    // _map<int, int, std::plus<int> >::value_compare vc = mx.value_comp();
+    // ft::pair<int, int> px1 = ft::make_pair(-1, 5);
+    // ft::pair<int, int> px2 = ft::make_pair(0, 5);
+    // std::cout << "comp: " << vc(px1, px2) << std::endl;
 
     _map<int, int, std::plus<int> > mp3;
-    ft::pair<_map<int, int>::iterator> p =  mp3.insert(ft::make_pair(4, 1));
+    ft::pair<_map<int, int, std::plus<int> >::iterator, bool> p =  mp3.insert(ft::make_pair(4, 1));
     std::cout << "was inserted: " << p.second << std::endl;
-    p = mp3.insert(ft::make_pair(5, 3));
-    std::cout << "was inserted: " << p.second << std::endl;
-    //mp3.show();
+    mp3.show();
+    ft::pair<_map<int, int, std::plus<int> >::iterator, bool> p2 = mp3.insert(ft::make_pair(5, 3));
+    std::cout << "was inserted: " << p2.second << std::endl;
+    mp3.show();
+    ft::pair<_map<int, int, std::plus<int> >::iterator, bool> p3 = mp3.insert(ft::make_pair(6, 4));
+    std::cout << "was inserted: " << p3.second << std::endl;
+    mp3.show();
     return 0;
     // fillMap(mp3);
     // for (_map<T, V>::iterator it = mp3.begin(); it != mp3.end(); ++it)
