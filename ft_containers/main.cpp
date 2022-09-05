@@ -120,62 +120,48 @@ void printVec(std::string const & pfx, Vector const & v)
     std::cout << std::endl;
 }
 
-#define NAMESPACE ft
-#define _map NAMESPACE::map
-#define _make_pair NAMESPACE::make_pair
-#define _pair NAMESPACE::pair
-
-typedef int T;
-typedef int V; 
+typedef ft::map<int, int>::iterator iterator;
+typedef ft::map<int, int>::const_iterator const_iterator;
 
 int main()
 {   
-    // _map<int, int, std::plus<int> > mx;
-    // _map<int, int, std::plus<int> >::value_compare vc = mx.value_comp();
-    // ft::pair<int, int> px1 = ft::make_pair(-1, 5);
-    // ft::pair<int, int> px2 = ft::make_pair(0, 5);
-    // std::cout << "comp: " << vc(px1, px2) << std::endl;
+	ft::map<int, int> mp;
 
-    _map<int, int, std::plus<int> > mp3;
-    ft::pair<_map<int, int, std::plus<int> >::iterator, bool> p =  mp3.insert(ft::make_pair(4, 1));
-    std::cout << "was inserted: " << p.second << std::endl;
-    mp3.show();
-    ft::pair<_map<int, int, std::plus<int> >::iterator, bool> p2 = mp3.insert(ft::make_pair(5, 3));
-    std::cout << "was inserted: " << p2.second << std::endl;
-    mp3.show();
-    ft::pair<_map<int, int, std::plus<int> >::iterator, bool> p3 = mp3.insert(ft::make_pair(6, 4));
-    std::cout << "was inserted: " << p3.second << std::endl;
-    mp3.show();
-    return 0;
-    // fillMap(mp3);
-    // for (_map<T, V>::iterator it = mp3.begin(); it != mp3.end(); ++it)
-    //     std::cout << it->first << ": " << it->second << std::endl;
-    // std::cout << "prout\n";
-    // for (_map<T, V>::iterator it = mp3.begin(); it != mp3.end(); it++) { std::cout << "zz\n"; v.push_back(it->first); }
-    // std::cout << "prout\n";
-    // for (_map<T, V>::iterator it = --mp3.end(); it != mp3.begin(); it--) { v.push_back(it->first); }
-    // _map<int, int, std::minus<int> > mp4;
-    // fillMap(mp4);
-    // for (_map<T, V>::iterator it = mp4.begin(); it != mp4.end(); it++) { v.push_back(it->first); }
-    // for (_map<T, V>::iterator it = --mp4.end(); it != mp4.begin(); it--) { v.push_back(it->first); }
-    // _map<int, int, std::greater_equal<int> > mp5;
-    // fillMap(mp5);
-    // for (_map<T, V>::iterator it = mp5.begin(); it != mp5.end(); it++) { v.push_back(it->first); }
-    // for (_map<T, V>::iterator it = --mp5.end(); it != mp5.begin(); it--) { v.push_back(it->first); }
-    // _map<int, int, std::multiplies<int> > mp6;
-    // fillMap(mp6);
-    // for (_map<T, V>::iterator it = mp6.begin(); it != mp6.end(); it++) { v.push_back(it->first); }
-    // for (_map<T, V>::iterator it = --mp6.end(); it != mp6.begin(); it--) { v.push_back(it->first); }
-    // _map<int, int, std::bit_xor<int> > mp7;
-    // fillMap(mp7);
-    // for (_map<T, V>::iterator it = mp7.begin(); it != mp7.end(); it++) { v.push_back(it->first); }
-    // for (_map<T, V>::iterator it = --mp7.end(); it != mp7.begin(); it--) { v.push_back(it->first); }
-    // std::map<T, V, std::logical_and<int> > mp8;
-    // fillStdMap(mp8);
-    // for (std::map<T, V>::iterator it = mp8.begin(); it != mp8.end(); it++) { v.push_back(it->first); }
-    // for (std::map<T, V>::iterator it = --mp8.end(); it != mp8.begin(); it--) { v.push_back(it->first); }
-    // v.push_back(mp1.size());
+	iterator  itz = mp.begin();
+	const_iterator  citz = mp.end();
+	//mp.insert(ft::make_pair(1, 3));
+	std::cout << (citz == itz) << std::endl;
+	return 0;
+	// mp.insert(ft::make_pair(2, 3));
+	// mp.insert(ft::make_pair(3, 3));
+	// mp.insert(ft::make_pair(4, 3));
+	// mp.insert(ft::make_pair(5, 3));
+	// mp.insert(ft::make_pair(6, 3));
+	// mp.insert(ft::make_pair(7, 3));
+	// mp.insert(ft::make_pair(8, 3));
+	// mp.insert(ft::make_pair(9, 3));
 
-    // printVec("v:", v);
+	mp.insert(ft::make_pair(6, 3));
+	mp.insert(ft::make_pair(5, 3));
+	mp.insert(ft::make_pair(4, 3));
+	mp.insert(ft::make_pair(3, 3));
+	mp.insert(ft::make_pair(2, 3));
+	mp.insert(ft::make_pair(1, 3));
+	// mp.insert(ft::make_pair(9, 3));
+	// mp.insert(ft::make_pair(8, 3));
+	// mp.insert(ft::make_pair(7, 3));
+
+	mp.erase(2);
+	iterator it = ++mp.begin();
+	std::cout << it->first << std::endl;
+	//mp.erase(mp.begin(), ++mp.begin());
+	// mp.erase(--(--(--mp.end())), --mp.end());
+	//mp.erase(mp.begin(), ++(--(++mp.begin())));
+	mp.show();
+	// for (iterator itx = mp.begin(); itx != ++++++mp.begin(); ++itx)
+	// 	std::cout << itx->first << std::endl;
+
+	for (iterator it = mp.begin(); it != --mp.end(); ++it)
+		std::cout << it->first << ": " << it->second << std::endl;
     return 0;
 }

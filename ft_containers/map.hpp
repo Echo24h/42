@@ -142,6 +142,21 @@ namespace ft
 				return _base.rend();
 			}
 
+			bool empty(void) const
+			{
+				return _base.empty();
+			}
+
+			mapped_type & at(key_type const & key)
+			{
+				return _base.at(ft::make_pair(key, mapped_type())).second;
+			}
+
+			mapped_type const & at(key_type const & key) const
+			{
+				return _base.at(ft::make_pair(key, mapped_type())).second;
+			}
+
 			const_reverse_iterator rend(void) const
 			{
 				return _base.rend();
@@ -196,11 +211,11 @@ namespace ft
 
 			void erase(iterator first, iterator last)
 			{
-				for (; first != last; ++first)
-					erase(*first);
+				while (first != last)
+					erase(first++);
 			}
 
-			size_type erase(Key const & key)
+			size_type erase(key_type const & key)
 			{
 				iterator pos = _base.find(ft::make_pair(key, mapped_type()));
 				if (pos.base() == end())
@@ -216,9 +231,10 @@ namespace ft
 
 			size_type count(key_type const & key) const
 			{
-				ft::pair<key_type, mapped_type> p;
-				p = ft::make_pair(key, mapped_type());
-				return (_base.find(p).base() != end());
+				const_iterator pos = find(key);
+				if (pos == end())
+					return 0;
+				return 1;
 			}
 
 			iterator find(key_type const & key)
@@ -231,22 +247,32 @@ namespace ft
 				return _base.find(ft::make_pair(key, mapped_type()));
 			}
 
-			std::pair<iterator, iterator> equal_range(key_type const & key)
+			ft::pair<iterator, iterator> equal_range(key_type const & key)
 			{
 				return ft::make_pair(lower_bound(key), upper_bound(key));
 			}
 
-			std::pair<const_iterator, const_iterator> equal_range(key_type const & key) const
+			ft::pair<const_iterator, const_iterator> equal_range(key_type const & key) const
 			{
 				return ft::make_pair(lower_bound(key), upper_bound(key));
 			}
 
-			iterator lower_bound(Key const & key)
+			iterator lower_bound(key_type const & key)
 			{
 				return _base.lower_bound(ft::make_pair(key, mapped_type()));
 			}
 
-			iterator upper_bound(Key const & key)
+			iterator upper_bound(key_type const & key)
+			{
+				return _base.upper_bound(ft::make_pair(key, mapped_type()));
+			}
+
+			const_iterator lower_bound(key_type const & key) const
+			{
+				return _base.lower_bound(ft::make_pair(key, mapped_type()));
+			}
+
+			const_iterator upper_bound(key_type const & key) const
 			{
 				return _base.upper_bound(ft::make_pair(key, mapped_type()));
 			}
@@ -255,12 +281,41 @@ namespace ft
 			{
 				return allocator_type();
 			}
+
+			friend bool operator==(map const & lhs, map const & rhs)
+			{
+				return lhs._base == rhs._base;
+ 			}
+
+			friend bool operator!=(map const & lhs, map const & rhs)
+			{
+				return lhs._base != rhs._base;
+ 			}
+
+			friend bool operator<(map const & lhs, map const & rhs)
+			{
+				return lhs._base < rhs._base;
+ 			}
+
+			friend bool operator<=(map const & lhs, map const & rhs)
+			{
+				return lhs._base <= rhs._base;
+ 			}
+
+			friend bool operator>(map const & lhs, map const & rhs)
+			{
+				return lhs._base > rhs._base;
+ 			}
+
+			friend bool operator>=(map const & lhs, map const & rhs)
+			{
+				return lhs._base >= rhs._base;
+ 			}
 	};
 }
 
 template <class Key, class T, class Compare, class Alloc>
-void swap(ft::map<Key,T,Compare,Alloc> & lhs,
-			ft::map<Key,T,Compare,Alloc> & rhs)
+void swap(ft::map<Key,T,Compare,Alloc> & lhs, ft::map<Key,T,Compare,Alloc> & rhs)
 {
 	lhs.swap(rhs);
 }

@@ -2,21 +2,12 @@
 #define _tree_hpp_
 
 #include <exception>
+#include <algorithm>
 #include <memory>
 #include <csignal>
 #include "iterator.hpp"
 #include "utility.hpp"
 #include "type_traits.hpp"
-
-static void printPtr(std::string const & pfx, void * ptr)
-{
-	std::cout << pfx << ": ";
-	if (!ptr)
-		std::cout << "null";
-	else
-		std::cout << ptr;
-	std::cout << std::endl;
-}
 
 namespace ft
 {
@@ -27,9 +18,9 @@ namespace ft
 	struct BSTNode
 	{
 		DataType		data;
+		BSTNode *		parent;
 		BSTNode *		left;
 		BSTNode * 		right;
-		BSTNode *		parent;
 
 		BSTNode(DataType const & data,
 				BSTNode * parent,
@@ -81,8 +72,8 @@ namespace ft
 		BSTNode<DataType> * parent = node->parent;
 		while (parent && parent->left != node)
 		{
-			node = node->parent;
-			parent = node->parent;
+			node = parent;
+			parent = parent->parent;
 		}
 		return parent;
 	}
@@ -102,8 +93,8 @@ namespace ft
 		BSTNode<DataType> * parent = node->parent;
 		while (parent && parent->right != node)
 		{
-			node = node->parent;
-			parent = node->parent;
+			node = parent;
+			parent = parent->parent;
 		}
 		return parent;
 	}
@@ -147,7 +138,7 @@ namespace ft
 				return _curr->data;
 			}
 
-			pointer operator->(void)
+			pointer operator->(void) const
 			{
 				return &_curr->data;
 			}
@@ -198,12 +189,6 @@ namespace ft
 				return !(lhs == rhs);
 			}
 	};
-
-	template <typename DataType>
-	bool operator!=(BSTIterator<DataType> const & lhs, BSTIterator<DataType> const & rhs)
-	{
-		return !(lhs == rhs);
-	}
 
 	template <typename DataType>
 	class BSTConstIterator
@@ -363,12 +348,27 @@ namespace ft
 				return alloc.max_size();
 			}
 
+			data_type & at(data_type const & key)
+			{
+				iterator pos = find(key);
+				if (pos == _end)
+					throw std::out_of_range("BST");
+				return *pos;
+			}
+
+			data_type const & at(data_type const & key) const
+			{
+				const_iterator pos = find(key);
+				if (pos == _end)
+					throw std::out_of_range("BST");
+				return *pos;
+			}
+
 			// * return false if data is duplicate
 			bool insert(data_type const & data)
 			{
 				if (_root == _end)
 				{
-					std::cout << "kseskek\n";
 					_root = _newNode(data, nullptr, nullptr, _end);
 					_end->parent = _root;
 					return true;
@@ -392,10 +392,10 @@ namespace ft
 				}
 				else
 				{
-					if (_comp(prev->data, data))
-						prev->right = _newNode(data, prev, nullptr, nullptr);
-					else
+					if (_comp(data, prev->data))
 						prev->left = _newNode(data, prev, nullptr, nullptr);
+					else
+						prev->right = _newNode(data, prev, nullptr, nullptr);
 				}
 				return true;
 			}
@@ -420,6 +420,11 @@ namespace ft
 			iterator find(data_type const & data)
 			{
 				return iterator(_find(_root, data));
+			}
+
+			const_iterator find(data_type const & data) const
+			{
+				return const_iterator(_find(_root, data));
 			}
 
 			void erase(data_type const & data)
@@ -481,7 +486,7 @@ namespace ft
 				return const_reverse_iterator(begin());
 			}
 
-			void swap(BST const & other)
+			void swap(BST & other)
 			{
 				std::swap(_root, other._root);
 				std::swap(_end, other._end);
@@ -508,16 +513,16 @@ namespace ft
 			iterator upper_bound(data_type const & data)
 			{
 				iterator it = lower_bound(data);
-				if (it.base() != _end && *it == data)
-					it++;
+				if (it != end() && it == find(data))
+					return ++it;
 				return it;
 			}
 
 			const_iterator upper_bound(data_type const & data) const
 			{
 				const_iterator it = lower_bound(data);
-				if (it.base() != _end && *it == data)
-					it++;
+				if (it != end() && it == find(data))
+					return ++it;
 				return it;
 			}
 
@@ -570,7 +575,7 @@ namespace ft
 				_showInOrder(root->right);
 			}
 
-			node_pointer _find(node_pointer root, data_type const & data)
+			node_pointer _find(node_pointer root, data_type const & data) const
 			{
 				if (root == nullptr || root == _end)
 					return _end;
@@ -610,11 +615,8 @@ namespace ft
 					else if (root->hasOneChild())
 					{
 						node_pointer child = root->getChild();
-						if (child == _end)
-						{
-							child->right = _end;
-							_end->parent = child;
-						}
+						if (child)
+							child->parent = root->parent;
 						_deleteNode(root);
 						return child;
 					}
