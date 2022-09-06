@@ -673,21 +673,23 @@ namespace ft
 	template <typename DataType, typename DataCompare, typename DataAlloc>
 	bool operator<(const BST<DataType, DataCompare, DataAlloc> & lhs, const BST<DataType, DataCompare, DataAlloc> & rhs)
 	{
-		typedef typename BST<DataType, DataCompare, DataAlloc>::const_iterator const_iterator;
+		if (lhs == rhs)
+			return false;
 		if (lhs.size() > rhs.size())
 			return false;
+		typedef typename BST<DataType, DataCompare, DataAlloc>::const_iterator const_iterator;
 		const_iterator it1 = lhs.begin();
-		const_iterator ite = lhs.end();
+		const_iterator it1e = lhs.end();
 		const_iterator it2 = rhs.begin();
-		while (it1 != ite)
+		const_iterator it2e = rhs.end();
+		while (it1 != it1e && it2 != it2e)
 		{
-			if (*it1 >= *it2)
+			if (*it1 > *it2)
 				return false;
 			++it1;
 			++it2;
 		}
 		return true;
-		return (lhs < rhs);
 	}
 
 	template <typename DataType, typename DataCompare, typename DataAlloc>
