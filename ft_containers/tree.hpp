@@ -22,10 +22,7 @@ namespace ft
 		BSTNode *		left;
 		BSTNode * 		right;
 
-		BSTNode(DataType const & data,
-				BSTNode * parent,
-				BSTNode * left,
-				BSTNode * right)
+		BSTNode(DataType const & data, BSTNode * parent, BSTNode * left, BSTNode * right)
 			: data(data),
 				parent(parent),
 				left(left),
@@ -622,22 +619,16 @@ namespace ft
 					}
 					else
 					{
+						node_pointer node = root->right == _end ? _getMax(root->left) : _getMin(root->right);
+						node_pointer tmp = root;
+						root = _newNode(node->data, root->parent, root->left, root->right);
+						root->left->parent = root;
+						root->right->parent = root;
+						_deleteNode(tmp);
 						if (root->right == _end)
-						{
-							node_pointer predecessor = _getMax(root->left);
-							predecessor->right = _end;
-							_end->parent = predecessor;
-							_deleteNode(root);
-							return predecessor;
-						}
+							root->left = _erase(root->left, node->data);
 						else
-						{
-							node_pointer successor = _getMin(root->right);
-							node_pointer tmp = root;
-							root = _newNode(successor->data, root->parent, root->left, root->right);
-							_deleteNode(tmp);
-							root->right = _erase(root->right, successor->data);
-						}
+							root->right = _erase(root->right, node->data);
 					}	
 				}
 				return root;

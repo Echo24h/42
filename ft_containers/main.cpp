@@ -127,41 +127,31 @@ int main()
 {   
 	ft::map<int, int> mp;
 
-	iterator  itz = mp.begin();
-	const_iterator  citz = mp.end();
+	// iterator  itz = mp.begin();
+	// const_iterator  citz = mp.end();
 	//mp.insert(ft::make_pair(1, 3));
-	std::cout << (citz == itz) << std::endl;
-	return 0;
-	// mp.insert(ft::make_pair(2, 3));
-	// mp.insert(ft::make_pair(3, 3));
-	// mp.insert(ft::make_pair(4, 3));
-	// mp.insert(ft::make_pair(5, 3));
-	// mp.insert(ft::make_pair(6, 3));
-	// mp.insert(ft::make_pair(7, 3));
-	// mp.insert(ft::make_pair(8, 3));
-	// mp.insert(ft::make_pair(9, 3));
 
 	mp.insert(ft::make_pair(6, 3));
 	mp.insert(ft::make_pair(5, 3));
-	mp.insert(ft::make_pair(4, 3));
 	mp.insert(ft::make_pair(3, 3));
+	mp.insert(ft::make_pair(4, 3));
 	mp.insert(ft::make_pair(2, 3));
 	mp.insert(ft::make_pair(1, 3));
 	// mp.insert(ft::make_pair(9, 3));
 	// mp.insert(ft::make_pair(8, 3));
 	// mp.insert(ft::make_pair(7, 3));
 
-	mp.erase(2);
-	iterator it = ++mp.begin();
-	std::cout << it->first << std::endl;
+	mp.erase(3);
+	// iterator it = ++mp.begin();
+	// std::cout << it->first << std::endl;
 	//mp.erase(mp.begin(), ++mp.begin());
 	// mp.erase(--(--(--mp.end())), --mp.end());
 	//mp.erase(mp.begin(), ++(--(++mp.begin())));
-	mp.show();
+	//mp.show();
 	// for (iterator itx = mp.begin(); itx != ++++++mp.begin(); ++itx)
 	// 	std::cout << itx->first << std::endl;
 
-	for (iterator it = mp.begin(); it != --mp.end(); ++it)
-		std::cout << it->first << ": " << it->second << std::endl;
+	// for (iterator it = mp.begin(); it != mp.end(); ++it)
+	// 	std::cout << it->first << ": " << it->second << std::endl;
     return 0;
 }
