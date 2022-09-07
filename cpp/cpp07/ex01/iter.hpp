@@ -1,5 +1,5 @@
 template<typename T>
-void iter(T * ptr, int size, void (*f)(T)) {
+void iter(T const * ptr, int size, void (*f)(T const)) {
     if (!ptr || !(*f)) {
         return ;
     }

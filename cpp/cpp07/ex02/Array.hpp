@@ -17,7 +17,12 @@ class Array {
 		}
 
 		Array(Array const & src) {
-			*this = src;
+			this->_array = new T[src._size];
+			this->_size = src._size;
+
+			for (unsigned int i = 0; i < this->_size; i++) {
+				this->_array[i] = src._array[i];
+			}
 		}
 
 		~Array(void) {
