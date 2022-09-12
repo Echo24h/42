@@ -69,11 +69,6 @@ namespace ft
 				(void)alloc;
 			}
 
-			void show(void)
-			{
-				_base.showInOrder();
-			}
-
 			map(map const & other)
 				: _base(other._base)
 			{}
