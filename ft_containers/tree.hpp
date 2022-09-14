@@ -22,10 +22,10 @@ namespace ft
 	struct BSTNode
 	{
 		DataType		data;
+		bool			color;
 		BSTNode *		parent;
 		BSTNode *		left;
 		BSTNode * 		right;
-		bool			color;
 
 		BSTNode(DataType const & data, bool color, BSTNode * parent, BSTNode * left, BSTNode * right)
 			: data(data),
@@ -387,6 +387,43 @@ namespace ft
 				return *pos;
 			}
 
+			void insert(data_type data) {
+				node_pointer node = nullptr; // _newNode(data, RED, nullptr, nullptr, nullptr);
+				node_pointer y = nullptr;
+				node_pointer x = _root;
+
+				while (x != nullptr && x != _end) {
+					y = x;
+					if (comp(data, x->data)) {
+						x = x->left;
+					} else if (comp(x->data, data)) {
+						x = x->right;
+					} else {
+						x = 
+					}
+				}
+
+				node->parent = y;
+				if (y == nullptr) {
+				root = node;
+				} else if (node->data < y->data) {
+				y->left = node;
+				} else {
+				y->right = node;
+				}
+
+				if (node->parent == nullptr) {
+				node->color = 0;
+				return;
+				}
+
+				if (node->parent->parent == nullptr) {
+				return;
+				}
+
+				insertFix(node);
+			}
+
 			// * return false if data is duplicate
 			bool insert(data_type const & data)
 			{
@@ -453,10 +490,8 @@ namespace ft
 
 			void erase(data_type const & data)
 			{
-				iterator toDelete = find(data);
-				_root = _erase(_root, data);
-				if (toDelete != _end)
-					
+				_eraseRBT(data);
+				//_root = _erase(_root, data);
 			}
 
 			size_type size(void) const
@@ -748,10 +783,10 @@ namespace ft
 							_rotateRight(k->parent->parent);
 						}
 					}
-					if (k == root)
+					if (k == _root)
 						break;
 				}
-				root->color = BLACK;
+				_root->color = BLACK;
 			}
 
 			void _showInOrder(node_pointer root) const
@@ -783,6 +818,62 @@ namespace ft
 				root->right = _clear(root->right);
 				_deleteNode(root);
 				return nullptr;
+			}
+
+			void rbTransplant(node_pointer u, node_pointer v)
+			{
+				if (u->parent == nullptr)
+					_root = v;
+				else if (u == u->parent->left)
+					u->parent->left = v;
+				else
+					u->parent->right = v;
+				v->parent = u->parent;
+			}
+
+			void _eraseRBT(data_type data)
+			{
+				node_pointer node = _root;
+				node_pointer z = nullptr;
+				node_pointer x;
+				node_pointer y;
+				while (node != nullptr || node != _end)
+				{
+					if (_comp(data, node->data))
+						node = node->left;
+					else if (_comp(node->data, data))
+						node = node->right;
+					else
+						z = node;
+				}
+				y = z;
+				bool y_original_color = y->color;
+				if (z->left == nullptr) {
+					x = z->right;
+					rbTransplant(z, z->right);
+				} else if (z->right == nullptr) {
+					x = z->left;
+					rbTransplant(z, z->left);
+				} else {
+					y = _getMin(z->right);
+					y_original_color = y->color;
+					x = y->right;
+					if (y->parent == z) {
+						x->parent = y;
+					} else {
+						rbTransplant(y, y->right);
+						y->right = z->right;
+						y->right->parent = y;
+					}
+					rbTransplant(z, y);
+					y->left = z->left;
+					y->left->parent = y;
+					y->color = z->color;
+				}
+				_deleteNode(z);
+				if (y_original_color == 0) {
+					_deleteFix(x);
+				}
 			}
 
 			node_pointer _erase(node_pointer root, data_type const & data)
