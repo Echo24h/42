@@ -35,6 +35,11 @@ namespace ft
 			second = pr.second;
 			return *this;
 		}
+
+		friend std::ostream & operator<<(std::ostream & o, pair p) {
+			o << p.first << ":" << p.second;
+			return o;
+		}
 	};
 
 	template <class T1, class T2>

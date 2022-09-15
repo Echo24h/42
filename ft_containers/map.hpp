@@ -74,13 +74,13 @@ namespace ft
 			{}
 
 			template <typename InputIt>
-			map(InputIt first, InputIt last,
-				const key_compare & comp = key_compare(),
-				const allocator_type & alloc = allocator_type())
+			map(InputIt first, InputIt last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type())
 				: _base(value_compare(comp))
 			{
 				(void)alloc;
+				// std::cout << "before\n";
 				insert(first, last);
+				// std::cout << "after\n";
 			}
 
 			~map(void)
@@ -144,12 +144,22 @@ namespace ft
 
 			mapped_type & at(key_type const & key)
 			{
-				return _base.at(ft::make_pair(key, mapped_type())).second;
+				try {
+					mapped_type & val = _base.at(ft::make_pair(key, mapped_type())).second;
+					return val;
+				} catch (...) {
+					throw std::out_of_range("map");
+				}
 			}
 
 			mapped_type const & at(key_type const & key) const
 			{
-				return _base.at(ft::make_pair(key, mapped_type())).second;
+				try {
+					mapped_type const & val = _base.at(ft::make_pair(key, mapped_type())).second;
+					return val;
+				} catch (...) {
+					throw std::out_of_range("map");
+				}
 			}
 
 			const_reverse_iterator rend(void) const
@@ -182,6 +192,7 @@ namespace ft
 			ft::pair<iterator, bool> insert(value_type const & value)
 			{
 				bool wasInserted;
+				// std::cout << "in insert\n";
 				wasInserted = _base.insert(value);
 				return ft::make_pair(_base.find(value), wasInserted);
 			}
@@ -195,8 +206,14 @@ namespace ft
 			template <typename Iter>
 			void insert(Iter first, Iter last)
 			{
+				// std::cout << "in insert range\n";
 				for (; first != last; ++first)
 					insert(*first);
+				// std::cout << "after insert range\n";
+			}
+
+			void debug(void) {
+				_base.debug();
 			}
 
 			void erase(iterator pos)
@@ -215,7 +232,7 @@ namespace ft
 				iterator pos = _base.find(ft::make_pair(key, mapped_type()));
 				if (pos.base() == end())
 					return 0;
-				_base.erase(*pos);
+				erase(pos);
 				return 1;
 			}
 			

@@ -6,29 +6,24 @@ SRCS		=	main.cpp	\
 
 all: $(NAME)
 
-$(NAME): ft
+$(NAME):
+	$(CC) $(CFLAGS) -o $(NAME) $(SRCS)
 
-run: ft
+run: re
 	./$(NAME)
 
-ft:
-	$(CC) $(CFLAGS) -DFT -o $(NAME) $(SRCS)
-
-std:
-	$(CC) $(CFLAGS) -DSTD -o $(NAME) $(SRCS)
-
-test:
-	./test.sh
+debug: re
+	$(CC) $(CFLAGS) -g -o $(NAME) $(SRCS)
 
 # use "leaks -atExit -- ./$(NAME)" or "valgrind ./$(NAME)"
 leaks: ft
 	valgrind ./$(NAME)
 
 clean:
-	rm -rf $(NAME) test_ft.out test_std.out
+	rm -rf $(NAME)
 
 fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re ft std test run
+.PHONY: all clean fclean re debug run
