@@ -1,6 +1,9 @@
 #ifndef _utility_hpp_
 #define _utility_hpp_
 
+#include "type_traits.hpp"
+#include "algorithm.hpp"
+
 namespace ft
 {
 	template <class T>

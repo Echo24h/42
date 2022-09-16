@@ -430,7 +430,7 @@ namespace ft
 				return true;
 			}
 
-			// * why rearrange tree after erase? jajajaja
+			// * jajajajaja oopsi
 			void erase(data_type const & data)
 			{
 				_root = _erase(_root, data);
