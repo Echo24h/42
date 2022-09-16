@@ -1,5 +1,5 @@
 CC			=	c++
-CFLAGS		=	-std=c++98 #-Wall -Wextra -Werror 
+CFLAGS		=	-std=c++98 -Wall -Wextra -Werror 
 NAME		=	prog
 
 SRCS		=	main.cpp	\
@@ -16,7 +16,7 @@ debug: re
 	$(CC) $(CFLAGS) -g -o $(NAME) $(SRCS)
 
 # use "leaks -atExit -- ./$(NAME)" or "valgrind ./$(NAME)"
-leaks: ft
+leaks: re
 	valgrind ./$(NAME)
 
 clean:

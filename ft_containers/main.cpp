@@ -56,57 +56,59 @@ void	ft_erase(MAP &mp, U param, V param2)
 // 	return (0);
 // }
 
-int		main(void)
-{
-	std::list<T3> lst;
-	unsigned int lst_size = 10;
-	for (unsigned int i = 0; i < lst_size; ++i)
-		lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
-	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
-	printSize(mp);
+// int		main(void)
+// {
+// 	std::list<T3> lst;
+// 	unsigned int lst_size = 10;
+// 	for (unsigned int i = 0; i < lst_size; ++i)
+// 		lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
+// 	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+// 	printSize(mp);
 
-	ft_erase(mp, ++mp.begin());
+// 	ft_erase(mp, ++mp.begin());
 
-	ft_erase(mp, mp.begin());
-	ft_erase(mp, --mp.end());
+// 	ft_erase(mp, mp.begin());
+// 	ft_erase(mp, --mp.end());
 
-	ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
-	ft_erase(mp, --(--(--mp.end())), --mp.end());
+// 	ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
+// 	ft_erase(mp, --(--(--mp.end())), --mp.end());
 
-	mp[10] = "Hello";
-	mp[11] = "Hi there";
-	printSize(mp);
-	ft_erase(mp, --(--(--mp.end())), mp.end());
+// 	mp[10] = "Hello";
+// 	mp[11] = "Hi there";
+// 	printSize(mp);
+// 	ft_erase(mp, --(--(--mp.end())), mp.end());
 
-	mp[12] = "ONE";
-	mp[13] = "TWO";
-	mp[14] = "THREE";
-	mp[15] = "FOUR";
-	printSize(mp);
-	ft_erase(mp, mp.begin(), mp.end());
+// 	mp[12] = "ONE";
+// 	mp[13] = "TWO";
+// 	mp[14] = "THREE";
+// 	mp[15] = "FOUR";
+// 	printSize(mp);
+// 	ft_erase(mp, mp.begin(), mp.end());
 
-	return (0);
-}
+// 	return (0);
+// }
 
-int mymain()
+int main()
 {   
 	ft::map<int, int> mp;
 
 	// iterator  itz = mp.begin();
 	// const_iterator  citz = mp.end();
 	// std::cout << "node inserted\n";
-	mp.insert(ft::make_pair(7, 3));
-	mp.insert(ft::make_pair(6, 3));
 	mp.insert(ft::make_pair(5, 3));
-	mp.insert(ft::make_pair(4, 3));
-	mp.insert(ft::make_pair(3, 3));
+	mp.insert(ft::make_pair(6, 3));
 	mp.insert(ft::make_pair(2, 3));
+	mp.insert(ft::make_pair(4, 3));
+	mp.insert(ft::make_pair(7, 3));
 	mp.insert(ft::make_pair(1, 3));
+	mp.insert(ft::make_pair(3, 3));
 	// std::cout << "node inserted\n";
 	// std::cout << "node inserted\n";
 	// mp.insert(ft::make_pair(9, 3));
 	// mp.insert(ft::make_pair(8, 3));
 	mp.erase(7);
+	mp.erase(1);
+mp.erase(3);
 	// mp.debug();
 	// mp.debug();
 	// mp.debug();

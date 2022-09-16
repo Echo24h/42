@@ -78,9 +78,7 @@ namespace ft
 				: _base(value_compare(comp))
 			{
 				(void)alloc;
-				// std::cout << "before\n";
 				insert(first, last);
-				// std::cout << "after\n";
 			}
 
 			~map(void)
@@ -192,7 +190,6 @@ namespace ft
 			ft::pair<iterator, bool> insert(value_type const & value)
 			{
 				bool wasInserted;
-				// std::cout << "in insert\n";
 				wasInserted = _base.insert(value);
 				return ft::make_pair(_base.find(value), wasInserted);
 			}
@@ -206,10 +203,8 @@ namespace ft
 			template <typename Iter>
 			void insert(Iter first, Iter last)
 			{
-				// std::cout << "in insert range\n";
 				for (; first != last; ++first)
 					insert(*first);
-				// std::cout << "after insert range\n";
 			}
 
 			void debug(void) {
