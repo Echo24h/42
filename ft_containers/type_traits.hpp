@@ -6,18 +6,18 @@
 namespace ft
 {
 	// ---- integral_constant ----
-	template <class T, T v>
-	struct integral_constant
-	{
-		static const T value = v;
-		typedef T value_type;
-		typedef integral_constant<T, v> type;
-		T const operator()(void) { return (this->value); }
-	};
+	// template <class T, T v>
+	// struct integral_constant
+	// {
+	// 	static const T value = v;
+	// 	typedef T value_type;
+	// 	typedef integral_constant<T, v> type;
+	// 	T const operator()(void) { return (this->value); }
+	// };
 
 	// ---- true_type and false_type ----
-	typedef integral_constant<bool, true>	true_type;
-	typedef integral_constant<bool, false>	false_type;
+	typedef std::integral_constant<bool, true>	true_type;
+	typedef std::integral_constant<bool, false>	false_type;
 
 	// ---- enable_if ----
 	template <bool, typename T = void>

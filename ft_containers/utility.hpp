@@ -1,6 +1,9 @@
 #ifndef _utility_hpp_
 #define _utility_hpp_
 
+#include "type_traits.hpp"
+#include "algorithm.hpp"
+
 namespace ft
 {
 	template <class T>
@@ -34,6 +37,11 @@ namespace ft
 			first = pr.first;
 			second = pr.second;
 			return *this;
+		}
+
+		friend std::ostream & operator<<(std::ostream & o, pair p) {
+			o << p.first << ":" << p.second;
+			return o;
 		}
 	};
 

@@ -10,6 +10,9 @@
 #include "type_traits.hpp"
 #include "algorithm.hpp"
 
+#define RED true
+#define BLACK false
+
 namespace ft
 {
 	// *****************************************
@@ -19,15 +22,13 @@ namespace ft
 	struct BSTNode
 	{
 		DataType		data;
+		bool			color;
 		BSTNode *		parent;
 		BSTNode *		left;
 		BSTNode * 		right;
 
-		BSTNode(DataType const & data, BSTNode * parent, BSTNode * left, BSTNode * right)
-			: data(data),
-				parent(parent),
-				left(left),
-				right(right)
+		BSTNode(DataType const & data, bool color, BSTNode * parent, BSTNode * left, BSTNode * right)
+			: data(data), color(color), parent(parent), left(left), right(right)
 		{}
 
 		~BSTNode(void)
@@ -45,10 +46,16 @@ namespace ft
 		BSTNode * getChild(void)
 		{ return (left != nullptr ? left : right); }
 
+		void printPtr(std::string const & pfx, void * ptr) {
+			std::cout << pfx << ":" << ptr << std::endl;
+		}
+
 		void debug(std::string const & pfx = "BSTNode")
 		{
+			std::cout << "----\n";
 			std::cout << pfx << std::endl;
 			std::cout << data << std::endl;
+			std::cout << "color: " << color << std::endl;
 			printPtr("parent", parent);
 			printPtr("left", left);
 			printPtr("right", right);
@@ -95,6 +102,25 @@ namespace ft
 			parent = parent->parent;
 		}
 		return parent;
+	}
+
+	// * return false if node is root
+	template <class DataType>
+	bool isLeftChild(BSTNode<DataType> * node)
+	{
+		if (node == nullptr || node->parent == nullptr)
+			return false;
+		if (node->parent->left == node)
+			return true;
+		return false;
+	}
+
+	template <class DataType>
+	bool isRightChild(BSTNode<DataType> * node)
+	{
+		if (node == nullptr || node->parent == nullptr)
+			return false;
+		return !isLeftChild(node);
 	}
 
 	// *****************************************
@@ -309,14 +335,14 @@ namespace ft
 			BST(data_compare const & c)
 				: _comp(c)
 			{
-				_end = _newNode(data_type(), nullptr, nullptr, nullptr);
+				_end = _newNode(data_type(), BLACK, nullptr, nullptr, nullptr);
 				_root = _end;
 			}
 
 			BST(BST const & other)
 				: _comp(other._comp)
 			{
-				_end = _newNode(data_type(), nullptr, nullptr, nullptr);
+				_end = _newNode(data_type(), BLACK, nullptr, nullptr, nullptr);
 				_root = _end;
 				const_iterator it = other.begin();
 				const_iterator ite = other.end();
@@ -363,39 +389,51 @@ namespace ft
 			}
 
 			// * return false if data is duplicate
-			bool insert(data_type const & data)
-			{
-				if (_root == _end)
-				{
-					_root = _newNode(data, nullptr, nullptr, _end);
-					_end->parent = _root;
-					return true;
-				}
-				node_pointer prev = nullptr;
-				node_pointer curr = _root;
-				while (curr != nullptr && curr != _end)
-				{
-					prev = curr;
-					if (_comp(data, curr->data))
-						curr = curr->left;
-					else if (_comp(curr->data, data))
-						curr = curr->right;
-					else
+			bool insert(data_type const & data) {
+				node_pointer node = _newNode(data, RED, nullptr, nullptr, nullptr);
+
+				node_pointer y = nullptr;
+				node_pointer x = _root;
+
+				while (x != nullptr && x != _end) {
+					y = x;
+					if (_comp(node->data, x->data)) {
+						x = x->left;
+					} else if (_comp(x->data, node->data)) {
+						x = x->right;
+					} else {
+						_deleteNode(node);
 						return false;
+					}
 				}
-				if (curr == _end)
-				{
-					prev->right = _newNode(data, prev, nullptr, _end);
-					_end->parent = prev->right;
+
+				node->parent = y;
+				if (y == nullptr) {
+					_root = node;
+					node->right = _end;
+					_end->parent = node;
+				} else if (_comp(node->data, y->data)) {
+					y->left = node;
+				} else {
+					if (y->right == _end) {
+						node->right = _end;
+						_end->parent = node;
+					}
+					y->right = node;
 				}
-				else
-				{
-					if (_comp(data, prev->data))
-						prev->left = _newNode(data, prev, nullptr, nullptr);
-					else
-						prev->right = _newNode(data, prev, nullptr, nullptr);
+
+				if (node->parent == nullptr) {
+					node->color = BLACK;
+				} else if (node->parent->parent != nullptr) {
+					_insertFix(node);
 				}
 				return true;
+			}
+
+			// * jajajajaja oopsi
+			void erase(data_type const & data)
+			{
+				_root = _erase(_root, data);
 			}
 
 			void showInOrder(void) const 
@@ -423,11 +461,6 @@ namespace ft
 			const_iterator find(data_type const & data) const
 			{
 				return const_iterator(_find(_root, data));
-			}
-
-			void erase(data_type const & data)
-			{
-				_root = _erase(_root, data);
 			}
 
 			size_type size(void) const
@@ -525,15 +558,12 @@ namespace ft
 			}
 
 		private:
-			node_pointer _newNode(data_type const & data,
-									node_pointer parent,
-									node_pointer left,
-									node_pointer right)
+			node_pointer _newNode(data_type const & data, bool color, node_pointer parent, node_pointer left, node_pointer right)
 			{
 				node_allocator alloc;
 				node_pointer node;
 				node = alloc.allocate(1);
-				alloc.construct(node, node_type(data, parent, left, right));
+				alloc.construct(node, node_type(data, color, parent, left, right));
 				return node;
 			}
 
@@ -562,6 +592,153 @@ namespace ft
 				while (root->right && root->right != _end)
 					root = root->right;
 				return root;
+			}
+
+			void _rbTransplant(node_pointer u, node_pointer v)
+			{
+				if (u->parent == nullptr)
+					_root = v;
+				else if (u == u->parent->left)
+					u->parent->left = v;
+				else
+					u->parent->right = v;
+				v->parent = u->parent;
+			}
+
+			void _rotateLeft(node_pointer x)
+			{
+			
+				node_pointer y = x->right;
+				x->right = y->left;
+				if (y->left)
+					y->left->parent = x;
+				y->parent = x->parent;
+				if (x->parent == nullptr)
+					_root = y;
+				else if (isLeftChild(x))
+					x->parent->left = y;
+				else
+					x->parent->right = y;
+				y->left = x;
+				x->parent = y;
+			}
+
+			void _rotateRight(node_pointer x)
+			{
+			
+				node_pointer y = x->left;
+				x->left = y->right;
+				if (y->right != nullptr)
+					y->right->parent = x;
+				y->parent = x->parent;
+				if (x->parent == nullptr)
+					_root = y;
+				else if (x == x->parent->right)
+					x->parent->right = y;
+				else
+					x->parent->left = y;
+				y->right = x;
+				x->parent = y;
+			}
+
+			node_pointer _erase(node_pointer root, data_type const & data)
+			{
+				if (!root || root == _end)
+					return root;
+				if (_comp(data, root->data))
+					root->left = _erase(root->left, data);
+				else if (_comp(root->data, data))
+					root->right = _erase(root->right, data);
+				else
+				{
+					if (root->hasNoChild())
+					{
+						_deleteNode(root);
+						return nullptr;
+					}
+					else if (root->hasOneChild())
+					{
+						node_pointer child = root->getChild();
+						if (child)
+							child->parent = root->parent;
+						_deleteNode(root);
+						return child;
+					}
+					else
+					{
+						node_pointer node = root->right == _end ? _getMax(root->left) : _getMin(root->right);
+						node_pointer tmp = root;
+						root = _newNode(node->data, node->color, root->parent, root->left, root->right);
+						root->left->parent = root;
+						root->right->parent = root;
+						_deleteNode(tmp);
+						if (root->right == _end)
+							root->left = _erase(root->left, node->data);
+						else
+							root->right = _erase(root->right, node->data);
+					}
+				}
+				return root;
+			}
+
+			void _insertFix(node_pointer k)
+			{
+			
+				node_pointer u;
+				while (k->parent->color == RED)
+				{
+					if (k->parent == k->parent->parent->right)
+					{
+					
+						u = k->parent->parent->left;
+						if (u != nullptr && u->color == RED)
+						{
+						
+							u->color = BLACK;
+							k->parent->color = BLACK;
+							k->parent->parent->color = RED;
+							k = k->parent->parent;
+						}
+						else
+						{
+						
+							if (k == k->parent->left)
+							{
+								k = k->parent;
+								_rotateRight(k);
+							}
+							k->parent->color = BLACK;
+							k->parent->parent->color = RED;
+							_rotateLeft(k->parent->parent);
+						}
+					}
+					else
+					{
+					
+						u = k->parent->parent->right;
+						if (u != nullptr && u->color == RED)
+						{
+							u->color = BLACK;
+							k->parent->color = BLACK;
+							k->parent->parent->color = RED;
+							k = k->parent->parent;
+						}
+						else
+						{
+							if (k == k->parent->right)
+							{
+								k = k->parent;
+								_rotateLeft(k);
+							}
+							k->parent->color = BLACK;
+							k->parent->parent->color = RED;
+							_rotateRight(k->parent->parent);
+						}
+					}
+					if (k == _root)
+						break;
+				}
+				_root->color = BLACK;
 			}
 
 			void _showInOrder(node_pointer root) const
@@ -593,46 +770,6 @@ namespace ft
 				root->right = _clear(root->right);
 				_deleteNode(root);
 				return nullptr;
-			}
-
-			node_pointer _erase(node_pointer root, data_type const & data)
-			{
-				if (!root || root == _end)
-					return root;
-				if (_comp(data, root->data))
-					root->left = _erase(root->left, data);
-				else if (_comp(root->data, data))
-					root->right = _erase(root->right, data);
-				else
-				{
-					if (root->hasNoChild())
-					{
-						_deleteNode(root);
-						return nullptr;
-					}
-					else if (root->hasOneChild())
-					{
-						node_pointer child = root->getChild();
-						if (child)
-							child->parent = root->parent;
-						_deleteNode(root);
-						return child;
-					}
-					else
-					{
-						node_pointer node = root->right == _end ? _getMax(root->left) : _getMin(root->right);
-						node_pointer tmp = root;
-						root = _newNode(node->data, root->parent, root->left, root->right);
-						root->left->parent = root;
-						root->right->parent = root;
-						_deleteNode(tmp);
-						if (root->right == _end)
-							root->left = _erase(root->left, node->data);
-						else
-							root->right = _erase(root->right, node->data);
-					}	
-				}
-				return root;
 			}
 
 			size_type _size(node_pointer root, size_type i = 0) const

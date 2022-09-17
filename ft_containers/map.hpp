@@ -74,9 +74,7 @@ namespace ft
 			{}
 
 			template <typename InputIt>
-			map(InputIt first, InputIt last,
-				const key_compare & comp = key_compare(),
-				const allocator_type & alloc = allocator_type())
+			map(InputIt first, InputIt last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type())
 				: _base(value_compare(comp))
 			{
 				(void)alloc;
@@ -144,12 +142,22 @@ namespace ft
 
 			mapped_type & at(key_type const & key)
 			{
-				return _base.at(ft::make_pair(key, mapped_type())).second;
+				try {
+					mapped_type & val = _base.at(ft::make_pair(key, mapped_type())).second;
+					return val;
+				} catch (...) {
+					throw std::out_of_range("map");
+				}
 			}
 
 			mapped_type const & at(key_type const & key) const
 			{
-				return _base.at(ft::make_pair(key, mapped_type())).second;
+				try {
+					mapped_type const & val = _base.at(ft::make_pair(key, mapped_type())).second;
+					return val;
+				} catch (...) {
+					throw std::out_of_range("map");
+				}
 			}
 
 			const_reverse_iterator rend(void) const
@@ -199,6 +207,10 @@ namespace ft
 					insert(*first);
 			}
 
+			void debug(void) {
+				_base.debug();
+			}
+
 			void erase(iterator pos)
 			{
 				_base.erase(*pos);
@@ -215,7 +227,7 @@ namespace ft
 				iterator pos = _base.find(ft::make_pair(key, mapped_type()));
 				if (pos.base() == end())
 					return 0;
-				_base.erase(*pos);
+				erase(pos);
 				return 1;
 			}
 			
