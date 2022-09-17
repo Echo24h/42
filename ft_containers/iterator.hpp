@@ -94,7 +94,7 @@ namespace ft {
 			operator reverse_iterator<iterator_type const>() const
 			{ return reverse_iterator<iterator_type const>(_curr); }
 
-			// ---- member function(s) ----
+			// ---- member function(s) ---- 
 			iterator_type 	base(void) const { return _curr; }
 	};
 
