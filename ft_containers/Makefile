@@ -3,6 +3,11 @@ CFLAGS		=	-std=c++98 -Wall -Wextra -Werror
 NAME		=	prog
 
 SRCS		=	main.cpp	\
+				tests/map.cpp	\
+				tests/stack.cpp	\
+				tests/vector.cpp	\
+				tests/set.cpp	\
+				tests/test.cpp
 
 all: $(NAME)
 
@@ -12,7 +17,7 @@ $(NAME):
 run: re
 	./$(NAME)
 
-debug: re
+debug:
 	$(CC) $(CFLAGS) -g -o $(NAME) $(SRCS)
 
 # use "leaks -atExit -- ./$(NAME)" or "valgrind ./$(NAME)"
