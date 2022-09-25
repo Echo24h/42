@@ -16,22 +16,22 @@
 namespace ft
 {
 	// *****************************************
-	// * BSTNode
+	// * Node
 	// *****************************************
 	template <typename DataType>
-	struct BSTNode
+	struct Node
 	{
 		DataType		data;
 		bool			color;
-		BSTNode *		parent;
-		BSTNode *		left;
-		BSTNode * 		right;
+		Node *		parent;
+		Node *		left;
+		Node * 		right;
 
-		BSTNode(DataType const & data, bool color, BSTNode * parent, BSTNode * left, BSTNode * right)
+		Node(DataType const & data, bool color, Node * parent, Node * left, Node * right)
 			: data(data), color(color), parent(parent), left(left), right(right)
 		{}
 
-		~BSTNode(void)
+		~Node(void)
 		{}
 
 		bool hasNoChild(void) const
@@ -43,14 +43,14 @@ namespace ft
 		bool hasOneChild(void) const
 		{ return (!hasNoChild() && !hasTwoChild()); }
 
-		BSTNode * getChild(void)
+		Node * getChild(void)
 		{ return (left != nullptr ? left : right); }
 
 		void printPtr(std::string const & pfx, void * ptr) {
 			std::cout << pfx << ":" << ptr << std::endl;
 		}
 
-		void debug(std::string const & pfx = "BSTNode")
+		void debug(std::string const & pfx = "Node")
 		{
 			std::cout << "----\n";
 			std::cout << pfx << std::endl;
@@ -63,7 +63,7 @@ namespace ft
 	};
 
 	template <class DataType>
-	BSTNode<DataType> * _getSuccessor(BSTNode<DataType> * node)
+	Node<DataType> * _getSuccessor(Node<DataType> * node)
 	{
 		if (!node)
 			return nullptr;
@@ -74,7 +74,7 @@ namespace ft
 				node = node->left;
 			return node;
 		}
-		BSTNode<DataType> * parent = node->parent;
+		Node<DataType> * parent = node->parent;
 		while (parent && parent->left != node)
 		{
 			node = parent;
@@ -84,7 +84,7 @@ namespace ft
 	}
 
 	template <class DataType>
-	BSTNode<DataType> * _getPredecessor(BSTNode<DataType> * node)
+	Node<DataType> * _getPredecessor(Node<DataType> * node)
 	{
 		if (!node)
 			return nullptr;
@@ -95,7 +95,7 @@ namespace ft
 				node = node->right;
 			return node;
 		}
-		BSTNode<DataType> * parent = node->parent;
+		Node<DataType> * parent = node->parent;
 		while (parent && parent->right != node)
 		{
 			node = parent;
@@ -106,7 +106,7 @@ namespace ft
 
 	// * return false if node is root
 	template <class DataType>
-	bool isLeftChild(BSTNode<DataType> * node)
+	bool isLeftChild(Node<DataType> * node)
 	{
 		if (node == nullptr || node->parent == nullptr)
 			return false;
@@ -116,7 +116,7 @@ namespace ft
 	}
 
 	template <class DataType>
-	bool isRightChild(BSTNode<DataType> * node)
+	bool isRightChild(Node<DataType> * node)
 	{
 		if (node == nullptr || node->parent == nullptr)
 			return false;
@@ -127,7 +127,7 @@ namespace ft
 	// * TreeIterator
 	// *****************************************
 	template <typename DataType>
-	class BSTIterator
+	class TreeIterator
 	{
 		public:
 			typedef DataType 					value_type;
@@ -136,7 +136,7 @@ namespace ft
 			typedef value_type &  				reference;
 			typedef bidirectional_iterator_tag	iterator_category;
 
-			typedef BSTNode<value_type>			node_type;
+			typedef Node<value_type>			node_type;
 			typedef node_type *					node_pointer;
 
 		private:
@@ -144,15 +144,15 @@ namespace ft
 
 		public:
 			// * ---- constructor(s) ----
-			BSTIterator(void)
+			TreeIterator(void)
 				: _curr(nullptr)
 			{}
 
-			BSTIterator(node_pointer ptr)
+			TreeIterator(node_pointer ptr)
 				: _curr(ptr)
 			{}
 
-			BSTIterator(BSTIterator const & src)
+			TreeIterator(TreeIterator const & src)
 				: _curr(src.base())
 			{}
 
@@ -167,7 +167,7 @@ namespace ft
 				return &_curr->data;
 			}
 
-			BSTIterator & operator++()
+			TreeIterator & operator++()
 			{
 				_curr = _getSuccessor(_curr);
 				if (!_curr)
@@ -175,7 +175,7 @@ namespace ft
 				return *this;
 			}
 
-			BSTIterator & operator--()
+			TreeIterator & operator--()
 			{
 				_curr = _getPredecessor(_curr);
 				if (!_curr)
@@ -183,16 +183,16 @@ namespace ft
 				return *this;
 			}
 
-			BSTIterator operator++(int)
+			TreeIterator operator++(int)
 			{
-				BSTIterator tmp = *this;
+				TreeIterator tmp = *this;
 				*this = operator++();
 				return tmp;
 			}
 
-			BSTIterator operator--(int)
+			TreeIterator operator--(int)
 			{
-				BSTIterator tmp = *this;
+				TreeIterator tmp = *this;
 				*this = operator--();
 				return tmp;
 			}
@@ -203,19 +203,19 @@ namespace ft
 				return _curr;
 			}
 
-			friend bool operator==(BSTIterator<DataType> const & lhs, BSTIterator<DataType> const & rhs)
+			friend bool operator==(TreeIterator<DataType> const & lhs, TreeIterator<DataType> const & rhs)
 			{
 				return lhs.base() == rhs.base();
 			}
 
-			friend bool operator!=(BSTIterator<DataType> const & lhs, BSTIterator<DataType> const & rhs)
+			friend bool operator!=(TreeIterator<DataType> const & lhs, TreeIterator<DataType> const & rhs)
 			{
 				return !(lhs == rhs);
 			}
 	};
 
 	template <typename DataType>
-	class BSTConstIterator
+	class TreeConstIterator
 	{
 		public:
 			typedef DataType 					value_type;
@@ -224,7 +224,7 @@ namespace ft
 			typedef value_type const &  		reference;
 			typedef bidirectional_iterator_tag	iterator_category;
 
-			typedef BSTNode<DataType>			node_type;
+			typedef Node<DataType>			node_type;
 			typedef node_type *					node_pointer;
 
 		private:
@@ -232,19 +232,19 @@ namespace ft
 
 		public:
 			// * ---- constructor(s) ----
-			BSTConstIterator(void)
+			TreeConstIterator(void)
 				: _curr(nullptr)
 			{}
 
-			BSTConstIterator(node_pointer ptr)
+			TreeConstIterator(node_pointer ptr)
 				: _curr(ptr)
 			{}
 
-			BSTConstIterator(BSTConstIterator const & src)
+			TreeConstIterator(TreeConstIterator const & src)
 				: _curr(src.base())
 			{}
 
-			BSTConstIterator(BSTIterator<DataType> const & src)
+			TreeConstIterator(TreeIterator<DataType> const & src)
 				: _curr(src.base())
 			{}
 
@@ -259,7 +259,7 @@ namespace ft
 				return &_curr->data;
 			}
 
-			BSTConstIterator & operator++()
+			TreeConstIterator & operator++()
 			{
 				_curr = _getSuccessor(_curr);
 				if (!_curr)
@@ -267,7 +267,7 @@ namespace ft
 				return *this;
 			}
 
-			BSTConstIterator & operator--()
+			TreeConstIterator & operator--()
 			{
 				_curr = _getPredecessor(_curr);
 				if (!_curr)
@@ -275,16 +275,16 @@ namespace ft
 				return *this;
 			}
 
-			BSTConstIterator operator++(int)
+			TreeConstIterator operator++(int)
 			{
-				BSTConstIterator tmp = *this;
+				TreeConstIterator tmp = *this;
 				*this = operator++();
 				return tmp;
 			}
 
-			BSTConstIterator operator--(int)
+			TreeConstIterator operator--(int)
 			{
-				BSTConstIterator tmp = *this;
+				TreeConstIterator tmp = *this;
 				*this = operator--();
 				return tmp;
 			}
@@ -295,31 +295,31 @@ namespace ft
 				return _curr;
 			}
 
-			friend bool operator==(BSTConstIterator<DataType> const & lhs, BSTConstIterator<DataType> const & rhs)
+			friend bool operator==(TreeConstIterator<DataType> const & lhs, TreeConstIterator<DataType> const & rhs)
 			{
 				return lhs.base() == rhs.base();
 			}
 
-			friend bool operator!=(BSTConstIterator<DataType> const & lhs, BSTConstIterator<DataType> const & rhs)
+			friend bool operator!=(TreeConstIterator<DataType> const & lhs, TreeConstIterator<DataType> const & rhs)
 			{
 				return !(lhs == rhs);
 			}
 	};
 
 	// *****************************************
-	// * BST (aka BinarySearchTree)
+	// * Tree (which is a Red-Black-Tree)
 	// *****************************************
 	template <typename DataType, typename DataCompare, typename DataAllocator>
-	class BST
+	class Tree
 	{
 		public:
 			typedef DataType								data_type;
 			typedef DataCompare								data_compare;
 			typedef DataAllocator							data_allocator;
-			typedef BSTNode<data_type>						node_type;
+			typedef Node<data_type>						node_type;
 			typedef node_type *								node_pointer;
-			typedef BSTIterator<data_type>					iterator;
-			typedef BSTConstIterator<data_type>				const_iterator;
+			typedef TreeIterator<data_type>					iterator;
+			typedef TreeConstIterator<data_type>				const_iterator;
 			typedef ft::reverse_iterator<iterator>			reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 			typedef size_t									size_type;
@@ -332,14 +332,14 @@ namespace ft
 			data_compare	_comp;
 
 		public:
-			BST(data_compare const & c)
+			Tree(data_compare const & c)
 				: _comp(c)
 			{
 				_end = _newNode(data_type(), BLACK, nullptr, nullptr, nullptr);
 				_root = _end;
 			}
 
-			BST(BST const & other)
+			Tree(Tree const & other)
 				: _comp(other._comp)
 			{
 				_end = _newNode(data_type(), BLACK, nullptr, nullptr, nullptr);
@@ -350,13 +350,13 @@ namespace ft
 					insert(*it);
 			}
 
-			~BST(void)
+			~Tree(void)
 			{
 				clear();
 				_deleteNode(_end);
 			}
 
-			BST & operator=(BST const & other)
+			Tree & operator=(Tree const & other)
 			{
 				clear();
 				const_iterator cit = other.begin();
@@ -376,7 +376,7 @@ namespace ft
 			{
 				iterator pos = find(key);
 				if (pos == _end)
-					throw std::out_of_range("BST");
+					throw std::out_of_range("Tree");
 				return *pos;
 			}
 
@@ -384,7 +384,7 @@ namespace ft
 			{
 				const_iterator pos = find(key);
 				if (pos == _end)
-					throw std::out_of_range("BST");
+					throw std::out_of_range("Tree");
 				return *pos;
 			}
 
@@ -517,7 +517,7 @@ namespace ft
 				return const_reverse_iterator(begin());
 			}
 
-			void swap(BST & other)
+			void swap(Tree & other)
 			{
 				std::swap(_root, other._root);
 				std::swap(_end, other._end);
@@ -784,9 +784,9 @@ namespace ft
 	};
 
 	template <typename DataType, typename DataCompare, typename DataAlloc>
-	bool operator==(const BST<DataType, DataCompare, DataAlloc> & lhs, const BST<DataType, DataCompare, DataAlloc> & rhs)
+	bool operator==(const Tree<DataType, DataCompare, DataAlloc> & lhs, const Tree<DataType, DataCompare, DataAlloc> & rhs)
 	{
-		typedef typename BST<DataType, DataCompare, DataAlloc>::const_iterator const_iterator;
+		typedef typename Tree<DataType, DataCompare, DataAlloc>::const_iterator const_iterator;
 		if (lhs.size() != rhs.size())
 			return false;
 		const_iterator it1 = lhs.begin();
@@ -803,31 +803,31 @@ namespace ft
 	}
 
 	template <typename DataType, typename DataCompare, typename DataAlloc>
-	bool operator!=(const BST<DataType, DataCompare, DataAlloc> & lhs, const BST<DataType, DataCompare, DataAlloc> & rhs)
+	bool operator!=(const Tree<DataType, DataCompare, DataAlloc> & lhs, const Tree<DataType, DataCompare, DataAlloc> & rhs)
 	{
 		return !(lhs == rhs);
 	}
 
 	template <typename DataType, typename DataCompare, typename DataAlloc>
-	bool operator<(const BST<DataType, DataCompare, DataAlloc> & lhs, const BST<DataType, DataCompare, DataAlloc> & rhs)
+	bool operator<(const Tree<DataType, DataCompare, DataAlloc> & lhs, const Tree<DataType, DataCompare, DataAlloc> & rhs)
 	{
 		return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 	}
 
 	template <typename DataType, typename DataCompare, typename DataAlloc>
-	bool operator<=(const BST<DataType, DataCompare, DataAlloc> & lhs, const BST<DataType, DataCompare, DataAlloc> & rhs)
+	bool operator<=(const Tree<DataType, DataCompare, DataAlloc> & lhs, const Tree<DataType, DataCompare, DataAlloc> & rhs)
 	{
 		return (lhs == rhs || lhs < rhs);
 	}
 
 	template <typename DataType, typename DataCompare, typename DataAlloc>
-	bool operator>(const BST<DataType, DataCompare, DataAlloc> & lhs, const BST<DataType, DataCompare, DataAlloc> & rhs)
+	bool operator>(const Tree<DataType, DataCompare, DataAlloc> & lhs, const Tree<DataType, DataCompare, DataAlloc> & rhs)
 	{
 		return !(lhs <= rhs);
 	}
 
 	template <typename DataType, typename DataCompare, typename DataAlloc>
-	bool operator>=(const BST<DataType, DataCompare, DataAlloc> & lhs, const BST<DataType, DataCompare, DataAlloc> & rhs)
+	bool operator>=(const Tree<DataType, DataCompare, DataAlloc> & lhs, const Tree<DataType, DataCompare, DataAlloc> & rhs)
 	{
 		return !(lhs < rhs);
 	}

@@ -28,7 +28,7 @@ static time_t g_end1;
 static time_t g_start2;
 static time_t g_end2;
 
-static int _ratio = 1000;
+static int _ratio = 10000;
 
 static const std::string GREEN = "\x1B[1;32m";
 static const std::string REDD = "\x1B[1;31m";

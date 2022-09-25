@@ -324,9 +324,6 @@ namespace ft
 			// ---- friend(s) ----
 			template <typename _T, typename _Allocator>
 			friend std::ostream & operator<<(std::ostream &, vector<_T, _Allocator> const &);
-
-			template <typename _T, typename _Allocator>
-			friend void	swap(vector<_T, _Allocator> & x, vector<_T, _Allocator> & y);
 	};
 
 	// ---- non-member function(s) ----
@@ -367,20 +364,23 @@ namespace ft
 	}
 
 	template <typename T, typename Allocator>
-	void swap(ft::vector<T, Allocator> & x, ft::vector<T, Allocator> & y) { x.swap(y); }
+	void swap(ft::vector<T, Allocator> & x, ft::vector<T, Allocator> & y)
+	{
+		x.swap(y);
+	}
 
 	template <typename _T, typename _Allocator>
 	std::ostream & operator<<(std::ostream & ostrm, ft::vector<_T, _Allocator> const & rhs)
 	{
-		std::cout << "capacity:\t" << rhs.capacity() << std::endl;
-		std::cout << "size:\t\t" << rhs.size() << std::endl;
-        std::cout << "data: ";
-		typename ft::vector<_T, _Allocator>::const_iterator it(rhs.begin());
-		typename ft::vector<_T, _Allocator>::const_iterator end(rhs.end());
-		for (; it != end; it++)
-			std::cout << *it << " ";
-        std::cout << std::endl << "--------" << std::endl;
-		return ostrm;
+	std::cout << "capacity:\t" << rhs.capacity() << std::endl;
+	std::cout << "size:\t\t" << rhs.size() << std::endl;
+	std::cout << "data: ";
+	typename ft::vector<_T, _Allocator>::const_iterator it(rhs.begin());
+	typename ft::vector<_T, _Allocator>::const_iterator end(rhs.end());
+	for (; it != end; it++)
+		std::cout << *it << " ";
+	std::cout << std::endl << "--------" << std::endl;
+	return ostrm;
 	}
 }
 

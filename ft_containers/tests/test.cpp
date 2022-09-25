@@ -5,6 +5,7 @@ int stack_test(void);
 
 int test(void) {
     vector_test();
+    stack_test();
     map_test();
     set_test();
     return 0;

@@ -20,7 +20,7 @@ namespace ft
 			typedef typename allocator_type::const_pointer	const_pointer;
 
 		private:
-			typedef ft::BST<value_type, value_compare, allocator_type>	_tree;
+			typedef ft::Tree<value_type, value_compare, allocator_type>	_tree;
 
 			_tree _base;
 
