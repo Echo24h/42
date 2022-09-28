@@ -1,0 +1,21 @@
+FROM alpine:3.15
+
+EXPOSE 443
+
+WORKDIR /
+
+RUN apk update && \
+    apk add \
+        openssl \
+        nginx \
+    && \
+    rm -rf /var/cache/apk/*
+
+# COPY ./conf /etc/nginx/
+# ... i must add paths to *.crt and *.key in my nginx config
+
+# RUN openssl genrsa -out /etc/ssl/ydanset.42.fr.key 2048 && \
+#     openssl req -new -key ydanset.42.fr.key -out ydanset.42.fr.csr -subj "/C=/ST=/L=/O=/OU=/CN=" 2> /dev/null
+# ... then i must generate an ydanset.42.fr.crt file using my own CA
+
+CMD ["nginx", "-g", "daemon off;"]
