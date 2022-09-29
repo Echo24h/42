@@ -1,3 +1,5 @@
+# https://wiki.alpinelinux.org/wiki/MariaDB
+
 FROM alpine:3.15
 
 EXPOSE 3306
@@ -6,16 +8,17 @@ WORKDIR /
 
 RUN apk update && \
     apk add \
-        mariadb \
-        mariadb-client \
+        mysql \
+        mysql-client \
         openrc \
     && \
     rm -rf /var/cache/apk/*
 
 RUN openrc && touch /run/openrc/softlevel
 
-# https://wiki.alpinelinux.org/wiki/MariaDB
 RUN /etc/init.d/mariadb setup && \
     /etc/init.d/mariadb start
 
-CMD ["mysql", "-u", "root"]
+# CMD ["mysql", "-u", "root"]
+
+CMD sh
