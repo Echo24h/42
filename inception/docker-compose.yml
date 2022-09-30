@@ -1,0 +1,31 @@
+version: "2.5"
+
+services:
+  nginx:
+    image: my_nginx
+    # command:
+    ports:
+      - 8080:80
+    # volumes:
+    #  - ./:/app
+    # environment:
+    #  - name=value
+
+  wordpress:
+    image: my_wordpress
+
+  mariadb:
+    image: my_mariadb
+
+# use for named volumes
+# volumes:
+#  myvolume:
+
+
+# HOW TO RUN IT
+# docker compose up -d
+# docker compose logs -f [service]
+# docker compose down [--volumes]
+
+# NOTE
+# wait for the mariadb to start before launching wordpress, use smth like 'wait-port'
