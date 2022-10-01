@@ -4,18 +4,26 @@ EXPOSE 9000
 
 WORKDIR /
 
-RUN apk update && \
-    apk add \
-        openssl \
-        nginx \
-    && \
-    rm -rf /var/cache/apk/*
+RUN apk update
 
-# COPY ./conf /etc/nginx/
-# ... i must add paths to *.crt and *.key in my nginx config
+# wget http://wordpress.org/latest.tar.gz
+# tar -xzf latest.tar.gz
+# rm -f latest.tar.gz
 
-# RUN openssl genrsa -out /etc/ssl/ydanset.42.fr.key 2048 && \
-#     openssl req -new -key ydanset.42.fr.key -out ydanset.42.fr.csr -subj "/C=/ST=/L=/O=/OU=/CN=" 2> /dev/null
-# ... then i must generate an ydanset.42.fr.crt file using my own CA
+# into modifying wp.conf machin
 
-CMD ["nginx", "-g", "daemon off;"]
+
+# using WP-CLI
+# wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+# chmod +x wp-cli.phar
+# mv wp-cli.phar /usr/bin/wp-cli
+# wp-cli core download
+# wp-cli config create --dbname=YOUR_DB_NAME --dbuser=YOUR_DB_USERNAME --dbpass=YOUR_DB_PASSWORD --locale=en_DB
+# wp-cli core install --url=YOUR_DOMAIN_NAME --title=YOUR_BLOG_TITLE --admin_user=ADMIN_USERNAME --admin_password=ADMIN_PASSWORD --admin_email=ADMIN_EMAIL
+
+# packages which make it work
+# apk add lighttpd php7-common php7-session php7-iconv php7-json php7-gd php7-curl php7-xml php7-mysqli php7-imap php7-cgi fcgi php7-pdo php7-pdo_mysql php7-soap php7-xmlrpc php7-posix php7-mcrypt php7-gettext php7-ldap php7-ctype php7-dom php7-simplexml
+
+# test with 'wp-cli --info'
+
+CMD ["sh"]

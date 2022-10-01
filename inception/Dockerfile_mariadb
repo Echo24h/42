@@ -7,32 +7,12 @@ EXPOSE 3306
 WORKDIR /
 
 RUN apk update && \
-    apk add mysql mysql-client openrc && \
-    rm -rf /var/cache/apk/*
+    apk add --no-cache openrc mariadb mariadb-client
 
 RUN openrc && touch /run/openrc/softlevel
 
-RUN /etc/init.d/mariadb setup && /etc/init.d/mariadb start
+COPY ./init.sh /
 
-RUN mysql -fsu root < mysql_secure_installation.sql
+RUN chmod +x init.sh
 
-# mysql_secure_installation ->
-# root pwd
-# switch to unix_socket authentification => "UPDATE mysql.global_priv SET priv=json_set(priv, '$.password_last_changed', UNIX_TIMESTAMP(), '$.plugin', 'mysql_native_password', '$.authentication_string', 'invalid', '$.auth_or', json_array(json_object(), json_object('plugin', 'unix_socket'))) WHERE User='root';"
-# change root pwd + pwd confirmation => "UPDATE mysql.user SET Password=PASSWORD('$esc_pass') WHERE User='root';" - OR - "UPDATE mysql.global_priv SET priv=json_set(priv, '$.plugin', 'mysql_native_password', '$.authentication_string', PASSWORD('$esc_pass')) WHERE User='root';"
-# remove anonymous user => "DELETE FROM mysql.user WHERE User='';" - OR - "DELETE FROM mysql.global_priv WHERE User='';"
-# disallow root login remotely => "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');" - OR - "DELETE FROM mysql.global_priv WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
-# remove test database => "DROP DATABASE IF EXISTS test;" && "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'"
-# reload privilege tables => "FLUSH PRIVILEGES;"
-
-# mysql -fsu root < mysql_secure_installation.sql
-
-# rc-service mariadb restart
-
-# launch daemon
-# cd '/usr' ; /usr/bin/mysqld_safe --datadir='/var/lib/mysql'
-
-
-# CMD ["mysql", "-u", "root"]
-
-CMD sh
+CMD ["./init.sh"]
