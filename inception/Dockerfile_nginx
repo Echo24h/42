@@ -5,11 +5,7 @@ EXPOSE 443
 WORKDIR /
 
 RUN apk update && \
-    apk add \
-        openssl \
-        nginx \
-    && \
-    rm -rf /var/cache/apk/*
+    apk add --no-cache openssl nginx && \
 
 # COPY ./conf /etc/nginx/
 # ... i must add paths to *.crt and *.key in my nginx config

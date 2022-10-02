@@ -15,4 +15,4 @@ COPY ./init.sh /
 
 RUN chmod +x init.sh
 
-CMD ["./init.sh"]
+CMD ["./init_db.sh"]

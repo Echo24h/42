@@ -2,24 +2,36 @@ version: "2.5"
 
 services:
   nginx:
-    image: my_nginx
-    # command:
+    depends_on:
+      - wordpress
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
+    image: mynginx
     ports:
-      - 8080:80
-    # volumes:
-    #  - ./:/app
-    # environment:
-    #  - name=value
+      - 80:80 # should be 443:443
+    volumes:
+      - wordpress:/wordpress
 
   wordpress:
-    image: my_wordpress
+    depends_on:
+      - mariadb
+    build:
+        context: .
+        dockerfile: Dockerfile_wordpress
 
   mariadb:
-    image: my_mariadb
+    build:
+      context: .
+      dockerfile: Dockerfile_mariadb
+    image: mymariadb
+    volumes:
+      - db:/var/lib/mysql
 
 # use for named volumes
-# volumes:
-#  myvolume:
+volumes:
+  wordpress:
+  db:
 
 
 # HOW TO RUN IT
