@@ -14,10 +14,9 @@ services:
       - ./requirements/nginx/conf:/etc/nginx/http.d/
       - ./requirements/nginx/tools:/etc/nginx/ssl/
       - wp-volume:/var/www/
-    restart: always
+    restart: on-failure
     networks:
       - inception
-
   mariadb:
     build:
       context: ./requirements/mariadb/
@@ -30,10 +29,9 @@ services:
     container_name: mariadb
     volumes:
       - db-volume:/var/lib/mysql/
-    restart: always
+    restart: on-failure
     networks:
       - inception
-
   wordpress:
     depends_on:
       - mariadb
@@ -47,12 +45,11 @@ services:
         DB_PASS: ${DB_PASS}
         REDIS_PASS: ${REDIS_PASS}
     container_name: wordpress
-    restart: always
+    restart: on-failure
     volumes:
       - wp-volume:/var/www/
     networks:
       - inception
-
   redis:
     depends_on:
       - mariadb
@@ -62,9 +59,20 @@ services:
       args:
         REDIS_PASS: ${REDIS_PASS}
     container_name: redis
-    restart: always
+    restart: on-failure
     networks:
       - inception
+  nginx_static_website:
+    build:
+      context: ./requirements/bonus/nginx-static-website/
+      dockerfile: Dockerfile
+    container_name: nginx_static_website
+    restart: on-failure
+    volumes:
+      - ./requirements/bonus/nginx-static-website/conf:/etc/nginx/http.d/
+      - static-website-volume:/var/www
+    ports:
+      - "80:80"
 
 volumes:
   wp-volume:
@@ -77,6 +85,11 @@ volumes:
       o: bind
       type: none
       device: /home/${USER}/data/mariadb
+  static-website-volume:
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/${USER}/data/static-website
 
 networks:
   inception:
